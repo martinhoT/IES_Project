@@ -15,6 +15,12 @@ public class MainController {
 		return "main";
 	}
 
+	@GetMapping("/guard")
+	public String guard(Model model) {
+		return "guard";
+	}
+
+
     @GetMapping("/error")
 	public String error() {
 		return "error";
