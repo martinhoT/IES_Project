@@ -1,9 +1,6 @@
-### Run website:
-```bash
-FLASK_APP=app.py flask run
-```
+## IES Project Prototype
+### Run prototype application:
 
-### Run website on dev:
 ```bash
-FLASK_APP=app.py FLASK_ENV=development flask run
+./mvnw spring-boot:run
 ```
