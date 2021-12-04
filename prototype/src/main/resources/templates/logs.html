@@ -1,5 +1,6 @@
 <html lang="en">
-    <head th:include="base :: head">
+    <head>
+        <th:block th:include="base :: head" />
         <title>Logs</title>
     </head>
     <body>
@@ -29,6 +30,6 @@
             </ul>
         </div>
         
-        <div th:include="base :: scripts"></div>
+        <th:block th:include="base :: scripts" />
     </body>
 </html>

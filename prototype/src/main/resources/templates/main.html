@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head th:include="base :: head">
+    <head>
+        <th:block th:include="base :: head" />
         <title>Getting Started: Serving Web Content</title> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
@@ -8,6 +9,6 @@
         <nav th:replace="base :: navbar"></nav>
         <p th:text="${text}"></p>
 
-        <div th:include="base :: scripts"></div>
+        <th:block th:include="base :: scripts" />
     </body>
 </html>

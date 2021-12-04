@@ -1,6 +1,8 @@
 <html lang="en">
-    <head th:include="base :: head">
+    <head>
+        <th:block th:include="base :: head" />
         <title>Heatmaps</title>
+        <link rel="stylesheet" href="css/heatmap.css" type="text/css">
     </head>
     <body>
         <nav th:replace="base :: navbar"></nav>
@@ -23,7 +25,10 @@
         
         <div class="container" id="map">
             <h4>Deti 1º</h4>
-            <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
+            <div>
+                <div class="box hm-almost-full" style="top:88%; left:43%; width:10%; height:40%"></div>
+                <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
+            </div>
             <h4>Deti 2º</h4>
             <img id="2D" th:src="@{images/deti2.jpg}" style="width: 100%;">
             <h4>Biblioteca 1º</h4>
@@ -34,7 +39,7 @@
             <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
         </div>
 
-        <div th:include="base :: scripts"></div>
+        <th:block th:include="base :: scripts" />
         <script>
             $( "#map_choice" ).change(function () {
                 let str = "";
