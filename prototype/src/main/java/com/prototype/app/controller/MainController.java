@@ -25,6 +25,11 @@ public class MainController {
 		return "heatmaps";
 	}
 
+	@GetMapping("/api")
+	public String guard() {
+		return "api";
+	}
+
     @GetMapping("/error")
 	public String error() {
 		return "error";
