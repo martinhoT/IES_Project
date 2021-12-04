@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="main.css">
+        <script src="https://code.jquery.com/jquery-3.5.0.js%22%3E"></script>
+    </head>
+    <body>
+        <div class="hide">
+            <select name="heatmap" id="map_choice">
+                <optgroup label="Deti:">
+                    <option value="1D">1º andar</option>
+                    <option value="2D">2º andar</option>
+                </optgroup>
+                <optgroup label="Biblioteca:">
+                    <option value="1B">1º andar</option>
+                    <option value="2B">2º andar</option>
+                    <option value="3B">3º andar</option>
+                </optgroup>
+            </select>
+        </div>
+        
+        <h2>Heatmaps</h2>
+        
+        <div class="container" id="map">
+            <h4>Deti 1º</h4>
+            <img id="1D" src="../images/deti1.jpg" style="width: 100%;">
+            <h4>Deti 2º</h4>
+            <img id="2D" src="../images/deti2.jpg" style="width: 100%;">
+            <h4>Biblioteca 1º</h4>
+            <img id="1B" src="../images/biblio1.jpg" style="width: 100%;">
+            <h4>Biblioteca 2º</h4>
+            <img id="2B" src="../images/biblio2.jpg" style="width: 100%;">
+            <h4>Biblioteca 3º</h4>
+            <img id="3B" src="../images/biblio3.jpg" style="width: 100%;">
+        </div>
+        
+        <script>
+            $( "#map_choice" ).change(function () {
+                var str = "";
+                $( "#map_choice option:selected" ).each(function() {
+                  str += $( this ).text() + " ";
+                });
+                $( "#update" ).text( str );
+              }).change();
+        </script>
+    </body>
+</html>
