@@ -1,10 +1,10 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="main.css">
-        <script src="https://code.jquery.com/jquery-3.5.0.js%22%3E"></script>
+<html lang="en">
+    <head th:include="base :: head">
+        <title>Heatmaps</title>
     </head>
     <body>
+        <nav th:replace="base :: navbar"></nav>
+
         <div class="hide">
             <select name="heatmap" id="map_choice">
                 <optgroup label="Deti:">
@@ -23,20 +23,21 @@
         
         <div class="container" id="map">
             <h4>Deti 1º</h4>
-            <img id="1D" src="../images/deti1.jpg" style="width: 100%;">
+            <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
             <h4>Deti 2º</h4>
-            <img id="2D" src="../images/deti2.jpg" style="width: 100%;">
+            <img id="2D" th:src="@{images/deti2.jpg}" style="width: 100%;">
             <h4>Biblioteca 1º</h4>
-            <img id="1B" src="../images/biblio1.jpg" style="width: 100%;">
+            <img id="1B" th:src="@{images/biblio1.jpg}" style="width: 100%;">
             <h4>Biblioteca 2º</h4>
-            <img id="2B" src="../images/biblio2.jpg" style="width: 100%;">
+            <img id="2B" th:src="@{images/biblio2.jpg}" style="width: 100%;">
             <h4>Biblioteca 3º</h4>
-            <img id="3B" src="../images/biblio3.jpg" style="width: 100%;">
+            <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
         </div>
-        
+
+        <div th:include="base :: scripts"></div>
         <script>
             $( "#map_choice" ).change(function () {
-                var str = "";
+                let str = "";
                 $( "#map_choice option:selected" ).each(function() {
                   str += $( this ).text() + " ";
                 });

@@ -15,11 +15,15 @@ public class MainController {
 		return "main";
 	}
 
-	@GetMapping("/guard")
-	public String guard(Model model) {
-		return "guard";
+	@GetMapping("/logs")
+	public String logs() {
+		return "logs";
 	}
-
+	
+	@GetMapping("/heatmaps")
+	public String heatmaps() {
+		return "heatmaps";
+	}
 
     @GetMapping("/error")
 	public String error() {
