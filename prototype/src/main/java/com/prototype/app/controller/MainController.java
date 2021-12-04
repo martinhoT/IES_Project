@@ -20,6 +20,11 @@ public class MainController {
 		return "guard";
 	}
 
+	@GetMapping("/api")
+	public String guard() {
+		return "api";
+	}
+
 
     @GetMapping("/error")
 	public String error() {
