@@ -19,7 +19,9 @@ import org.json.simple.parser.JSONParser;
 
 @RestController
 public class ApiController {
-	public List<Event> getToday(){
+	// TODO: instead of these methods being static, make requests to this API
+
+	public static List<Event> getToday(){
 		JSONParser parser = new JSONParser();
 		List<Event> eventList = new ArrayList<Event>();
 		try {
@@ -43,7 +45,7 @@ public class ApiController {
 		return eventList;
 	}
 
-	public HashMap<String, List<Event>> getHistory(){
+	public static HashMap<String, List<Event>> getHistory(){
 		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
 		for(int year = 2018; year <= 2020; year++){
 			JSONParser parser = new JSONParser();
@@ -71,7 +73,7 @@ public class ApiController {
 		return history;
 	}
 
-	public HashMap<String, List<Room>> getUsage(){
+	public static HashMap<String, List<Room>> getUsage(){
 		HashMap<String, List<Room>> departments = new HashMap<String, List<Room>>();
 		for(int department = 1; department <= 6; department++){
 			JSONParser parser = new JSONParser();

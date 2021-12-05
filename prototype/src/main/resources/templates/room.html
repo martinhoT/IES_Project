@@ -2,12 +2,63 @@
 <html lang="en">
 <head>
     <th:block th:include="base :: head" />
-    <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}"></title>
+    <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</title>
 </head>
 <body>
     <nav th:replace="base :: navbar"></nav>
 
-    <p th:text="${dep} + '.' + ${floor} + '.' + ${room}"></p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-7">
+                <h1 th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</h1>
+            </div>
+
+            <div class="col-5">
+                <h2>Blacklist</h2>
+                <ul th:each="student : ${blacklisted}">
+                    <li>
+                        <span th:text="'Student ' + ${student.id}">Student</span>
+                        <a th:href="@{/room/${dep}.${floor}.${room}/blacklist/remove(sid=${student.id})}">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h1>Events</h1>
+                <div>
+                    <h3>Filters</h3>
+                    <form>
+                        <label></label>
+                        <select></select>
+                    </form>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Person</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="event : ${eventMap}">
+                        <tr>
+                            <th th:text="" scope="row"></th>
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+
 
     <th:block th:include="base :: scripts" />
 </body>
