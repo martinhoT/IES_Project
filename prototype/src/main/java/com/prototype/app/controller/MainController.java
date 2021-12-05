@@ -3,8 +3,7 @@ package com.prototype.app.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -19,9 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
-import java.util.Map;
 
 @RequestMapping("")
 @Controller
@@ -101,11 +97,12 @@ public class MainController {
 
 		for (int i = listOfFiles.length - 1; i >= 0; i--) {
 			if (listOfFiles[i].isFile()) {
-				fnames.add(listOfFiles[i].getName().replace(".json", ""));
-				System.out.println(fnames);
+				fnames.add(listOfFiles[i].getName().replace(".json", "").toUpperCase());
+				model.addAttribute(listOfFiles[i].getName().replace(".json", ""), listOfFiles[i].getName());
 			}
 		}
 
+		Collections.sort(fnames);
 		model.addAttribute("depList", fnames);
 		return "search_room";
 	}
@@ -120,7 +117,7 @@ public class MainController {
 
 		try {
 
-			JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/resources/static/data/status/" + dep + ".json"));
+			JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/resources/static/data/status/" + dep.toLowerCase() + ".json"));
 
 			for (Object o : a)
 			{
