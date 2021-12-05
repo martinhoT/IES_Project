@@ -2,13 +2,10 @@ package com.prototype.app.controller;
 
 import java.io.FileReader;
 
-import java.util.List;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 import javax.validation.Valid;
 
-import com.prototype.app.entity.Room;
 import com.prototype.app.entity.User;
 
 import org.json.simple.JSONArray;
@@ -68,9 +65,7 @@ public class MainController {
 		/*
 		* ... obtain the room dynamically ...
 		*/
-		// dep = 4;
-		// floor = 1;
-		// room = 19;
+		//getHistory
 		model.addAllAttributes(Map.of(
 			"dep", dep,
 			"floor", floor,
