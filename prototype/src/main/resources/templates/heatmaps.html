@@ -2,7 +2,7 @@
     <head>
         <th:block th:include="base :: head" />
         <title>Heatmaps</title>
-        <link rel="stylesheet" href="css/heatmap.css" type="text/css">
+        <link rel="stylesheet" th:href="@{/css/heatmap.css}" type="text/css">
     </head>
     <body>
         <nav th:replace="base :: navbar"></nav>

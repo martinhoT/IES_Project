@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <th:block th:include="base :: head" />
-    <title>Title</title>
+    <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}"></title>
 </head>
 <body>
     <nav th:replace="base :: navbar"></nav>
