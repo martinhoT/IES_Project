@@ -7,6 +7,11 @@
 <body>
     <nav th:replace="base :: navbar"></nav>
 
+    <div>
+        <ul id="alert-list" style="position: fixed">
+        </ul>
+    </div>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-7">
@@ -76,7 +81,29 @@
         </div>
     </div>
 
-
     <th:block th:include="base :: scripts" />
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function demo() {
+            await sleep(1000);
+            const alertList = document.getElementById('alert-list');
+            let alert = document.createElement('li');
+            alert.textContent = 'This is an alert box.';
+            alert.className = 'alert';
+            let x = document.createElement('span');
+            x.className = 'closebtn';
+            x.onclick = function (event) {
+                this.parentElement.style.display='none';
+            }
+            x.innerHTML = '&times';
+            alert.appendChild(x);
+            alertList.appendChild(alert);
+        }
+
+        demo()
+    </script>
 </body>
 </html>
