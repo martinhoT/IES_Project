@@ -22,32 +22,32 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main(Model model) {
-        model.addAttribute("text", "Hello World!");
+		model.addAttribute("text", "Hello World!");
 		return "main";
 	}
 
-  @GetMapping("/login")
-  public String showLoginForm(User user) {
-      return "login";
-  }
+	@GetMapping("/login")
+	public String showLoginForm(User user) {
+		return "login";
+	}
 
-@PostMapping("/login")
-  public String addUser(@Valid User user, BindingResult result, Model model) {
-      if (result.hasErrors()) {
-          return "login";
-      }
+	@PostMapping("/login")
+	public String login(@Valid User user, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			return "login";
+		}
 
-      if (user.getName().equals("Analyst") && user.getpassword().equals("Password")){
-        return "redirect:/api";
-      }else if (user.getName().equals("Security") && user.getpassword().equals("Password")){
-        return "redirect:/guard";
-      }else if (user.getName().equals("Student") && user.getpassword().equals("Password")) {
-        return "redirect:/";
-      }else{
-        model.addAttribute("wrong", true);
-        return "login";
-      }
-  }
+		if (user.getName().equals("Analyst") && user.getpassword().equals("Password")){
+			return "redirect:/api";
+		}else if (user.getName().equals("Security") && user.getpassword().equals("Password")){
+			return "redirect:/";
+		}else if (user.getName().equals("Student") && user.getpassword().equals("Password")) {
+			return "redirect:/";
+		}else{
+			model.addAttribute("wrong", true);
+			return "login";
+		}
+	}
 
 	@GetMapping("/logs")
 	public String logs() {
