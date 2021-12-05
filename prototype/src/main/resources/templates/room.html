@@ -7,7 +7,7 @@
 <body>
     <nav th:replace="base :: navbar"></nav>
 
-    <div style="position: sticky; z-index: 1; width: 100%;">
+    <div style="position: absolute; z-index: 1; width: 100%;">
         <ul id="alert-list" style="padding: 0">
         </ul>
     </div>
@@ -88,7 +88,7 @@
         }
 
         async function demo() {
-            await sleep(1000);
+            await sleep(5000);
             const alertList = document.getElementById('alert-list');
             let alert = document.createElement('li');
             alert.textContent = 'This is an alert box.';
