@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-    <head> 
-        <title>Getting Started: Serving Web Content</title> 
+    <head>
+        <th:block th:include="base :: head" />
+        <title>Main page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
+        <nav th:replace="base :: navbar"></nav>
         <p th:text="${text}"></p>
+
+        <th:block th:include="base :: scripts" />
     </body>
 </html>
