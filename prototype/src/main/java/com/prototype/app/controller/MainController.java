@@ -2,46 +2,44 @@ package com.prototype.app.controller;
 
 import com.prototype.app.entity.Event;
 import com.prototype.app.entity.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequestMapping("")
 @Controller
 public class MainController {
 
-	private final List<Student> blacklist;
+	private final Map<String, Student> blacklist;
 
 	public MainController() {
-		blacklist = new ArrayList<>(List.of(
-				new Student(98592),
-				new Student(92521),
-				new Student(52195)
+		blacklist = new HashMap<>(Map.of(
+				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
+				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
+				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
 		));
 	}
 
-	public List<Student> getRoomBlacklist(int dep, int floor, int room) {
+	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
 		return blacklist;
 	}
 
-	public HashMap<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
+	public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
 		return ApiController.getHistory();
 	}
 
-	public void remRoomBlacklist(int dep, int floor, int room, int studentId) {
-		blacklist.removeIf((s) -> s.getId()==studentId);
+	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
+		blacklist.remove(studentEmail);
+	}
+
+	public void addRoomBlacklist(int dep, int floor, int room, String studentName, String studentEmail) {
+		if (!blacklist.containsKey(studentEmail))
+			blacklist.put(studentEmail, new Student(studentName, studentEmail));
 	}
 
 	@GetMapping("/")
@@ -60,12 +58,9 @@ public class MainController {
 		/*
 		* ... obtain the room dynamically ...
 		*/
-		dep = 4;
-		floor = 1;
-		room = 19;
 
-		List<Student> blacklisted = getRoomBlacklist(dep, floor, room);
-		HashMap<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
 		model.addAllAttributes(Map.of(
 			"dep", dep,
 			"floor", floor,
@@ -81,11 +76,44 @@ public class MainController {
 			@PathVariable int dep,
 			@PathVariable int floor,
 			@PathVariable int room,
-			@RequestParam(name="sid") int studentId) {
+			@RequestParam(name="email") String studentEmail,
+			Model model) {
 
-		remRoomBlacklist(dep, floor, room, studentId);
+		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+		model.addAllAttributes(Map.of(
+				"dep", dep,
+				"floor", floor,
+				"room", room,
+				"blacklisted", blacklisted,
+				"eventMap", eventMap
+		));
+		remRoomBlacklist(dep, floor, room, studentEmail);
 		return "room";
 	}
+
+	@GetMapping("/room/{dep}.{floor}.{room}/add")
+	public String roomAdd(
+			@PathVariable int dep,
+			@PathVariable int floor,
+			@PathVariable int room,
+			@RequestParam(name="name") String studentName,
+			@RequestParam(name="email") String studentEmail,
+			Model model) {
+
+		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+		model.addAllAttributes(Map.of(
+				"dep", dep,
+				"floor", floor,
+				"room", room,
+				"blacklisted", blacklisted,
+				"eventMap", eventMap
+		));
+		addRoomBlacklist(dep, floor, room, studentName, studentEmail);
+		return "room";
+	}
+
 
 	@GetMapping("/heatmaps")
 	public String heatmaps() {
