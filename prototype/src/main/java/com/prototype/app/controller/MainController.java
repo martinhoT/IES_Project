@@ -1,7 +1,5 @@
 package com.prototype.app.controller;
 
-import java.util.HashMap;
-
 import javax.validation.Valid;
 
 import com.prototype.app.entity.User;
