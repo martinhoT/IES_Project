@@ -45,7 +45,7 @@ public class MainController {
 	}
 
 	@GetMapping("/api")
-	public String guard() {
+	public String api() {
 		return "api";
 	}
 
