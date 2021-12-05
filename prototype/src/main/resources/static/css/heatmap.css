@@ -1,3 +1,7 @@
+.map-container {
+    position: relative;
+}
+
 .box {
     position: absolute;
     opacity: 0.4;
