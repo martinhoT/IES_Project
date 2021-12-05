@@ -81,7 +81,15 @@ public class MainController {
 	}
 
 	@GetMapping("/logs")
-	public String logs() {
+	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+		List<Event> events;
+		if (room.equals("None"))
+			events = new ArrayList<>();
+		else
+			events = ApiController.getToday(room);
+		model.addAllAttributes(Map.of(
+			"events", events
+		));
 		return "logs";
 	}
 
