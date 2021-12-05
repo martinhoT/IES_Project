@@ -13,6 +13,10 @@ public class Room {
         this.restricted = restricted;
 	}
 
+    public Room() {
+
+    }
+
     public void setRoom(String room){
         this.room = room;
     }
