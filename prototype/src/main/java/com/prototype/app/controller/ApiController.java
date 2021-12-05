@@ -1,6 +1,7 @@
 package com.prototype.app.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prototype.app.entity.Room;
@@ -19,9 +20,10 @@ import org.json.simple.parser.JSONParser;
 
 @RestController
 public class ApiController {
-	public List<Event> getToday(){
+	public List<Event> getToday(String roomName){
 		JSONParser parser = new JSONParser();
 		List<Event> eventList = new ArrayList<Event>();
+
 		try {
 			java.io.File filePath = new java.io.File("src/main/resources/static/data/today/events.json");
 			JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
@@ -35,7 +37,11 @@ public class ApiController {
 										(Boolean)jsonObject.get("entered"), 
 										(String)jsonObject.get("time")
 									   );
-				eventList.add(event);
+				if (roomName == null){
+					eventList.add(event);
+				}else if(event.getRoom().replace(".", "").equals(roomName)){
+					eventList.add(event);
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -43,9 +49,10 @@ public class ApiController {
 		return eventList;
 	}
 
-	public HashMap<String, List<Event>> getHistory(){
+	public HashMap<String, List<Event>> getHistory(String year){
 		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
-		for(int year = 2018; year <= 2020; year++){
+
+		if (year != null){
 			JSONParser parser = new JSONParser();
 			List<Event> eventList = new ArrayList<Event>();
 			try {
@@ -67,6 +74,30 @@ public class ApiController {
 				e.printStackTrace();
 			}
 			history.put(year + "", eventList);
+		}else {
+			for(int y = 2018; y <= 2020; y++){
+				JSONParser parser = new JSONParser();
+				List<Event> eventList = new ArrayList<Event>();
+				try {
+					java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + y + ".json");
+					JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
+					for(Object eventJson : jsonEvents){
+						JSONObject jsonObject = (JSONObject)eventJson;
+						Event event = new Event(
+												(Long)jsonObject.get("index"), 
+												(String)jsonObject.get("user"), 
+												(String)jsonObject.get("email"),
+												(String)jsonObject.get("room"),
+												(Boolean)jsonObject.get("entered"), 
+												(String)jsonObject.get("time")
+											);
+						eventList.add(event);
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				history.put(y + "", eventList);
+			}
 		}
 		return history;
 	}
@@ -98,13 +129,13 @@ public class ApiController {
 	}
 	
 	@GetMapping("/api/today")
-	public List<Event> today() {
-		return getToday();
+	public List<Event> today(@RequestParam(required = false) String room) {
+		return getToday(room);
     }
 
 	@GetMapping("/api/history")
-	public HashMap<String, List<Event>> history() {
-		return getHistory();
+	public HashMap<String, List<Event>> history(@RequestParam(required = false) String year) {
+		return getHistory(year);
     }
 
 	@GetMapping("/api/status")
