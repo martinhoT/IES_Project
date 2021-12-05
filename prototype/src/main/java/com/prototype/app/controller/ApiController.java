@@ -23,7 +23,7 @@ public class ApiController {
 		JSONParser parser = new JSONParser();
 		List<Event> eventList = new ArrayList<Event>();
 		try {
-			java.io.File filePath = new java.io.File("src/main/resources/static/todayEvents.json");
+			java.io.File filePath = new java.io.File("src/main/resources/static/data/today/events.json");
 			JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
 			for(Object eventJson : jsonEvents){
 				JSONObject jsonObject = (JSONObject)eventJson;
@@ -49,7 +49,7 @@ public class ApiController {
 			JSONParser parser = new JSONParser();
 			List<Event> eventList = new ArrayList<Event>();
 			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/year" + year + "Events.json");
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + year + ".json");
 				JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
 				for(Object eventJson : jsonEvents){
 					JSONObject jsonObject = (JSONObject)eventJson;
@@ -77,7 +77,7 @@ public class ApiController {
 			JSONParser parser = new JSONParser();
 			List<Room> roomList = new ArrayList<Room>();
 			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/dep" + department + "rooms.json");
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep" + department + ".json");
 				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
 				for(Object roomJson : jsonRooms){
 					JSONObject jsonObject = (JSONObject)roomJson;
