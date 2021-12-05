@@ -1,10 +1,19 @@
 package com.prototype.app.controller;
 
+import java.io.FileReader;
+
+import java.util.List;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.validation.Valid;
 
+import com.prototype.app.entity.Room;
 import com.prototype.app.entity.User;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,7 +80,23 @@ public class MainController {
 	}
 
 	@GetMapping("/heatmaps")
-	public String heatmaps() {
+	public String heatmaps(Model model) {
+		Map<String,String> roomOccupacy = new HashMap<String,String>();
+		for(int department = 1; department <= 6; department++){
+			JSONParser parser = new JSONParser();
+			try {
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep"+department+".json");
+				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
+				for(Object roomJson : jsonRooms){
+					JSONObject jsonObject = (JSONObject)roomJson;
+					roomOccupacy.put((String)jsonObject.get("room"),(String)jsonObject.get("occupacy"));
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		model.addAllAttributes(Map.of(
+			"roomOccupacy", roomOccupacy));
 		return "heatmaps";
 	}
 
