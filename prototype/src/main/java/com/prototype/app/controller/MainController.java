@@ -1,5 +1,7 @@
 package com.prototype.app.controller;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("")
@@ -83,5 +86,23 @@ public class MainController {
     @GetMapping("/error")
 	public String error() {
 		return "error";
+	}
+
+	@RequestMapping(value="/studyRooms")
+	public String getAllStudyRooms(Model model) {
+		// Get dep names
+		File folder = new File("src/main/resources/static/data/status/");
+		File[] listOfFiles = folder.listFiles();
+		List<String> fnames = new ArrayList<>();
+
+		for (int i = listOfFiles.length - 1; i >= 0; i--) {
+			if (listOfFiles[i].isFile()) {
+				fnames.add(listOfFiles[i].getName().replace(".json", ""));
+				System.out.println(fnames);
+			}
+		}
+
+		model.addAttribute("depList", fnames);
+		return "search_room";
 	}
 }
