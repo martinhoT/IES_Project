@@ -1,6 +1,7 @@
 package com.prototype.app.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prototype.app.entity.Room;
@@ -21,11 +22,12 @@ import org.json.simple.parser.JSONParser;
 public class ApiController {
 	// TODO: instead of these methods being static, make requests to this API
 
-	public static List<Event> getToday(){
+	public static List<Event> getToday(String roomName){
 		JSONParser parser = new JSONParser();
 		List<Event> eventList = new ArrayList<Event>();
+
 		try {
-			java.io.File filePath = new java.io.File("src/main/resources/static/todayEvents.json");
+			java.io.File filePath = new java.io.File("src/main/resources/static/data/today/events.json");
 			JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
 			for(Object eventJson : jsonEvents){
 				JSONObject jsonObject = (JSONObject)eventJson;
@@ -37,7 +39,11 @@ public class ApiController {
 										(Boolean)jsonObject.get("entered"), 
 										(String)jsonObject.get("time")
 									   );
-				eventList.add(event);
+				if (roomName == null){
+					eventList.add(event);
+				}else if(event.getRoom().replace(".", "").equals(roomName)){
+					eventList.add(event);
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -45,13 +51,14 @@ public class ApiController {
 		return eventList;
 	}
 
-	public static HashMap<String, List<Event>> getHistory(){
+	public static HashMap<String, List<Event>> getHistory(String year){
 		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
-		for(int year = 2018; year <= 2020; year++){
+
+		if (year != null){
 			JSONParser parser = new JSONParser();
 			List<Event> eventList = new ArrayList<Event>();
 			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/year" + year + "Events.json");
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + year + ".json");
 				JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
 				for(Object eventJson : jsonEvents){
 					JSONObject jsonObject = (JSONObject)eventJson;
@@ -69,17 +76,41 @@ public class ApiController {
 				e.printStackTrace();
 			}
 			history.put(year + "", eventList);
+		}else {
+			for(int y = 2018; y <= 2020; y++){
+				JSONParser parser = new JSONParser();
+				List<Event> eventList = new ArrayList<Event>();
+				try {
+					java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + y + ".json");
+					JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
+					for(Object eventJson : jsonEvents){
+						JSONObject jsonObject = (JSONObject)eventJson;
+						Event event = new Event(
+												(Long)jsonObject.get("index"), 
+												(String)jsonObject.get("user"), 
+												(String)jsonObject.get("email"),
+												(String)jsonObject.get("room"),
+												(Boolean)jsonObject.get("entered"), 
+												(String)jsonObject.get("time")
+											);
+						eventList.add(event);
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				history.put(y + "", eventList);
+			}
 		}
 		return history;
 	}
 
-	public static HashMap<String, List<Room>> getUsage(){
+	public static HashMap<String, List<Room>> getStatus(){
 		HashMap<String, List<Room>> departments = new HashMap<String, List<Room>>();
 		for(int department = 1; department <= 6; department++){
 			JSONParser parser = new JSONParser();
 			List<Room> roomList = new ArrayList<Room>();
 			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/dep" + department + "rooms.json");
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep" + department + ".json");
 				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
 				for(Object roomJson : jsonRooms){
 					JSONObject jsonObject = (JSONObject)roomJson;
@@ -98,19 +129,19 @@ public class ApiController {
 		}
 		return departments;
 	}
-	
+
 	@GetMapping("/api/today")
-	public List<Event> today() {
-		return getToday();
+	public List<Event> today(@RequestParam(required = false) String room) {
+		return getToday(room);
     }
 
 	@GetMapping("/api/history")
-	public HashMap<String, List<Event>> history() {
-		return getHistory();
+	public HashMap<String, List<Event>> history(@RequestParam(required = false) String year) {
+		return getHistory(year);
     }
 
 	@GetMapping("/api/status")
 	public HashMap<String, List<Room>> status() {
-		return getUsage();
+		return getStatus();
     }
 }

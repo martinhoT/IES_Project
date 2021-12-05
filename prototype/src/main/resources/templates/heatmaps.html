@@ -22,12 +22,19 @@
         </div>
         
         <h2>Heatmaps</h2>
-        
+
         <div class="container" id="map">
             <h4>Deti 1º</h4>
             <div class="map-container">
                 <a th:href="@{/room/4.1.19}">
-                    <div class="box hm-almost-full" style="top:8%; left:42%; width:12%; height:14%"></div>
+                    <div class="box hm-almost-full" style="top:8.3%; left:42%; width:11.5%; height:13.5%; background:#ff7300">
+                        <p th:utext="${roomOccupacy.get('4.7.8')}"></p>
+                    </div>
+                </a>
+                <a th:href="@{/room/4.1.20}">
+                    <div class="box hm-almost-full" style="top:8.3%; left:53.5%; width:7.2%; height:13.5%; background: #ff0000;">
+                        <p th:utext="${roomOccupacy.get('4.0.10')}"></p>
+                    </div>
                 </a>
                 <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
             </div>
@@ -42,6 +49,7 @@
         </div>
 
         <th:block th:include="base :: scripts" />
+        
         <script>
             $( "#map_choice" ).change(function () {
                 let str = "";
