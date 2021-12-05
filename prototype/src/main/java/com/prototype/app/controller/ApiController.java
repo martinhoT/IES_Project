@@ -71,7 +71,7 @@ public class ApiController {
 		return history;
 	}
 
-	public HashMap<String, List<Room>> getUsage(){
+	public HashMap<String, List<Room>> getStatus(){
 		HashMap<String, List<Room>> departments = new HashMap<String, List<Room>>();
 		for(int department = 1; department <= 6; department++){
 			JSONParser parser = new JSONParser();
@@ -109,6 +109,6 @@ public class ApiController {
 
 	@GetMapping("/api/status")
 	public HashMap<String, List<Room>> status() {
-		return getUsage();
+		return getStatus();
     }
 }
