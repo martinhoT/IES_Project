@@ -57,9 +57,9 @@ public class MainController {
 		/*
 		* ... obtain the room dynamically ...
 		*/
-		dep = 4;
-		floor = 1;
-		room = 19;
+		// dep = 4;
+		// floor = 1;
+		// room = 19;
 		model.addAllAttributes(Map.of(
 			"dep", dep,
 			"floor", floor,
