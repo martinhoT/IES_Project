@@ -4,7 +4,36 @@
         <title>Logs</title>
     </head>
     <body>
-        <nav th:replace="base :: navbar"></nav>
+    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/sec}">
+                        <i class="fa fa-home"></i>
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/heatmaps}">
+                        Map
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logs}">
+                        Logs
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">
+                        Log out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
         <div class="container">
             <h2>Logs</h2>

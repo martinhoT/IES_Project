@@ -72,13 +72,18 @@ public class MainController {
 		if (user.getName().equals("Analyst") && user.getpassword().equals("Password")){
 			return "redirect:/api";
 		}else if (user.getName().equals("Security") && user.getpassword().equals("Password")){
-			return "redirect:/";
+			return "redirect:/sec";
 		}else if (user.getName().equals("Student") && user.getpassword().equals("Password")) {
-			return "redirect:/";
+			return "redirect:/studyRooms";
 		}else{
 			model.addAttribute("wrong", true);
 			return "login";
 		}
+	}
+
+	@GetMapping("/sec")
+	public String sec() {
+		return "sec";
 	}
 
 	@GetMapping("/logs")
@@ -175,6 +180,27 @@ public class MainController {
 		model.addAllAttributes(Map.of(
 			"roomOccupacy", roomOccupacy));
 		return "heatmaps";
+	}
+
+	@GetMapping("/heatmaps_lite")
+	public String heatmaps_lite(Model model) {
+		Map<String,String> roomOccupacy = new HashMap<String,String>();
+		for(int department = 1; department <= 6; department++){
+			JSONParser parser = new JSONParser();
+			try {
+				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep"+department+".json");
+				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
+				for(Object roomJson : jsonRooms){
+					JSONObject jsonObject = (JSONObject)roomJson;
+					roomOccupacy.put((String)jsonObject.get("room"),(String)jsonObject.get("occupacy"));
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		model.addAllAttributes(Map.of(
+				"roomOccupacy", roomOccupacy));
+		return "heatmaps_lite";
 	}
 
 	@GetMapping("/api")
