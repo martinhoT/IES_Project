@@ -4,30 +4,64 @@
         <title>Logs</title>
     </head>
     <body>
-        <nav th:replace="base :: navbar"></nav>
+    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/sec}">
+                        <i class="fa fa-home"></i>
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/heatmaps}">
+                        Map
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logs}">
+                        Logs
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">
+                        Log out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
         <div class="container">
-            <h2>Sala 101:</h2>
-            <ul role="toolbar">
-                <li>User 1 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="1" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 2 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="2" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 3 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="3" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 4 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="4" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-            </ul>
-            <h2>Sala 102:</h2>
-            <ul role="toolbar">
-                <li>User 1 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="1" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 2 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="2" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 3 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="3" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 4 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="4" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-            </ul>
-            <h2>Sala 103:</h2>
-            <ul role="toolbar">
-                <li>User 1 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="1" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 2 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="2" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 3 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="3" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-                <li>User 4 <button type="button" class="btn btn-danger" aria-setsize="4" aria-posinset="4" title="BLOCK"><i class="fa fa-ban"></i></button></li>
-            </ul>
+            <h2>Logs</h2>
+            <form method="get" th:action="@{/logs}">
+                <label for="room">Room:</label>
+                <input type="text" id="room" name="room"/>
+                <input type="submit" value="Submit" />
+            </form>
+            <table class="table" th:unless="${events.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Person</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody th:each="event : ${events}">
+                    <tr>
+                        <th th:text="${event.id}" scope="row">Id</th>
+                        <td th:text="${event.person}">Person</td>
+                        <td th:text="${event.email}">Email</td>
+                        <td th:text="${event.action}">Action</td>
+                        <td th:text="${event.time}">Time</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
         <th:block th:include="base :: scripts" />
