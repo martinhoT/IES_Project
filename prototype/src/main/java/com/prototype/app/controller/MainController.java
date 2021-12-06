@@ -180,7 +180,7 @@ public class MainController {
 	}
 
 	@GetMapping(value="/studyRooms")
-	public String getAllStudyRooms(Model model) {
+	public String getAllDepartments(Model model) {
 		// Get dep names
 		File folder = new File("src/main/resources/static/data/status/");
 		File[] listOfFiles = folder.listFiles();
@@ -200,11 +200,12 @@ public class MainController {
 
 	@PostMapping(value = "/studyRooms")
 	@ResponseBody
-	public ModelAndView addUser(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
+	public ModelAndView getStudyRooms(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
 		JSONParser parser = new JSONParser();
 		JSONObject suggested = null;
 		ModelAndView mav = new ModelAndView();
-		Room room = new Room();
+		List<Room> rooms = new ArrayList<>();
+
 
 		try {
 
@@ -212,6 +213,7 @@ public class MainController {
 
 			for (Object o : a)
 			{
+				Room room = new Room();
 				JSONObject roomJson = (JSONObject) o;
 
 				String roomName = (String) roomJson.get("room");
@@ -225,6 +227,9 @@ public class MainController {
 
 				Boolean roomRestricted = (Boolean) roomJson.get("restricted");
 				room.setRestricted(roomRestricted);
+
+				if (!room.getRestricted())
+					rooms.add(room);
 
 //				if ((Boolean) roomJson.get("restricted"))
 //					continue;
@@ -243,7 +248,9 @@ public class MainController {
 			System.out.println(e.getMessage());
 		}
 
-		mav.addObject("room", room);
+		rooms.sort(Comparator.comparingInt(Room::getCurrentOccupacy));
+
+		mav.addObject("rooms", rooms);
 		mav.setViewName("suggested_room");
 
 		return mav;

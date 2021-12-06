@@ -33,6 +33,8 @@ public class Room {
         return occupacy;
     }
 
+    public int getCurrentOccupacy(){return Integer.parseInt(occupacy.substring(0, occupacy.length()-1));}
+
     public void setMaxNumberOfPeople(Long maxNumberOfPeople){
         this.maxNumberOfPeople = maxNumberOfPeople;
     }
