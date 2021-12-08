@@ -1,0 +1,92 @@
+<html lang="en">
+    <head>
+        <th:block th:include="base :: head" />
+        <title>Heatmaps</title>
+        <link rel="stylesheet" th:href="@{/css/heatmap.css}" type="text/css">
+    </head>
+    <body>
+    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/sec}">
+                        <i class="fa fa-home"></i>
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/heatmaps}">
+                        Map
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logs}">
+                        Logs
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">
+                        Log out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+        <div class="hide">
+            <select name="heatmap" id="map_choice">
+                <optgroup label="Deti:">
+                    <option value="1D">1º andar</option>
+                    <option value="2D">2º andar</option>
+                </optgroup>
+                <optgroup label="Biblioteca:">
+                    <option value="1B">1º andar</option>
+                    <option value="2B">2º andar</option>
+                    <option value="3B">3º andar</option>
+                </optgroup>
+            </select>
+        </div>
+        
+        <h2>Heatmaps</h2>
+
+        <div class="container" id="map">
+            <h4>Deti 1º</h4>
+            <div class="map-container">
+                <a th:href="@{/room/4.1.19}">
+                    <div class="box hm-almost-full" style="top:8.3%; left:42%; width:11.5%; height:13.5%; background:#ff7300">
+                        <p th:utext="${roomOccupacy.get('4.7.8')}"></p>
+                    </div>
+                </a>
+                <a th:href="@{/room/4.1.20}">
+                    <div class="box hm-almost-full" style="top:8.3%; left:53.5%; width:7.2%; height:13.5%; background: #ff0000;">
+                        <p th:utext="${roomOccupacy.get('4.0.10')}"></p>
+                    </div>
+                </a>
+                <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
+            </div>
+            <h4>Deti 2º</h4>
+            <img id="2D" th:src="@{images/deti2.jpg}" style="width: 100%;">
+            <h4>Biblioteca 1º</h4>
+            <img id="1B" th:src="@{images/biblio1.jpg}" style="width: 100%;">
+            <h4>Biblioteca 2º</h4>
+            <img id="2B" th:src="@{images/biblio2.jpg}" style="width: 100%;">
+            <h4>Biblioteca 3º</h4>
+            <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
+        </div>
+
+        <th:block th:include="base :: scripts" />
+        
+        <script>
+            $( "#map_choice" ).change(function () {
+                let str = "";
+                $( "#map_choice option:selected" ).each(function() {
+                  str += $( this ).text() + " ";
+                });
+                $( "#update" ).text( str );
+              }).change();
+        </script>
+    </body>
+</html>
