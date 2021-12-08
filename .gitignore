@@ -1,0 +1,8 @@
+# Visual Studio Code
+**/.vscode
+
+# Python
+**/__pycache__
+
+# Logs
+RaspberryPi/Data/Output/logs.txt
