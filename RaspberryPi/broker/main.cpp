@@ -4,13 +4,13 @@
 #include <algorithm>
 #include <iterator>
 
-const char* client_name = "melga";
+const char* client_name = "fetcher";
 
-const char* broker_host = "192.168.1.66";
+const char* broker_host = "localhost";
 // It's usually 1883
 const int broker_port = 1883;
 // The number of seconds after which the broker should send a PING message to the client if no other messages have been exchanged in that time
-const int connection_keepalive = 30;
+const int connection_keepalive = 60;
 
 const char* topic = "mosquitto/test";
 /* Quality of Service
@@ -26,8 +26,7 @@ void msg_received(struct mosquitto* mosq, void* obj, const struct mosquitto_mess
     msg.copy((char*) message->payload, message->payloadlen);
 }
 
-// TODO: not secure, maybe use TLS later?
-// This is a mosquitto instance that obtains data and sends it to the broker
+// This is the broker's mosquitto instance that fetches the data sent by the sensor mosquittoes
 int main() {
     struct mosquitto* client = mosquitto_new(client_name, true, nullptr);
     mosquitto_message_callback_set(client, msg_received);
@@ -53,5 +52,6 @@ int main() {
     }
 
     mosquitto_destroy(client);
+
     return 0;
 }
