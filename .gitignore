@@ -6,3 +6,6 @@
 
 # Logs
 RaspberryPi/Data/Output/logs.txt
+
+# Compilation artifacts
+**/*.o
