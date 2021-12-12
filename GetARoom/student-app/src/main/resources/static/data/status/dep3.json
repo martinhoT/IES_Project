@@ -1,0 +1,404 @@
+[
+    {
+      "room": "3.6.3",
+      "occupacy": "52%",
+      "maxNumberOfPeople": 9,
+      "restricted": false
+    },
+    {
+      "room": "3.10.0",
+      "occupacy": "59%",
+      "maxNumberOfPeople": 9,
+      "restricted": true
+    },
+    {
+      "room": "3.2.3",
+      "occupacy": "39%",
+      "maxNumberOfPeople": 5,
+      "restricted": false
+    },
+    {
+      "room": "3.0.9",
+      "occupacy": "34%",
+      "maxNumberOfPeople": 2,
+      "restricted": true
+    },
+    {
+      "room": "3.8.6",
+      "occupacy": "64%",
+      "maxNumberOfPeople": 4,
+      "restricted": true
+    },
+    {
+      "room": "3.8.10",
+      "occupacy": "32%",
+      "maxNumberOfPeople": 4,
+      "restricted": true
+    },
+    {
+      "room": "3.1.4",
+      "occupacy": "45%",
+      "maxNumberOfPeople": 2,
+      "restricted": true
+    },
+    {
+      "room": "3.3.6",
+      "occupacy": "65%",
+      "maxNumberOfPeople": 0,
+      "restricted": false
+    },
+    {
+      "room": "3.6.5",
+      "occupacy": "69%",
+      "maxNumberOfPeople": 1,
+      "restricted": true
+    },
+    {
+      "room": "3.1.1",
+      "occupacy": "99%",
+      "maxNumberOfPeople": 6,
+      "restricted": false
+    },
+    {
+      "room": "3.9.0",
+      "occupacy": "17%",
+      "maxNumberOfPeople": 7,
+      "restricted": false
+    },
+    {
+      "room": "3.5.7",
+      "occupacy": "94%",
+      "maxNumberOfPeople": 10,
+      "restricted": true
+    },
+    {
+      "room": "3.4.3",
+      "occupacy": "71%",
+      "maxNumberOfPeople": 6,
+      "restricted": true
+    },
+    {
+      "room": "3.7.6",
+      "occupacy": "36%",
+      "maxNumberOfPeople": 4,
+      "restricted": true
+    },
+    {
+      "room": "3.2.6",
+      "occupacy": "64%",
+      "maxNumberOfPeople": 7,
+      "restricted": true
+    },
+    {
+      "room": "3.8.5",
+      "occupacy": "31%",
+      "maxNumberOfPeople": 3,
+      "restricted": false
+    },
+    {
+      "room": "3.8.4",
+      "occupacy": "33%",
+      "maxNumberOfPeople": 7,
+      "restricted": true
+    },
+    {
+      "room": "3.5.7",
+      "occupacy": "93%",
+      "maxNumberOfPeople": 5,
+      "restricted": true
+    },
+    {
+      "room": "3.0.9",
+      "occupacy": "49%",
+      "maxNumberOfPeople": 0,
+      "restricted": false
+    },
+    {
+      "room": "3.9.9",
+      "occupacy": "84%",
+      "maxNumberOfPeople": 6,
+      "restricted": false
+    },
+    {
+      "room": "3.9.0",
+      "occupacy": "57%",
+      "maxNumberOfPeople": 5,
+      "restricted": false
+    },
+    {
+      "room": "3.5.7",
+      "occupacy": "29%",
+      "maxNumberOfPeople": 3,
+      "restricted": true
+    },
+    {
+      "room": "3.0.3",
+      "occupacy": "55%",
+      "maxNumberOfPeople": 9,
+      "restricted": true
+    },
+    {
+      "room": "3.8.8",
+      "occupacy": "77%",
+      "maxNumberOfPeople": 9,
+      "restricted": true
+    },
+    {
+      "room": "3.7.10",
+      "occupacy": "18%",
+      "maxNumberOfPeople": 5,
+      "restricted": false
+    },
+    {
+      "room": "3.0.8",
+      "occupacy": "79%",
+      "maxNumberOfPeople": 8,
+      "restricted": true
+    },
+    {
+      "room": "3.8.7",
+      "occupacy": "21%",
+      "maxNumberOfPeople": 6,
+      "restricted": true
+    },
+    {
+      "room": "3.9.3",
+      "occupacy": "81%",
+      "maxNumberOfPeople": 8,
+      "restricted": false
+    },
+    {
+      "room": "3.7.7",
+      "occupacy": "90%",
+      "maxNumberOfPeople": 4,
+      "restricted": false
+    },
+    {
+      "room": "3.7.9",
+      "occupacy": "90%",
+      "maxNumberOfPeople": 4,
+      "restricted": false
+    },
+    {
+      "room": "3.4.6",
+      "occupacy": "57%",
+      "maxNumberOfPeople": 0,
+      "restricted": false
+    },
+    {
+      "room": "3.3.8",
+      "occupacy": "54%",
+      "maxNumberOfPeople": 0,
+      "restricted": true
+    },
+    {
+      "room": "3.1.4",
+      "occupacy": "42%",
+      "maxNumberOfPeople": 2,
+      "restricted": true
+    },
+    {
+      "room": "3.9.1",
+      "occupacy": "73%",
+      "maxNumberOfPeople": 8,
+      "restricted": false
+    },
+    {
+      "room": "3.9.4",
+      "occupacy": "77%",
+      "maxNumberOfPeople": 5,
+      "restricted": true
+    },
+    {
+      "room": "3.2.10",
+      "occupacy": "5%",
+      "maxNumberOfPeople": 9,
+      "restricted": true
+    },
+    {
+      "room": "3.3.8",
+      "occupacy": "39%",
+      "maxNumberOfPeople": 2,
+      "restricted": true
+    },
+    {
+      "room": "3.2.8",
+      "occupacy": "37%",
+      "maxNumberOfPeople": 1,
+      "restricted": true
+    },
+    {
+      "room": "3.7.6",
+      "occupacy": "85%",
+      "maxNumberOfPeople": 6,
+      "restricted": false
+    },
+    {
+      "room": "3.9.9",
+      "occupacy": "41%",
+      "maxNumberOfPeople": 6,
+      "restricted": false
+    },
+    {
+      "room": "3.7.4",
+      "occupacy": "13%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.7.8",
+      "occupacy": "100%",
+      "maxNumberOfPeople": 2,
+      "restricted": true
+    },
+    {
+      "room": "3.7.2",
+      "occupacy": "45%",
+      "maxNumberOfPeople": 2,
+      "restricted": false
+    },
+    {
+      "room": "3.3.7",
+      "occupacy": "39%",
+      "maxNumberOfPeople": 4,
+      "restricted": true
+    },
+    {
+      "room": "3.8.5",
+      "occupacy": "85%",
+      "maxNumberOfPeople": 7,
+      "restricted": true
+    },
+    {
+      "room": "3.4.9",
+      "occupacy": "83%",
+      "maxNumberOfPeople": 3,
+      "restricted": true
+    },
+    {
+      "room": "3.0.3",
+      "occupacy": "41%",
+      "maxNumberOfPeople": 3,
+      "restricted": false
+    },
+    {
+      "room": "3.10.8",
+      "occupacy": "11%",
+      "maxNumberOfPeople": 7,
+      "restricted": true
+    },
+    {
+      "room": "3.6.7",
+      "occupacy": "49%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.7.8",
+      "occupacy": "57%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.3.5",
+      "occupacy": "99%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.1.1",
+      "occupacy": "19%",
+      "maxNumberOfPeople": 8,
+      "restricted": true
+    },
+    {
+      "room": "3.9.6",
+      "occupacy": "96%",
+      "maxNumberOfPeople": 5,
+      "restricted": false
+    },
+    {
+      "room": "3.7.10",
+      "occupacy": "15%",
+      "maxNumberOfPeople": 1,
+      "restricted": false
+    },
+    {
+      "room": "3.4.1",
+      "occupacy": "65%",
+      "maxNumberOfPeople": 3,
+      "restricted": true
+    },
+    {
+      "room": "3.8.1",
+      "occupacy": "40%",
+      "maxNumberOfPeople": 0,
+      "restricted": true
+    },
+    {
+      "room": "3.7.2",
+      "occupacy": "96%",
+      "maxNumberOfPeople": 8,
+      "restricted": false
+    },
+    {
+      "room": "3.5.8",
+      "occupacy": "95%",
+      "maxNumberOfPeople": 5,
+      "restricted": true
+    },
+    {
+      "room": "3.9.10",
+      "occupacy": "0%",
+      "maxNumberOfPeople": 9,
+      "restricted": false
+    },
+    {
+      "room": "3.9.4",
+      "occupacy": "60%",
+      "maxNumberOfPeople": 3,
+      "restricted": true
+    },
+    {
+      "room": "3.3.0",
+      "occupacy": "36%",
+      "maxNumberOfPeople": 8,
+      "restricted": false
+    },
+    {
+      "room": "3.7.2",
+      "occupacy": "45%",
+      "maxNumberOfPeople": 4,
+      "restricted": false
+    },
+    {
+      "room": "3.0.2",
+      "occupacy": "87%",
+      "maxNumberOfPeople": 9,
+      "restricted": true
+    },
+    {
+      "room": "3.1.0",
+      "occupacy": "27%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.3.0",
+      "occupacy": "91%",
+      "maxNumberOfPeople": 10,
+      "restricted": false
+    },
+    {
+      "room": "3.6.5",
+      "occupacy": "71%",
+      "maxNumberOfPeople": 0,
+      "restricted": false
+    },
+    {
+      "room": "3.8.8",
+      "occupacy": "77%",
+      "maxNumberOfPeople": 7,
+      "restricted": false
+    }
+  ]
