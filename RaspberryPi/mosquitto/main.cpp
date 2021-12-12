@@ -4,6 +4,9 @@
 #include <algorithm>
 #include <iterator>
 #include <cstring>
+#include <fstream>
+#include <sys/stat.h>
+#include <unistd.h>
 
 const char* client_name = "melga";
 
@@ -21,38 +24,62 @@ const char* topic = "mosquitto/test";
 */
 const int qos = 1;
 
-std::string msg = "No messages... :(";
+// The mosquitto client. Should be global so that the signal handler can properly terminate it
+struct mosquitto* client;
 
-void msg_received(struct mosquitto* mosq, void* obj, const struct mosquitto_message* message) {
-    msg.copy((char*) message->payload, message->payloadlen);
+void signal_handler(int signum) {
+    std::cout << "Closing mosquitto..." << std::endl;
+    mosquitto_disconnect(client);
+    mosquitto_destroy(client);
+
+    exit(signum);
 }
 
 // TODO: not secure, maybe use TLS later?
 // This is a mosquitto instance that obtains data and sends it to the broker
 int main(int argc, char** argv) {
-    struct mosquitto* client = mosquitto_new(client_name, true, nullptr);
-    mosquitto_message_callback_set(client, msg_received);
+    std::fstream data;
+    struct stat data_info;
+    data.open("../Data/Output/logs.txt", std::ios::in);
+    if (data.is_open()) {
 
-    const int status = mosquitto_connect(client, broker_host, broker_port, connection_keepalive);
-    if (status == MOSQ_ERR_SUCCESS) {
-        int mid;
+        client = mosquitto_new(client_name, true, nullptr);
+        const int status = mosquitto_connect(client, broker_host, broker_port, connection_keepalive);
+        signal(SIGINT, signal_handler);
 
-        const char* tomsg = argc>1 ? argv[1] : "Bom dia!{→↓←øŧæŋßþ“þ«»}";
-        mosquitto_publish(client, &mid, topic, strlen(tomsg), tomsg, qos, true);
+        if (status == MOSQ_ERR_SUCCESS) {
+            int mid;
 
-        mosquitto_subscribe(client, &mid, topic, qos);
+            std::streampos pos = 0;
+            while (true) {
+                // Check file timestamp
+                if (1) {
+                    data.seekg(pos);
+                    
+                    char* msg;
+                    int chars_read, read_size=10;
+                    data.getline(msg, -1);                
 
-        std::cout << msg << std::endl;
+                    mosquitto_publish(client, &mid, topic, strlen(msg), msg, qos, false);
+                    pos = data.tellg();
+                }
+                else {
+                    sleep(5);
+                }
+            }
 
-        mosquitto_disconnect(client);
+        }
+        else if (status == MOSQ_ERR_INVAL) {
+            std::cout << "ERROR: Invalid connection parameters!" << std::endl;
+            raise(SIGINT);
+        }
+        else {
+            std::cout << "ERROR: A system call returned an error:" << mosquitto_strerror(status) << std::endl;
+            raise(SIGINT);
+        }
+
     }
-    else if (status == MOSQ_ERR_INVAL) {
-        std::cout << "ERROR: Invalid connection parameters!" << std::endl;
-    }
-    else {
-        std::cout << "ERROR: A system call returned an error:" << mosquitto_strerror(status) << std::endl;
-    }
 
-    mosquitto_destroy(client);
+    
     return 0;
 }
