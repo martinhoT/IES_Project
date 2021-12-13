@@ -22,17 +22,17 @@ public class MQTTClient implements InitializingBean {
         String name = "fetcher";
         IMqttClient client;
 
-        System.out.println("Creating...");
-
+        System.out.print("Creating...");
         client = new MqttClient("tcp://127.0.0.1:1883", name);
+        System.out.println(" done!");
 
-        System.out.println("Connecting...");
-
+        System.out.print("Connecting...");
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
         options.setCleanSession(false);
         options.setConnectionTimeout(10);
         client.connect(options);
+        System.out.println(" done!");
 
         CountDownLatch receivedMsg = new CountDownLatch(10);
         client.subscribe("mosquitto/test", (topic, msg) -> {
