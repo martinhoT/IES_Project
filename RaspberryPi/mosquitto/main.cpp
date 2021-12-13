@@ -27,6 +27,8 @@ const int qos = 1;
 // The mosquitto client. Should be global so that the signal handler can properly terminate it
 struct mosquitto* client;
 
+const char* fname = "../Data/Output/logs.txt";
+
 void signal_handler(int signum) {
     std::cout << "Closing mosquitto..." << std::endl;
     mosquitto_disconnect(client);
@@ -40,7 +42,10 @@ void signal_handler(int signum) {
 int main(int argc, char** argv) {
     std::fstream data;
     struct stat data_info;
-    data.open("../Data/Output/logs.txt", std::ios::in);
+    data.open(fname, std::ios::in);
+    // I don't think I need to say this, but don't clear the contents of or remove the file
+    // that is being read, the program doesn't crash apparently but it won't properly read
+    // it because the cursor position will not go back
     if (data.is_open()) {
 
         client = mosquitto_new(client_name, true, nullptr);
@@ -51,21 +56,38 @@ int main(int argc, char** argv) {
             int mid;
 
             std::streampos pos = 0;
+            stat(fname, &data_info);
+            long prev_time = 0;
             while (true) {
                 // Check file timestamp
-                if (1) {
-                    data.seekg(pos);
-                    
-                    char* msg;
-                    int chars_read, read_size=10;
-                    data.getline(msg, -1);                
+                std::cout << "Checking old timestamp " << prev_time << " with new timestamp " << data_info.st_mtim.tv_sec << std::endl;
+                if (prev_time < data_info.st_mtim.tv_sec) {
+                    // Clear the error state (such as the EOF bit), so that the file may be read again
+                    data.clear();
+                    while (data.good()) {
+                        // It's apparently easier to get a line from the file to a string rather than a char*
+                        std::string msg_str;
+                        getline(data, msg_str);
+                        int ln = msg_str.length();
+                        if (!ln) continue;
+                        char* msg = new char[ln+1];
+                        memcpy(msg, msg_str.c_str(), ln+1);
 
-                    mosquitto_publish(client, &mid, topic, strlen(msg), msg, qos, false);
-                    pos = data.tellg();
+                        mosquitto_publish(client, &mid, topic, ln, msg, qos, false);
+                        std::cout << "Sent message: " << msg << std::endl;
+                    }
+                    // Make the current timestamp outdated, and wait for the next one
+                    prev_time = data_info.st_mtim.tv_sec;
+                    std::cout << "Old timestamp is now " << prev_time << std::endl;
                 }
                 else {
+                    std::cout << "I'll sleep...";
+                    fflush(stdout);
                     sleep(5);
+                    std::cout << " rise and shine!" << std::endl;
                 }
+                // Keep updating the current timestamp
+                stat(fname, &data_info);
             }
 
         }
@@ -78,6 +100,9 @@ int main(int argc, char** argv) {
             raise(SIGINT);
         }
 
+    }
+    else {
+        std::cout << "Oops, the file could not be opened??" << std::endl;
     }
 
     
