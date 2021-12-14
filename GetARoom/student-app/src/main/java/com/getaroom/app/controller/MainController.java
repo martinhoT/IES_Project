@@ -28,67 +28,6 @@ public class MainController {
 		return "redirect:/login";
 	}
 
-	@GetMapping("/login")
-	public String showLoginForm(User user) {
-		return "login";
-	}
-
-	@PostMapping("/login")
-	public String login(@Valid User user, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			return "login";
-		}
-
-		if (user.getName().equals("Student") && user.getpassword().equals("Password")) {
-			return "redirect:/studyRooms";
-		}else{
-			model.addAttribute("wrong", true);
-			return "login";
-		}
-	}
-
-	@GetMapping("/heatmaps")
-	public String heatmaps(Model model) {
-		Map<String,String> roomOccupacy = new HashMap<String,String>();
-		for(int department = 1; department <= 6; department++){
-			JSONParser parser = new JSONParser();
-			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep"+department+".json");
-				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
-				for(Object roomJson : jsonRooms){
-					JSONObject jsonObject = (JSONObject)roomJson;
-					roomOccupacy.put((String)jsonObject.get("room"),(String)jsonObject.get("occupacy"));
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		model.addAllAttributes(Map.of(
-			"roomOccupacy", roomOccupacy));
-		return "heatmaps";
-	}
-
-	@GetMapping("/heatmaps_lite")
-	public String heatmaps_lite(Model model) {
-		Map<String,String> roomOccupacy = new HashMap<String,String>();
-		for(int department = 1; department <= 6; department++){
-			JSONParser parser = new JSONParser();
-			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep"+department+".json");
-				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
-				for(Object roomJson : jsonRooms){
-					JSONObject jsonObject = (JSONObject)roomJson;
-					roomOccupacy.put((String)jsonObject.get("room"),(String)jsonObject.get("occupacy"));
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		model.addAllAttributes(Map.of(
-				"roomOccupacy", roomOccupacy));
-		return "heatmaps_lite";
-	}
-
 	@GetMapping(value="/studyRooms")
 	public String getAllDepartments(Model model) {
 		// Get dep names
