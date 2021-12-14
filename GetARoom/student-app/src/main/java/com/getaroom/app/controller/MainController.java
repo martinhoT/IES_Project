@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
@@ -99,7 +100,7 @@ public class MainController {
 
 		rooms.sort(Comparator.comparingInt(Room::getCurrentOccupacy));
 
-		mav.addObject("rooms", rooms);
+		mav.addObject("rooms", rooms.stream().limit(10).collect(Collectors.toList()));
 		mav.setViewName("suggested_room");
 
 		return mav;
