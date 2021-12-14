@@ -8,9 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="student_app" />
         <module name="secguard_app" />
+        <module name="analyst_app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="analyst_app" target="17" />
       <module name="GetARoom" target="1.5" />
       <module name="secguard_app" target="17" />
       <module name="student_app" target="17" />
@@ -18,6 +20,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="analyst_app" options="-parameters" />
       <module name="secguard_app" options="-parameters" />
       <module name="student_app" options="-parameters" />
     </option>

@@ -12,6 +12,7 @@
     <modules>
         <module>student_app</module>
         <module>secguard_app</module>
+        <module>analyst_app</module>
     </modules>
 
     <properties>
