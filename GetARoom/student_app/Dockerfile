@@ -1,6 +1,6 @@
 FROM maven:3.8.4-openjdk-17
 
-WORKDIR /student-app
-COPY ../student-app .
+WORKDIR /student_app
+COPY . .
 
 CMD mvn spring-boot:run
