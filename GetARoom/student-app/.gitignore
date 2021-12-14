@@ -34,3 +34,4 @@ build/
 
 ### Docker logs ###
 /student-app/mongodb/log
+/student-app/mongodb/data

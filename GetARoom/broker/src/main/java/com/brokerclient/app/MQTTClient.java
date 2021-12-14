@@ -5,7 +5,6 @@ import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import com.mongodb.reactivestreams.client.MongoCollection;
 import com.mongodb.reactivestreams.client.MongoDatabase;
-import com.mongodb.reactivestreams.client.Success;
 import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -28,9 +27,9 @@ public class MQTTClient implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // TODO: point to the MongoDB node
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost");
+        MongoClient mongoClient = MongoClients.create("mongodb://mongodb:27017");
         // TODO: put the database's name accordingly
-        MongoDatabase database = mongoClient.getDatabase("data_gather");
+        MongoDatabase database = mongoClient.getDatabase("getaroom_db");
 
         MongoCollection<Document> collectionToday = database.getCollection("today");
 
