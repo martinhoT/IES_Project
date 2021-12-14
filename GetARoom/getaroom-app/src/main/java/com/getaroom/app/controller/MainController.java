@@ -1,15 +1,15 @@
 package com.getaroom.app.controller;
 
 
-import com.getaroom.app.entity.Event;
-import com.getaroom.app.entity.Room;
-import com.getaroom.app.entity.Student;
+import student_app.src.main.java.com.getaroom.app.entity.Event;
+import student_app.src.main.java.com.getaroom.app.entity.Room;
+import student_app.src.main.java.com.getaroom.app.entity.Student;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import javax.validation.Valid;
-import com.getaroom.app.entity.User;
+import student_app.src.main.java.com.getaroom.app.entity.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

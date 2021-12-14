@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.getaroom.app.entity.Room;
-import com.getaroom.app.entity.Event;
+import student_app.src.main.java.com.getaroom.app.entity.Room;
+import student_app.src.main.java.com.getaroom.app.entity.Event;
 
 import java.util.List;
 import java.util.HashMap;

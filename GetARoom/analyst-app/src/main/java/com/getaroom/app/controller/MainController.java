@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 
-import com.getaroom.app.entity.User;
+import student_app.src.main.java.com.getaroom.app.entity.User;
 
 @RequestMapping("")
 @Controller
