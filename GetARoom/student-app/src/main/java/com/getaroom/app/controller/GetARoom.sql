@@ -1,13 +1,17 @@
--- USE *database*;
+DROP IF EXISTS DATABASE getaroom_mysql;
+
+CREATE DATABASE getaroom_mysql;
+
+USE getaroom_mysql;
 
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
     username VARCHAR(20),
     email VARCHAR(20) PRIMARY KEY,
-    password VARCHAR(20),
+    password VARCHAR(225),
     role VARCHAR(20)
-)
+);
 
 INSERT INTO users
 VALUES ("Student" , "student@gmail.com" , SHA2('Password', 512), "student" );
@@ -30,8 +34,8 @@ CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(255))
     END &&  
 DELIMITER ;  
 
--- CALL loggeIn("Student", "Password");
--- CALL loggeIn("Student", "Passwor");
+CALL loggeIn("Student", "Password");
+CALL loggeIn("Student", "Passwor");
 
 DROP FUNCTION IF EXISTS register;
 
@@ -52,5 +56,5 @@ CREATE FUNCTION register (username VARCHAR(20), email VARCHAR(20), password VARC
     END &&
 DELIMITER ; 
 
--- SELECT register ("Student", "student@gmail", "Password", "Student");
--- SELECT register ("Test", "test@gmail", "Password", "Student");
+SELECT register ("Student", "student@gmail", "Password", "Student");
+SELECT register ("Test", "test@gmail", "Password", "Student");
