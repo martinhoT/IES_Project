@@ -32,7 +32,7 @@ CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(255))
             WHERE users.username = username
             AND  users.password = SHA2(password,512));
     END &&  
-DELIMITER ;  
+DELIMITER ;
 
 CALL loggeIn("Student", "Password");
 CALL loggeIn("Student", "Passwor");

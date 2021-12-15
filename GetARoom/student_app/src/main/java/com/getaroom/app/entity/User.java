@@ -1,25 +1,35 @@
-package com.getaroom.app.entity;
+package student_app.src.main.java.com.getaroom.app.entity;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 
 public class User {
     @NotBlank(message = "Name is mandatory")
     private String name;
-    
-    @NotBlank(message = "Email address is mandatory")
+
+    @Id
     private String email;
 
     @NotBlank(message = "Password is mandatory")
     private String password;
 
+    private String role;
 
     public User() {}
 
-    public User(String name, String email, String password) {
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.email = "";
+        this.role = "";
+    }
+
+    public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
     
     public void setName(String name) {
@@ -44,6 +54,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

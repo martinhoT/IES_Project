@@ -1,12 +1,12 @@
-package com.getaroom.app.controller;
+package student_app.src.main.java.com.getaroom.app.controller;
 
 
 import javax.validation.Valid;
-
-import com.getaroom.app.entity.User;
+import student_app.src.main.java.com.getaroom.app.entity.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/login")
 @Controller
 public class LoginController {
+
     @GetMapping("")
     public String showLoginForm(User user) {
         return "login";
