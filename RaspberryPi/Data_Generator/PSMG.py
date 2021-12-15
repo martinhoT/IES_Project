@@ -28,7 +28,7 @@ class Person():
         if self.location == None:
             self.location = random.choice(places)
             self.action = "enter"
-            event = "{" + f"\"user\": {self.name},\"email\": {self.email},\"room\": {self.location},\"entered\": true,\"time\": {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" + "}"
+            event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
 
         if self.action == "enter":
@@ -36,7 +36,7 @@ class Person():
             place = mChain.next_state(self.location)
             if place != self.location:
                 self.action = "exit"
-                event = "{" + f"\"user\": {self.name},\"email\": {self.email},\"room\": {self.location},\"entered\": false,\"time\": {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" + "}"
+                event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": false,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
                 self.location = place
                 return event
             else:
@@ -44,7 +44,7 @@ class Person():
         
         if self.action == "exit":
             self.action = "enter"
-            event = "{" + f"\"user\": {self.name},\"email\": {self.email},\"room\": {self.location},\"entered\": true,\"time\": {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}" + "}"
+            event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
         
     def __str__(self):
