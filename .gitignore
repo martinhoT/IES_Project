@@ -12,3 +12,6 @@
 
 # MongoDB
 /GetARoom/student-app/mongodb/data/*
+
+# Broker
+/GetARoom/broker/fetcher-tcp*1883/*

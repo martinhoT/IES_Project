@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
                         char* msg = new char[ln+1];
                         memcpy(msg, msg_str.c_str(), ln+1);
 
-                        mosquitto_publish(client, &mid, topic, ln, msg, qos, false);
+                        mosquitto_publish(client, &mid, topic, ln, msg, qos, true);
                         std::cout << "Sent message: " << msg << std::endl;
                     }
                     // Make the current timestamp outdated, and wait for the next one
