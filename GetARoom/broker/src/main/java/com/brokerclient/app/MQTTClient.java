@@ -27,7 +27,9 @@ public class MQTTClient implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // TODO: point to the MongoDB node
-        MongoClient mongoClient = MongoClients.create("mongodb://mongodb:27017");
+//        MongoClient mongoClient = MongoClients.create("mongodb://mongodb:27017");
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
         // TODO: put the database's name accordingly
         MongoDatabase database = mongoClient.getDatabase("getaroom_db");
 
@@ -37,6 +39,7 @@ public class MQTTClient implements InitializingBean {
         IMqttClient mqttClient;
 
         System.out.print("Creating...");
+//        mqttClient = new MqttClient("tcp://mosquitto:1883", name);
         mqttClient = new MqttClient("tcp://127.0.0.1:1883", name);
         System.out.println(" done!");
 
