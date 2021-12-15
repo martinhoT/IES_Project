@@ -1,4 +1,4 @@
-DROP IF EXISTS DATABASE getaroom_mysql;
+DROP DATABASE IF EXISTS getaroom_mysql;
 
 CREATE DATABASE getaroom_mysql;
 

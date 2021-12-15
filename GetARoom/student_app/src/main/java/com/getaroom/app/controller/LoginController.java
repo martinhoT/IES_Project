@@ -1,8 +1,9 @@
-package student_app.src.main.java.com.getaroom.app.controller;
+package com.getaroom.app.controller;
 
 
 import javax.validation.Valid;
-import student_app.src.main.java.com.getaroom.app.entity.User;
+
+import com.getaroom.app.entity.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

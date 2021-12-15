@@ -1,4 +1,4 @@
-package student_app.src.main.java.com.getaroom.app.entity;
+package com.getaroom.app.entity;
 
 import javax.validation.constraints.NotBlank;
 
@@ -7,13 +7,18 @@ public class User {
     @NotBlank(message = "Name is mandatory")
     private String name;
     
-    @NotBlank(message = "password is mandatory")
+    @NotBlank(message = "Email address is mandatory")
+    private String email;
+
+    @NotBlank(message = "Password is mandatory")
     private String password;
+
 
     public User() {}
 
-    public User(String name, String password) {
+    public User(String name, String email, String password) {
         this.name = name;
+        this.email = email;
         this.password = password;
     }
     
@@ -31,6 +36,14 @@ public class User {
 
     public String getpassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
