@@ -56,7 +56,7 @@ services:
     depends_on:
       - mysqldb
       - mongodb
-    build: ./student-app
+    build: ./student_app
     env_file: ./.env
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
