@@ -10,8 +10,8 @@
 # Compilation artifacts
 **/*.o
 
-# MongoDB
-/GetARoom/student-app/mongodb/data/*
+# Volumes
+/GetARoom/volumes/*/*.log
 
 # Broker
 /GetARoom/broker/fetcher-tcp*1883/*
