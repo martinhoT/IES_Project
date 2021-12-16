@@ -11,7 +11,7 @@ services:
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-      - db:/var/lib/mysql
+      - ./volumes/mysql/:/var/lib/mysql
   mongodb:
     image: "mongo:4.4.3"
     platform: linux/x86_64
@@ -26,12 +26,19 @@ services:
       - MONGO_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
       - MONGO_DATABASE=$MONGO_DB
     volumes:
-      - $MONGO_DATA_HOST_PATH:/data/db/
-      - $MONGO_LOG_HOST_PATH:/var/log/mongodb/
+      - ./volumes/mongo/data/db/:/data/db/
+      - ./volumes/mongo/log/:/var/log/mongodb/
     command: ["--bind_ip", "0.0.0.0"]
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+    volumes: 
+      - ./volumes/mosquitto:/mosquitto/config
   broker:
     depends_on:
       - mongodb
+      - mosquitto
     build: ./broker
     env_file: ./.env
     environment:
@@ -45,7 +52,7 @@ services:
         "spring.data.mongodb.database" : "$MONGO_DB"
       }'
     volumes:
-      - .m1:/root/.m1
+      - ./volumes/broker/:/root/.m2
     stdin_open: true
     tty: true
   app:
@@ -72,7 +79,7 @@ services:
         "spring.data.mongodb.database" : "$MONGO_DB"
       }'
     volumes:
-      - .m2:/root/.m2
+      - ./volumes/student/:/root/.m2
     stdin_open: true
     tty: true
 
