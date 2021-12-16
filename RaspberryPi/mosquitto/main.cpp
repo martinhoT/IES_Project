@@ -8,9 +8,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-const char* client_name = "melga";
+std::string client_name = "melga";
 
-const char* broker_host = "localhost";
+std::string broker_host = "localhost";
 // It's usually 1883
 const int broker_port = 1883;
 // The number of seconds after which the broker should send a PING message to the client if no other messages have been exchanged in that time
@@ -27,7 +27,7 @@ const int qos = 1;
 // The mosquitto client. Should be global so that the signal handler can properly terminate it
 struct mosquitto* client;
 
-const char* fname = "../Data/Output/logs.txt";
+std::string fname = "../Data/Output/logs.txt";
 
 void signal_handler(int signum) {
     std::cout << "Closing mosquitto..." << std::endl;
@@ -40,6 +40,48 @@ void signal_handler(int signum) {
 // TODO: not secure, maybe use TLS later?
 // This is a mosquitto instance that obtains data and sends it to the broker
 int main(int argc, char** argv) {
+    // Argument parsing
+    for (int i = 1; i < argc; i+=2) {
+        if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+            printf("\
+Mosquitto client that sends data from an append-only file.\n\
+\n\
+Usage: ./mosquitto [options]\n\
+Options:\n\
+    - -h / --help       Show this help\n\
+    - -b / --broker     Specify the address of the MQTT broker\n\
+    - -n / --name       Specify the name of this client\n\
+    - -f / --file       Specify the location of the log file\n\
+");
+            return 0;
+        }
+        else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--broker")) {
+            if (i+1 == argc) {
+                std::cout << "Option '-b'/'--broker' doesn't have a value!" << std::endl;
+                return 1;
+            }
+            broker_host = argv[i+1];
+        }
+        else if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--name")) {
+            if (i+1 == argc) {
+                std::cout << "Option '-n'/'--name' doesn't have a value!" << std::endl;
+                return 1;
+            }
+            client_name = argv[i+1];
+        }
+        else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--file")) {
+            if (i+1 == argc) {
+                std::cout << "Option '-f'/'--file' doesn't have a value!" << std::endl;
+                return 1;
+            }
+            fname = argv[i+1];
+        }
+        else {
+            std::cout << "Options are in an incorrect format! Unknown option '" << argv[i] << "'" << std::endl;
+            return 1;
+        }
+    }
+    
     std::fstream data;
     struct stat data_info;
     data.open(fname, std::ios::in);
@@ -48,15 +90,15 @@ int main(int argc, char** argv) {
     // it because the cursor position will not go back
     if (data.is_open()) {
 
-        client = mosquitto_new(client_name, true, nullptr);
-        const int status = mosquitto_connect(client, broker_host, broker_port, connection_keepalive);
+        client = mosquitto_new(client_name.c_str(), true, nullptr);
+        const int status = mosquitto_connect(client, broker_host.c_str(), broker_port, connection_keepalive);
         signal(SIGINT, signal_handler);
 
         if (status == MOSQ_ERR_SUCCESS) {
             int mid;
 
             std::streampos pos = 0;
-            stat(fname, &data_info);
+            stat(fname.c_str(), &data_info);
             long prev_time = 0;
             while (true) {
                 // Check file timestamp
@@ -87,7 +129,7 @@ int main(int argc, char** argv) {
                     std::cout << " rise and shine!" << std::endl;
                 }
                 // Keep updating the current timestamp
-                stat(fname, &data_info);
+                stat(fname.c_str(), &data_info);
             }
 
         }
@@ -96,15 +138,14 @@ int main(int argc, char** argv) {
             raise(SIGINT);
         }
         else {
-            std::cout << "ERROR: A system call returned an error:" << mosquitto_strerror(status) << std::endl;
+            std::cout << "ERROR: A system call returned an error: " << mosquitto_strerror(status) << std::endl;
             raise(SIGINT);
         }
 
     }
     else {
-        std::cout << "Oops, the file could not be opened??" << std::endl;
+        std::cout << "Oops, the file could not be opened!" << std::endl;
     }
-
     
     return 0;
 }
