@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS getaroom_mysql;
+-- DROP DATABASE IF EXISTS getaroom_mysql;
 
-CREATE DATABASE getaroom_mysql;
+-- CREATE DATABASE getaroom_mysql;
 
-USE getaroom_mysql;
+USE getaroom_db;
 
 DROP TABLE IF EXISTS users;
 
@@ -32,29 +32,29 @@ CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(255))
             WHERE users.username = username
             AND  users.password = SHA2(password,512));
     END &&  
-DELIMITER ;
+DELIMITER ;  
 
-CALL loggeIn("Student", "Password");
-CALL loggeIn("Student", "Passwor");
+-- CALL loggeIn("Student", "Password");
+-- CALL loggeIn("Student", "Passwor");
 
 DROP FUNCTION IF EXISTS register;
 
 DELIMITER &&
 CREATE FUNCTION register (username VARCHAR(20), email VARCHAR(20), password VARCHAR(20), role VARCHAR(20))
-    RETURNS VARCHAR(20)
+    RETURNS INT
     DETERMINISTIC
     BEGIN 
         IF (EXISTS(
             SELECT * FROM users
             WHERE users.username = username
             OR users.email = email
-        )) THEN RETURN 'Allready exists';
+        )) THEN RETURN 0;
         ELSE
             INSERT INTO users VALUES (username, email, SHA2(password,512), role);
-            RETURN 'Register completed';
+            RETURN 1;
         END IF;
     END &&
 DELIMITER ; 
 
-SELECT register ("Student", "student@gmail", "Password", "Student");
-SELECT register ("Test", "test@gmail", "Password", "Student");
+-- SELECT register ("Student", "student@gmail", "Password", "Student");
+-- SELECT register ("Test", "test@gmail", "Password", "Student");

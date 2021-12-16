@@ -1,4 +1,4 @@
-package student_app.src.main.java.com.getaroom.app;
+package com.getaroom.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

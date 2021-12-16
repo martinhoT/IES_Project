@@ -1,4 +1,4 @@
-package student_app.src.main.java.com.getaroom.app.entity;
+package com.getaroom.app.entity;
 
 public class Room {
     private String room;

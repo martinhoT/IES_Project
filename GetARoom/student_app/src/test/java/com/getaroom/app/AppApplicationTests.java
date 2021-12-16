@@ -1,4 +1,4 @@
-package student_app.src.test.java.com.getaroom.app;
+package com.getaroom.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
