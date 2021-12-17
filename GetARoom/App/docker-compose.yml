@@ -32,11 +32,11 @@ services:
       - 1883:1883
     volumes: 
       - ./volumes/mosquitto:/mosquitto/config
-  broker:
+  fetcher:
     depends_on:
       - mongodb
       - mosquitto
-    build: ./broker
+    build: ./fetcher
     env_file: ./.env
     environment:
       SPRING_APPLICATION_JSON: '{

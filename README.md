@@ -36,7 +36,7 @@ cd RaspberryPi
 ./run.sh
 
 # Terminal 2
-cd RaspberryPi/mosquitto
+cd RaspberryPi/sensor
 # Use the '-h'/'--help' option for usage
-./mosquitto [options]
+./sensor [options]
 ```
