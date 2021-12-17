@@ -28,7 +28,7 @@ class Person():
         if self.location == None:
             self.location = random.choice(places)
             self.action = "enter"
-            event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+            event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
 
         if self.action == "enter":
@@ -36,7 +36,7 @@ class Person():
             place = mChain.next_state(self.location)
             if place != self.location:
                 self.action = "exit"
-                event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": false,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+                event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": false,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
                 self.location = place
                 return event
             else:
@@ -44,7 +44,7 @@ class Person():
         
         if self.action == "exit":
             self.action = "enter"
-            event = "{" + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+            event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
         
     def __str__(self):
@@ -52,9 +52,10 @@ class Person():
 
 def main():
     peoplePath = "Data/Input/people.json"
-    depsPath = "Data/Input/deps"
+    depsPath = "Data/Input/rooms.json"
     peopleLimit = None
-
+    depsDict = {}
+    depRooms = []
 
     # Get people data
     with open(peoplePath,"r") as jsonF:
@@ -63,9 +64,11 @@ def main():
             people = people[:peopleLimit]
     
     # Get Department rooms
-    with open(depsPath) as file:
-        lines = file.readlines()
-        depRooms = [line.rstrip() for line in lines]
+    with open(depsPath,"r") as jsonF:
+        depsJson = json.load(jsonF)
+        for room in depsJson:
+            depsDict[room["name"]] = [room["limit"], 0]
+            depRooms.append(room["name"])
 
     # Create person objects
     people = [Person(p["name"], p["mail"]) for p in people]
@@ -79,7 +82,15 @@ def main():
         while True:
             event = random.choice(people).move(depRooms)
             if event:
-                print(event)
+                print(event, flush=True)
+                event = json.loads(event)
+                name = event["room"]
+                if event["entered"]:
+                    depsDict[name][1] += 1
+                else:
+                    depsDict[name][1] -= 1
+                status = "{\"type:\": \"status\",\"room\":" + f"\"{name}\",\"occupacy\": \"{round(depsDict[name][1]/depsDict[name][0], 2)}\", \"maxNumberOfPeople\": \"{depsDict[name][0]}\"" + "}"
+                print(status, flush=True)
             time.sleep(random.randrange(3, 8))
     except KeyboardInterrupt:
         pass
