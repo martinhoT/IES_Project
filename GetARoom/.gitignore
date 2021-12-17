@@ -1,6 +1,3 @@
-# Visual Studio Code
-**/.vscode
-
 # Jetbrains IDE
 **/.idea
 
@@ -15,9 +12,11 @@
 
 # Compilation artifacts
 **/*.o
+/RaspberryPi/sensor/sensor
 
 # Volumes
-/GetARoom/volumes/*/*.log
+#/App/volumes/*/*.log
+/App/volumes/*
 
 # Broker
 /GetARoom/broker/fetcher-tcp*1883/*
