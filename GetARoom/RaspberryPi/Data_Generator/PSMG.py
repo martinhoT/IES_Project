@@ -89,7 +89,7 @@ def main():
                     depsDict[name][1] += 1
                 else:
                     depsDict[name][1] -= 1
-                status = "{\"type:\": \"status\",\"room\":" + f"\"{name}\",\"occupacy\": \"{round(depsDict[name][1]/depsDict[name][0], 2)}\", \"maxNumberOfPeople\": \"{depsDict[name][0]}\"" + "}"
+                status = "{\"type\": \"status\",\"room\":" + f"\"{name}\",\"occupacy\": {round(depsDict[name][1]/depsDict[name][0], 2)}, \"maxNumberOfPeople\": {depsDict[name][0]}" + "}"
                 print(status, flush=True)
             time.sleep(random.randrange(3, 8))
     except KeyboardInterrupt:

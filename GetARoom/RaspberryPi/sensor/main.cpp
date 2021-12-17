@@ -15,6 +15,8 @@ std::string broker_host = "localhost";
 const int broker_port = 1883;
 // The number of seconds after which the broker should send a PING message to the client if no other messages have been exchanged in that time
 const int connection_keepalive = 30;
+// The number of seconds that the sensor will wait between the log file checks
+unsigned int sleep_time = 5;
 
 const char* topic = "mosquitto/test";
 /* Quality of Service
@@ -52,6 +54,7 @@ Options:\n\
     - -b / --broker     Specify the address of the MQTT broker\n\
     - -n / --name       Specify the name of this client\n\
     - -f / --file       Specify the location of the log file\n\
+    - -s / --sleep      Specify the amount of seconds that the sensor will sleep between the log file checks\n\
 ");
             return 0;
         }
@@ -75,6 +78,14 @@ Options:\n\
                 return 1;
             }
             fname = argv[i+1];
+        }
+        else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sleep")) {
+            if (i+1 == argc) {
+                std::cout << "Option '-s'/'--sleep' doesn't have a value!" << std::endl;
+                return 1;
+            }
+            // Accept only the first digit
+            sleep_time = strtol(argv[i+1], &argv[i+1]+1, 10);
         }
         else {
             std::cout << "Options are in an incorrect format! Unknown option '" << argv[i] << "'" << std::endl;
@@ -125,7 +136,7 @@ Options:\n\
                 else {
                     std::cout << "I'll sleep...";
                     fflush(stdout);
-                    sleep(5);
+                    sleep(sleep_time);
                     std::cout << " rise and shine!" << std::endl;
                 }
                 // Keep updating the current timestamp
