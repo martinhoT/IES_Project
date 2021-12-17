@@ -14,9 +14,11 @@
 **/*.o
 /RaspberryPi/sensor/sensor
 
-# Volumes
-#/App/volumes/*/*.log
-/App/volumes/*
+# Docker volumes
+/App/volumes/fetcher
+/App/volumes/mysql
+/App/volumes/mongo
+/App/volumes/student
 
-# Broker
-/GetARoom/broker/fetcher-tcp*1883/*
+# Fetcher
+/GetARoom/fetcher/fetcher-tcp*1883/*

@@ -49,7 +49,7 @@ services:
         "spring.data.mongodb.database" : "$MONGO_DB"
       }'
     volumes:
-      - ./volumes/broker/:/root/.m2
+      - ./volumes/fetcher/:/root/.m2
     stdin_open: true
     tty: true
   app:
