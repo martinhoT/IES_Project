@@ -12,7 +12,6 @@
 
 # Compilation artifacts
 **/*.o
-/RaspberryPi/sensor/sensor
 
 # Docker volumes
 /App/volumes/fetcher

@@ -28,6 +28,12 @@ docker-compose up --build
 
 ## Sensor
 
+First Install:
+```bash
+sudo apt install libmosquittopp-dev
+pip install numpy
+```
+
 In order to run the Sensor application (the one that is run on the Raspberry Pi instances) do:
 ```bash
 cd GetARoom/RaspberryPi
@@ -35,3 +41,17 @@ cd GetARoom/RaspberryPi
 ```
 
 *Note: this process will be constantly appending data to the same file as long as it's being run, and the file is only cleared when the script is run again."
+
+## MongoDB
+
+In order to access MongoDB, run application and do:
+```bash
+docker exec -it app_mongodb_1 mongo
+```
+
+To gain access to getaroom_db first run sensor to have data:
+```
+use admin
+db.auth("root","123456")
+use getaroom_db
+```
