@@ -5,7 +5,8 @@ import java.io.FileReader;
 import javax.validation.Valid;
 import javax.validation.constraints.Null;
 
-import com.getaroom.app.entity.Room;
+import com.getaroom.app.entity.Dep;
+import com.getaroom.app.entity.Status;
 import com.getaroom.app.entity.User;
 import com.getaroom.app.repository.RoomRepository;
 import com.mongodb.client.FindIterable;
@@ -31,6 +32,8 @@ public class MainController {
 
 	private final RoomRepository roomRepository;
 
+	private Map<String, List<Status>> allRooms = new HashMap<String, List<Status>>();
+
 	@Autowired
 	public MainController(RoomRepository roomRepository){
 		this.roomRepository = roomRepository;
@@ -43,46 +46,26 @@ public class MainController {
 
 	@GetMapping(value="/studyRooms")
 	public String getAllDepartments(Model model) {
-		// Get dep names
 
-		// Possibly like this
-		Map<String, List<String>> allRooms = new HashMap<String, List<String>>();
-		FindIterable<Document> rooms = roomRepository.findAllRooms();
-		for(Document doc : rooms){
-			String room = ((String) doc.get("room"));
-			String[] room_info = room.split(".");
-			if(allRooms.get(room_info[0])== null){
-				allRooms.put(room_info[0], new ArrayList<String>());
-			}
-			else{
-				allRooms.get(room_info[0]).add(room);
-			}
-        }
+		List<Dep> allDepartments = roomRepository.findAllDep();
+		System.err.println(allDepartments);
 
-
-		File folder = new File("src/main/resources/static/data/status/");
-		File[] listOfFiles = folder.listFiles();
-		List<String> fnames = new ArrayList<>();
-
-		for (int i = listOfFiles.length - 1; i >= 0; i--) {
-			if (listOfFiles[i].isFile()) {
-				fnames.add(listOfFiles[i].getName().replace(".json", "").toUpperCase());
-				model.addAttribute(listOfFiles[i].getName().replace(".json", ""), listOfFiles[i].getName());
-			}
-		}
-
-		Collections.sort(fnames);
-		model.addAttribute("depList", fnames);
+		//Collections.sort(allDepartments);
+		model.addAttribute("depList", allDepartments);
 		return "search_room";
 	}
 
 	@PostMapping(value = "/studyRooms")
 	@ResponseBody
 	public ModelAndView getStudyRooms(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
+
+		List<Status> allRooms = roomRepository.findAllRooms(dep);
+		System.err.println(allRooms);
+
 		JSONParser parser = new JSONParser();
 		JSONObject suggested = null;
 		ModelAndView mav = new ModelAndView();
-		List<Room> rooms = new ArrayList<>();
+		List<Status> rooms = new ArrayList<>();
 
 
 		try {
@@ -91,7 +74,7 @@ public class MainController {
 
 			for (Object o : a)
 			{
-				Room room = new Room();
+				Status room = new Status();
 				JSONObject roomJson = (JSONObject) o;
 
 				String roomName = (String) roomJson.get("room");
@@ -103,11 +86,11 @@ public class MainController {
 				Long roomMaxNumberOfPeople = (Long) roomJson.get("maxNumberOfPeople");
 				room.setMaxNumberOfPeople(roomMaxNumberOfPeople);
 
-//				Boolean roomRestricted = (Boolean) roomJson.get("restricted");
-//				room.setRestricted(roomRestricted);
-//
-//				if (!room.getRestricted())
-//					rooms.add(room);
+				Boolean roomRestricted = (Boolean) roomJson.get("restricted");
+				room.setRestricted(roomRestricted);
+
+				if (!room.getRestricted())
+					rooms.add(room);
 //
 //				if ((Boolean) roomJson.get("restricted"))
 //					continue;
@@ -126,7 +109,7 @@ public class MainController {
 			System.out.println(e.getMessage());
 		}
 
-		rooms.sort(Comparator.comparingInt(Room::getCurrentOccupacy));
+		rooms.sort(Comparator.comparingInt(Status::getCurrentOccupacy));
 
 		mav.addObject("rooms", rooms.stream().limit(10).collect(Collectors.toList()));
 		mav.setViewName("suggested_room");

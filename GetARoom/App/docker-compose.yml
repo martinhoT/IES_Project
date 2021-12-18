@@ -67,7 +67,7 @@ services:
         "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
         "spring.jpa.hibernate.ddl-auto" : "update",
-        "spring.data.mongodb.authentication-database" : "$MONGO_DB",
+        "spring.data.mongodb.authentication-database" : "admin",
         "spring.data.mongodb.auto-index-creation" : "$MONGO_AUTO_INDEX_CREATION",
         "spring.data.mongodb.host" : "mongodb:27017",
         "spring.data.mongodb.port" : "27017",
