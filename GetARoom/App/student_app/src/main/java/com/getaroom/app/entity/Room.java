@@ -4,14 +4,20 @@ public class Room {
     private String room;
     private String occupacy;
     private Long maxNumberOfPeople;
-    private Boolean restricted;
+    // private Boolean restricted;
 
-    public Room(String room, String occupacy, Long maxNumberOfPeople, Boolean restricted) {
+    public Room(String room, String occupacy, Long maxNumberOfPeople) {
         this.room = room;
         this.occupacy = occupacy;
         this.maxNumberOfPeople = maxNumberOfPeople;
-        this.restricted = restricted;
 	}
+
+    // public Room(String room, String occupacy, Long maxNumberOfPeople, Boolean restricted) {
+    //     this.room = room;
+    //     this.occupacy = occupacy;
+    //     this.maxNumberOfPeople = maxNumberOfPeople;
+    //     this.restricted = restricted;
+	// }
 
     public Room() {
 
@@ -43,18 +49,24 @@ public class Room {
         return maxNumberOfPeople;
     }
 
-    public void setRestricted(Boolean restricted){
-        this.restricted = restricted;
-    }
+    // public void setRestricted(Boolean restricted){
+    //     this.restricted = restricted;
+    // }
 
-    public Boolean getRestricted(){
-        return restricted;
-    }
+    // public Boolean getRestricted(){
+    //     return restricted;
+    // }
 
     public String toString() {
         return "Room: " + getRoom() + 
                ", occupacy: " + getOccupacy() +
-               ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
-               ", restricted: " + getRestricted();
+               ", maxNumberOfPeople: " + getMaxNumberOfPeople();
     }
+
+    //public String toString() {
+    //    return "Room: " + getRoom() + 
+    //           ", occupacy: " + getOccupacy() +
+    //           ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
+    //           ", restricted: " + getRestricted();
+    //}
 }

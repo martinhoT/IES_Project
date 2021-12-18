@@ -3,9 +3,15 @@ package com.getaroom.app.controller;
 import java.io.File;
 import java.io.FileReader;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
 import com.getaroom.app.entity.Room;
 import com.getaroom.app.entity.User;
+import com.getaroom.app.repository.RoomRepository;
+import com.mongodb.client.FindIterable;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
+
+import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,6 +29,13 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
 
+	private final RoomRepository roomRepository;
+
+	@Autowired
+	public MainController(RoomRepository roomRepository){
+		this.roomRepository = roomRepository;
+	}
+
 	@GetMapping("/")
 	public String entryPoint(User user) {
 		return "redirect:/login";
@@ -31,6 +44,22 @@ public class MainController {
 	@GetMapping(value="/studyRooms")
 	public String getAllDepartments(Model model) {
 		// Get dep names
+
+		// Possibly like this
+		Map<String, List<String>> allRooms = new HashMap<String, List<String>>();
+		FindIterable<Document> rooms = roomRepository.findAllRooms();
+		for(Document doc : rooms){
+			String room = ((String) doc.get("room"));
+			String[] room_info = room.split(".");
+			if(allRooms.get(room_info[0])== null){
+				allRooms.put(room_info[0], new ArrayList<String>());
+			}
+			else{
+				allRooms.get(room_info[0]).add(room);
+			}
+        }
+
+
 		File folder = new File("src/main/resources/static/data/status/");
 		File[] listOfFiles = folder.listFiles();
 		List<String> fnames = new ArrayList<>();
@@ -74,12 +103,12 @@ public class MainController {
 				Long roomMaxNumberOfPeople = (Long) roomJson.get("maxNumberOfPeople");
 				room.setMaxNumberOfPeople(roomMaxNumberOfPeople);
 
-				Boolean roomRestricted = (Boolean) roomJson.get("restricted");
-				room.setRestricted(roomRestricted);
-
-				if (!room.getRestricted())
-					rooms.add(room);
-
+//				Boolean roomRestricted = (Boolean) roomJson.get("restricted");
+//				room.setRestricted(roomRestricted);
+//
+//				if (!room.getRestricted())
+//					rooms.add(room);
+//
 //				if ((Boolean) roomJson.get("restricted"))
 //					continue;
 //
