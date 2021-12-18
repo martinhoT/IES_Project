@@ -13,7 +13,7 @@ public class Dep {
     String dep;
 
     public Dep(String dep){
-        this.dep=dep;
+        this.dep = dep;
     }
 
     public void setDep(String dep){
