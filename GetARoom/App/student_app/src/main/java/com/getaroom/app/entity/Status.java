@@ -1,5 +1,7 @@
 package com.getaroom.app.entity;
 
+import java.text.DecimalFormat;
+
 public class Status {
     private String room;
     private String occupacy;
@@ -40,7 +42,13 @@ public class Status {
         return occupacy;
     }
 
-    public int getCurrentOccupacy(){return Integer.parseInt(occupacy.substring(0, occupacy.length()-1));}
+    //public int getCurrentOccupacy(){return Integer.parseInt(occupacy.substring(0, 3));}
+
+
+    public String getCurrentOccupacy(){
+        Double currentOcuppanvy = Double.parseDouble(occupacy)*100;
+        return String.valueOf(currentOcuppanvy.intValue());
+    }
 
     public void setMaxNumberOfPeople(Long maxNumberOfPeople){
         this.maxNumberOfPeople = maxNumberOfPeople;
