@@ -11,7 +11,8 @@ services:
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-      - ./volumes/mysql/:/var/lib/mysql
+      - ./volumes/mysql/db:/var/lib/mysql
+      - ./volumes/mysql/scripts:/docker-entrypoint-initdb.d
   mongodb:
     image: mongo:4.4.3
     platform: linux/x86_64
