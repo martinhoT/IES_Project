@@ -1,14 +1,2 @@
 # Visual Studio Code
 **/.vscode
-
-# Python
-**/__pycache__
-
-# Logs
-/RaspberryPi/Data/Output/logs.txt
-
-# Compilation artifacts
-**/*.o
-
-# MongoDB
-/GetARoom/student-app/mongodb/data/*
