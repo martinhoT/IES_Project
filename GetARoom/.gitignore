@@ -15,7 +15,7 @@
 
 # Docker volumes
 /App/volumes/fetcher
-/App/volumes/mysql
+/App/volumes/mysql/db
 /App/volumes/mongo
 /App/volumes/student
 
