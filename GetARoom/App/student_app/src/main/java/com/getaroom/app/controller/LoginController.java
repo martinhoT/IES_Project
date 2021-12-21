@@ -13,20 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController 
-@RequestMapping("/login")
+@RequestMapping("/")
 public class LoginController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("")
+    @GetMapping("/login")
     public ModelAndView showLoginForm(User user) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         return modelAndView;
     }
 
-    @PostMapping("")
+    @GetMapping("/register")
+    public ModelAndView showRegisterForm(User user) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("register");
+        return modelAndView;
+    }
+
+    @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors()) {
@@ -37,6 +44,24 @@ public class LoginController {
         }
         else{
             modelAndView.setViewName("login");
+            model.addAttribute("wrong", true);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/register")
+    public ModelAndView register(@Valid User user, BindingResult result, Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        System.err.print(user);
+
+        if (result.hasErrors()) {
+            modelAndView.setViewName("register");
+        }
+        if (userRepository.register(user.getName(), user.getEmail(), user.getpassword(),user.getRole()) == 1){
+            modelAndView.setViewName("redirect:/studyRooms");
+        }
+        else{
+            modelAndView.setViewName("register");
             model.addAttribute("wrong", true);
         }
         return modelAndView;

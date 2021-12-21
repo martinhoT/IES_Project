@@ -55,3 +55,10 @@ use admin
 db.auth("root","123456")
 use getaroom_db
 ```
+
+## MySQL
+
+In order to access MySQL, run application and do:
+```bash
+docker exec -it app_mysql_1 mysqldb -h localhost -P 3306 -u root -p123456
+```
