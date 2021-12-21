@@ -79,6 +79,12 @@ def main():
 
     # Start generator
     try:
+        # Default status
+        for depName in depsDict.keys():
+            status = "{\"type\": \"status\",\"room\":" + f"\"{depName}\",\"occupacy\": {round(depsDict[depName][1]/depsDict[depName][0], 2)}, \"maxNumberOfPeople\": {depsDict[depName][0]}" + "}"
+            print(status, flush=True)
+
+        # Events
         while True:
             event = random.choice(people).move(depRooms)
             if event:
