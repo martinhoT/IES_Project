@@ -13,6 +13,7 @@ services:
     volumes:
       - ./volumes/mysql/db:/var/lib/mysql
       - ./volumes/mysql/scripts:/docker-entrypoint-initdb.d
+  
   mongodb:
     image: mongo:4.4.3
     platform: linux/x86_64
@@ -27,12 +28,14 @@ services:
       - ./volumes/mongo/data/db/:/data/db/
       - ./volumes/mongo/log/:/var/log/mongodb/
     command: ["--bind_ip", "0.0.0.0"]
+  
   mosquitto:
     image: eclipse-mosquitto
     ports:
       - 1883:1883
     volumes: 
       - ./volumes/mosquitto:/mosquitto/config
+  
   fetcher:
     depends_on:
       - mongodb
@@ -53,6 +56,7 @@ services:
       - ./volumes/fetcher/:/root/.m2
     stdin_open: true
     tty: true
+  
   student_app:
     depends_on:
       - mysqldb
@@ -80,6 +84,7 @@ services:
       - ./volumes/student/:/root/.m2
     stdin_open: true
     tty: true
+  
   secguard_app:
     depends_on:
       - mysqldb
@@ -105,6 +110,34 @@ services:
       }'
     volumes:
       - ./volumes/secguard/:/root/.m2
+    stdin_open: true
+    tty: true
+  
+  analyst_app:
+    depends_on:
+      - mysqldb
+      - mongodb
+    build: ./analyst_app
+    env_file: ./.env
+    ports:
+      - $SPRING_ANALYST_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update",
+        "spring.data.mongodb.authentication-database" : "admin",
+        "spring.data.mongodb.auto-index-creation" : "$MONGO_AUTO_INDEX_CREATION",
+        "spring.data.mongodb.host" : "mongodb:27017",
+        "spring.data.mongodb.port" : "27017",
+        "spring.data.mongodb.username" : "$MONGO_ROOT_USERNAME",
+        "spring.data.mongodb.password" : "$MONGO_ROOT_PASSWORD",
+        "spring.data.mongodb.database" : "$MONGO_DB"
+      }'
+    volumes:
+      - ./volumes/analyst/:/root/.m2
     stdin_open: true
     tty: true
 volumes:
