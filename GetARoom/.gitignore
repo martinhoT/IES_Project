@@ -18,6 +18,8 @@
 /App/volumes/mysql/db
 /App/volumes/mongo
 /App/volumes/student
+/App/volumes/secguard
+/App/volumes/analyst
 
 # Fetcher
 /GetARoom/fetcher/fetcher-tcp*1883/*
