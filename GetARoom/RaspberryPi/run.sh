@@ -18,6 +18,12 @@ cleanup() {
 trap graceful_shutdown SIGINT
 trap cleanup EXIT
 
+broker=localhost
+if [ -n "$1" ]
+then
+    broker=$1
+fi
+
 log_file="./Data/Output/logs.txt"
 
 # Clear the file's contents, or else the sensor will send all the content inside at once
@@ -28,4 +34,4 @@ python3 ./Data_Generator/PSMG.py >> ${log_file} &
 pid=($!)
 
 # Sensor
-./sensor/sensor --broker localhost --name melga --file ${log_file}
+./sensor/sensor --broker "${broker}" --name melga --file ${log_file}

@@ -141,6 +141,8 @@ Options:\n\
                 }
                 // Keep updating the current timestamp
                 stat(fname.c_str(), &data_info);
+
+                mosquitto_loop(client, -1, 1);
             }
 
         }
