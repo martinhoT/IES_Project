@@ -54,26 +54,7 @@ public class MainController {
 	public String entryPoint(User user) {
 		return "redirect:/login";
 	}
-
-	@GetMapping("/login")
-	public String showLoginForm(User user) {
-		return "login";
-	}
-
-	@PostMapping("/login")
-	public String login(@Valid User user, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			return "login";
-		}
-
-		if (user.getName().equals("Security") && user.getpassword().equals("Password")){
-			return "redirect:/sec";
-		}else{
-			model.addAttribute("wrong", true);
-			return "login";
-		}
-	}
-
+	
 	@GetMapping("/sec")
 	public String sec() {
 		return "sec";

@@ -22,17 +22,21 @@ VALUES ("security@gmail.com", "Security", SHA2('Password', 512), "security");
 INSERT INTO users
 VALUES ("analyst@gmail.com" , "Analyst" , SHA2('Password', 512), "analyst" );
 
+
 DROP PROCEDURE IF EXISTS loggeIn;
 
 DELIMITER &&
-CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(20))
+CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(20), IN role VARCHAR(20))
     BEGIN
         SELECT EXISTS(
             SELECT * FROM users
             WHERE users.username = username
-            AND  users.password = SHA2(password,512));
+            AND users.password = SHA2(password,512)
+            AND users.role = role);
     END &&  
-DELIMITER ;  
+DELIMITER ; 
+
+
 
 -- CALL loggeIn("Student", "Password");
 -- CALL loggeIn("Student", "Passwor");

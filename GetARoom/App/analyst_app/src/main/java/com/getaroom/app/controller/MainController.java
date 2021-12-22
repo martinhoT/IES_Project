@@ -13,30 +13,6 @@ import org.springframework.ui.Model;
 @Controller
 public class MainController {
 
-	@GetMapping("/")
-	public String entryPoint(User user) {
-		return "redirect:/login";
-	}
-
-	@GetMapping("/login")
-	public String showLoginForm(User user) {
-		return "login";
-	}
-
-	@PostMapping("/login")
-	public String login(@Valid User user, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			return "login";
-		}
-
-		if (user.getName().equals("Analyst") && user.getpassword().equals("Password")){
-			return "redirect:/api";
-		}else{
-			model.addAttribute("wrong", true);
-			return "login";
-		}
-	}
-
 	@GetMapping("/api")
 	public String api() {
 		return "api";

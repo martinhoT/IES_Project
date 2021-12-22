@@ -40,8 +40,8 @@ public class LoginController {
             modelAndView.setViewName("login");
             return modelAndView;
         }
-        if (userRepository.loggeIn(user.getName(), user.getpassword(), "student")==1){
-            modelAndView.setViewName("redirect:/studyRooms");
+        if (userRepository.loggeIn(user.getName(), user.getpassword(), "analyst")==1){
+            modelAndView.setViewName("redirect:/api");
         }
         else{
             modelAndView.setViewName("login");
@@ -58,7 +58,7 @@ public class LoginController {
         if (result.hasErrors()) {
             modelAndView.setViewName("register");
         }
-        if (userRepository.register(user.getName(), user.getEmail(), user.getpassword(),"student") == 1){
+        if (userRepository.register(user.getName(), user.getEmail(), user.getpassword(), "analyst") == 1){
             modelAndView.setViewName("redirect:/studyRooms");
         }
         else{
