@@ -26,7 +26,7 @@ cd GetARoom/App
 docker-compose up --build
 ```
 
-## Sensor
+## MQTT sender
 
 First Install:
 ```bash
@@ -34,13 +34,19 @@ sudo apt install libmosquittopp-dev
 pip install numpy
 ```
 
-In order to run the Sensor application (the one that is run on the Raspberry Pi instances) do:
+And compile the C++ MQTT sender program, if needed:
+```bash
+cd GetARoom/RaspberryPi/sender
+make
+```
+
+In order to run the sender application (the one that is run on the Raspberry Pi instances) do:
 ```bash
 cd GetARoom/RaspberryPi
 ./run.sh
 ```
 
-*Note: this process will be constantly appending data to the same file as long as it's being run, and the file is only cleared when the script is run again."
+*Note: this script will be constantly appending data to the same file as long as it's being run, and the file is only cleared when the script is run again."*
 
 ## MongoDB
 
@@ -49,7 +55,7 @@ In order to access MongoDB, run application and do:
 docker exec -it app_mongodb_1 mongo
 ```
 
-To gain access to getaroom_db first run sensor to have data:
+To gain access to getaroom\_db first run sensor to have data:
 ```
 use admin
 db.auth("root","123456")

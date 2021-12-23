@@ -5,8 +5,14 @@
 #include <iterator>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 #include <sys/stat.h>
 #include <unistd.h>
+
+/* Message type IDs
+0: event
+1: status
+*/
 
 std::string client_name = "melga";
 
@@ -18,7 +24,8 @@ const int connection_keepalive = 30;
 // The number of seconds that the sensor will wait between the log file checks
 unsigned int sleep_time = 5;
 
-const char* topic = "mosquitto/test";
+std::fstream data;
+
 /* Quality of Service
 0: send once (no ACK)
 1: send at least once (with ACK)
@@ -32,6 +39,7 @@ struct mosquitto* client;
 std::string fname = "../Data/Output/logs.txt";
 
 void signal_handler(int signum) {
+    data.close();
     std::cout << "Closing mosquitto..." << std::endl;
     mosquitto_disconnect(client);
     mosquitto_destroy(client);
@@ -60,40 +68,39 @@ Options:\n\
         }
         else if (!strcmp(argv[i], "-b") || !strcmp(argv[i], "--broker")) {
             if (i+1 == argc) {
-                std::cout << "Option '-b'/'--broker' doesn't have a value!" << std::endl;
+                std::cerr << "Option '-b'/'--broker' doesn't have a value!" << std::endl;
                 return 1;
             }
             broker_host = argv[i+1];
         }
         else if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--name")) {
             if (i+1 == argc) {
-                std::cout << "Option '-n'/'--name' doesn't have a value!" << std::endl;
+                std::cerr << "Option '-n'/'--name' doesn't have a value!" << std::endl;
                 return 1;
             }
             client_name = argv[i+1];
         }
         else if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--file")) {
             if (i+1 == argc) {
-                std::cout << "Option '-f'/'--file' doesn't have a value!" << std::endl;
+                std::cerr << "Option '-f'/'--file' doesn't have a value!" << std::endl;
                 return 1;
             }
             fname = argv[i+1];
         }
         else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sleep")) {
             if (i+1 == argc) {
-                std::cout << "Option '-s'/'--sleep' doesn't have a value!" << std::endl;
+                std::cerr << "Option '-s'/'--sleep' doesn't have a value!" << std::endl;
                 return 1;
             }
             // Accept only the first digit
             sleep_time = strtol(argv[i+1], &argv[i+1]+1, 10);
         }
         else {
-            std::cout << "Options are in an incorrect format! Unknown option '" << argv[i] << "'" << std::endl;
+            std::cerr << "Options are in an incorrect format! Unknown option '" << argv[i] << "'" << std::endl;
             return 1;
         }
     }
     
-    std::fstream data;
     struct stat data_info;
     data.open(fname, std::ios::in);
     // I don't think I need to say this, but don't clear the contents of or remove the file
@@ -126,8 +133,38 @@ Options:\n\
                         char* msg = new char[ln+1];
                         memcpy(msg, msg_str.c_str(), ln+1);
 
-                        mosquitto_publish(client, &mid, topic, ln, msg, qos, true);
-                        std::cout << "Sent message: " << msg << std::endl;
+                        // Split the message so that its room can be obtained (to be sent to the respective topic)
+                        strtok(msg, "\"");
+                        // Obtain the room number (includes department, floor, room)
+                        int idx = 0;
+                        for (int i = 0; i < 2; i++) strtok(nullptr, "\"");
+                        char* room_all = strtok(nullptr, "\"");
+
+                        char* dep = strtok(room_all, ".");
+                        char* floor = strtok(nullptr, ".");
+                        char* room = strtok(nullptr, ".");
+
+                        std::stringstream topic_stream;
+                        // Character index in the message where the content excluding the type definition starts
+                        // (since the type doesn't have to be sent, the topic already indicates the type explicitly)
+                        char type = *msg;
+                        switch (type)
+                        {
+                            case '0':
+                                topic_stream << "status/" << dep << "/" << floor << "/" << room;
+                                break;
+                            case '1':
+                                topic_stream << "event/" << dep << "/" << floor << "/" << room;
+                                break;
+
+                            default:
+                                std::cerr << "Unknown message type '" << type << "' from data stream" << std::endl;
+                        }
+
+                        delete[] msg;
+
+                        mosquitto_publish(client, &mid, topic_stream.str().c_str(), ln, msg_str.c_str()+1, qos, true);
+                        std::cout << "Sent message: " << msg_str.c_str()+1 << " (type " << type << ", topic '" << topic_stream.str() << "')" << std::endl;
                     }
                     // Make the current timestamp outdated, and wait for the next one
                     prev_time = data_info.st_mtim.tv_sec;
