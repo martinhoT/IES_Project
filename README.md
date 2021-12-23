@@ -56,8 +56,67 @@ docker exec -it app_mongodb_1 mongo
 ```
 
 To gain access to getaroom\_db first run sensor to have data:
-```
+```sql
 use admin
 db.auth("root","123456")
 use getaroom_db
+```
+
+## MySQL
+
+In order to access MySQL, run application and do:
+```bash
+docker exec -it app_mysqldb_1 mysql -h localhost -P 3306 -u root -p123456
+```
+
+To use the right database
+```
+use getaroom_db
+```
+
+## Data generation
+### Generator
+We use a generator built with Markov chains to simulate entrances and exits of people between rooms 
+
+```bash
+cd GetARoom/RaspberryPi/
+./run.sh
+```
+
+### Sensors
+#### Optical Sensor
+We use a camera to verify entrances and exits for later integrity checks
+
+Code based on: https://github.com/saimj7/People-Counting-in-Real-Time
+##### Run
+```bash
+cd GetARoom/RaspberryPi/Data_Generator/Camera_counter/
+python -m venv ./venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+python run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel
+```
+##### Run demo
+```
+cd GetARoom/RaspberryPi/Data_Generator/Camera_counter/
+python -m venv ./venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+python run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4
+```
+
+##### Configs
+Change the following file:
+```bash
+Camera_counter/mylib/config.py
+```
+
+Change to integrated camera:
+```python
+url = 0
+```
+
+Change to remote camera:
+```python
+url = '<address>'
 ```

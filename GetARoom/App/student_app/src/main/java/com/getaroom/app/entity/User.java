@@ -10,12 +10,13 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "username", nullable = false)
     @NotBlank(message = "Name is mandatory")
     private String name;
 
     @Id
     @Column(name = "email", nullable = false)
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -31,6 +32,13 @@ public class User {
         this.name = name;
         this.password = password;
         this.email = "";
+        this.role = "";
+    }
+
+    public User(String name, String password, String role) {
+        this.name = name;
+        this.password = password;
+        this.email = role;
         this.role = "";
     }
 
@@ -75,6 +83,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "name=" + name + ", password=" + password + '}';
+        return "User{" + "name=" + name + ", password=" + password + ", email=" + email + ", role="+role+'}';
     }
 }
