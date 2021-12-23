@@ -21,10 +21,10 @@
                         <div class="card-body p-5 text-center">
                             <div class="mb-md-5 mt-md-4 pb-5">
 
-                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                                <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                                <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+                                <p class="text-white-50 mb-5">Please enter your username, password, email and select a role!</p>
 
-                                <form action="#" th:action="@{/login}" th:object="${user}" method="post">
+                                <form action="#" th:action="@{/register}" th:object="${user}" method="post">
                                     <div class="form-outline form-white mb-4">
                                         <input type="text" th:field="*{name}" class="form-control form-control-lg"
                                             id="name" placeholder="Name" style="margin:auto; display:table;">
@@ -36,27 +36,24 @@
                                             style="margin:auto; display:table;">
                                     </div>
 
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="email" th:field="*{email}" class="form-control form-control-lg"
+                                            id="email" placeholder="Email" style="margin:auto; display:table;">
+                                    </div>
+
                                     <div class="container" style="justify-content: center;">
-                                        <span th:if="${#fields.hasErrors('name') || #fields.hasErrors('password')}"
+                                        <span th:if="${#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password')}"
                                             class="text-danger">All fields are mandatory!</span>
-                                        <span th:if="${wrong}" class="text-danger">Wrong Credentials!</span>
+                                        <span th:if="${wrong}" class="text-danger">Email or username is allready being used!</span>
                                         <span
-                                            th:if="${not (#fields.hasErrors('name') || #fields.hasErrors('password'))}"
+                                            th:if="${not (#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password'))}"
                                             class="text-danger"><br></span>
                                     </div>
                                     <div class="row">
-                                        <input type="submit" class="btn btn-outline-light btn-lg px-5" value="Login"
+                                        <input type="submit" class="btn btn-outline-light btn-lg px-5" value="Register"
                                             style="margin:auto; display:table;">
                                     </div>
-                                    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot
-                                            password?</a></p>
                                 </form>
-
-                                <div>
-                                    <p class="mb-0">Don't have an account? <a href="/register"
-                                            class="text-white-50 fw-bold">Sign Up</a></p>
-                                </div>
-
                                 <a th:href="@{/}" style="margin: auto"><button type="button" class="btn btn-outline-light btn-md px-5">Back</button></a>
                             </div>
                         </div>
