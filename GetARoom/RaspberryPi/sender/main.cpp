@@ -151,10 +151,10 @@ Options:\n\
                         switch (type)
                         {
                             case '0':
-                                topic_stream << "status/" << dep << "/" << floor << "/" << room;
+                                topic_stream << "event/" << dep << "/" << floor << "/" << room;
                                 break;
                             case '1':
-                                topic_stream << "event/" << dep << "/" << floor << "/" << room;
+                                topic_stream << "status/" << dep << "/" << floor << "/" << room;
                                 break;
 
                             default:

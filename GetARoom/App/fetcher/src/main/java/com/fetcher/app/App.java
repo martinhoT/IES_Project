@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
@@ -47,7 +48,7 @@ public class App implements CommandLineRunner {
 
 		System.out.print("Connecting...");
 		MqttConnectOptions mqttOptions = new MqttConnectOptions();
-		mqttOptions.setAutomaticReconnect(true);
+		mqttOptions.setAutomaticReconnect(false);
 		mqttOptions.setCleanSession(true);
 		mqttOptions.setConnectionTimeout(10);
 		mqttClient.connect(mqttOptions);
@@ -55,6 +56,10 @@ public class App implements CommandLineRunner {
 
 		CountDownLatch receivedMsg = new CountDownLatch(1);
 		mqttClient.subscribe("status/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
+			System.out.println("Obtaining STATUS document");
+			if (!verifyDocumentType(doc, List.of("room", "occupacy", "maxNumberOfPeople")))
+				return;
+
 			String room = (String) doc.get("room");
 			Status status = statusRepository.findByRoom(room)
 					.orElse(new Status(room));
@@ -64,6 +69,10 @@ public class App implements CommandLineRunner {
 			statusRepository.save(status);
 		}));
 		mqttClient.subscribe("event/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
+			System.out.println("Obtaining EVENT document");
+			if (!verifyDocumentType(doc, List.of("time", "user", "email", "room", "entered")))
+				return;
+
 			String timeStr = (String) doc.get("time");
 			try {
 				Date time = dateFormat.parse(timeStr);
@@ -103,5 +112,14 @@ public class App implements CommandLineRunner {
 
 		// If this is commented, the program will run indefinitely
 		//receivedMsg.countDown();
+	}
+
+	// Verify that the message if formatted correctly. Already sends an error message
+	private boolean verifyDocumentType(Document doc, List<String> fields) {
+		if (!fields.stream().allMatch(doc::containsKey)) {
+			System.err.println("Error: The message is doesn't contain all of the following attributes: " + fields + ".");
+			return false;
+		}
+		return true;
 	}
 }

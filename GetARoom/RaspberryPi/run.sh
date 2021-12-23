@@ -30,4 +30,4 @@ python3 ./Data_Generator/PSMG.py >> ${log_file} &
 pid=($!)
 
 # Sender
-./sender/sender "$@"
+./sender/sender "$@" --file "$log_file"
