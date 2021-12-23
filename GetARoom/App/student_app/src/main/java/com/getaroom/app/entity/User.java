@@ -16,6 +16,7 @@ public class User {
 
     @Id
     @Column(name = "email", nullable = false)
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -31,6 +32,13 @@ public class User {
         this.name = name;
         this.password = password;
         this.email = "";
+        this.role = "";
+    }
+
+    public User(String name, String password, String role) {
+        this.name = name;
+        this.password = password;
+        this.email = role;
         this.role = "";
     }
 

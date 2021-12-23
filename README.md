@@ -60,5 +60,10 @@ use getaroom_db
 
 In order to access MySQL, run application and do:
 ```bash
-docker exec -it app_mysql_1 mysqldb -h localhost -P 3306 -u root -p123456
+docker exec -it app_mysqldb_1 mysql -h localhost -P 3306 -u root -p123456
+```
+
+To use the right database
+```
+use getaroom_db
 ```
