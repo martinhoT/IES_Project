@@ -7,21 +7,20 @@ USE getaroom_db;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
-    email VARCHAR(20) PRIMARY KEY,
     username VARCHAR(20),
+    email VARCHAR(20) PRIMARY KEY,
     password VARCHAR(225),
     role VARCHAR(20)
 );
 
-INSERT INTO users
+INSERT INTO users (username, email, password, role)
 VALUES ("student@gmail.com" , "Student" , SHA2('Password', 512), "student" );
 
-INSERT INTO users
+INSERT INTO users (username, email, password, role)
 VALUES ("security@gmail.com", "Security", SHA2('Password', 512), "security");
 
-INSERT INTO users
+INSERT INTO users (username, email, password, role)
 VALUES ("analyst@gmail.com" , "Analyst" , SHA2('Password', 512), "analyst" );
-
 
 DROP PROCEDURE IF EXISTS loggeIn;
 
@@ -35,8 +34,6 @@ CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(20), IN r
             AND users.role = role);
     END &&  
 DELIMITER ; 
-
-
 
 -- CALL loggeIn("Student", "Password");
 -- CALL loggeIn("Student", "Passwor");
@@ -54,7 +51,8 @@ CREATE FUNCTION register (username VARCHAR(20), email VARCHAR(20), password VARC
             OR users.email = email
         )) THEN RETURN 0;
         ELSE
-            INSERT INTO users VALUES (email, username, SHA2(password,512), role);
+            INSERT INTO users (username, email, password, role) 
+            VALUES (username, email, SHA2(password,512), role);
             RETURN 1;
         END IF;
     END &&

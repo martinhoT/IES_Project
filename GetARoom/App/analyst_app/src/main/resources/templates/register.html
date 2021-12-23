@@ -37,16 +37,16 @@
                                     </div>
 
                                     <div class="form-outline form-white mb-4">
-                                        <input type="text" th:field="*{email}" class="form-control form-control-lg"
+                                        <input type="email" th:field="*{email}" class="form-control form-control-lg"
                                             id="email" placeholder="Email" style="margin:auto; display:table;">
                                     </div>
 
                                     <div class="container" style="justify-content: center;">
-                                        <span th:if="${#fields.hasErrors('name') || #fields.hasErrors('password')}"
+                                        <span th:if="${#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password')}"
                                             class="text-danger">All fields are mandatory!</span>
                                         <span th:if="${wrong}" class="text-danger">Email or username is allready being used!</span>
                                         <span
-                                            th:if="${not (#fields.hasErrors('name') || #fields.hasErrors('password'))}"
+                                            th:if="${not (#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password'))}"
                                             class="text-danger"><br></span>
                                     </div>
                                     <div class="row">

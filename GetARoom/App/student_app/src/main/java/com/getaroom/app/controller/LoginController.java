@@ -53,10 +53,9 @@ public class LoginController {
     @PostMapping("/register")
     public ModelAndView register(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        System.err.print(user);
-
         if (result.hasErrors()) {
             modelAndView.setViewName("register");
+            return modelAndView;
         }
         if (userRepository.register(user.getName(), user.getEmail(), user.getpassword(),"student") == 1){
             modelAndView.setViewName("redirect:/studyRooms");

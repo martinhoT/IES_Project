@@ -16,6 +16,7 @@ public class User {
 
     @Id
     @Column(name = "email", nullable = false)
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Column(name = "password", nullable = false)
