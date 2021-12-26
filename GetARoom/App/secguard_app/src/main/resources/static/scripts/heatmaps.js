@@ -1,6 +1,6 @@
 // Run on localhost
-//client = new Paho.MQTT.Client("localhost", 1884, "");
-client = new Paho.MQTT.Client(location, 1884, "");
+//client = new Paho.MQTT.Client("localhost", 1884, "", "");
+client = new Paho.MQTT.Client(location.hostname, 1884, "", "");
 
 // Set callback handlers
 client.onConnectionLost = onConnectionLost;
