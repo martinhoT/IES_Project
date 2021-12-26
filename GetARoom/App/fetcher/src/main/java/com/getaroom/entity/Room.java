@@ -1,10 +1,10 @@
-package com.fetcher.app;
+package com.getaroom.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Status {
+public class Room {
 
     @Id
     private String id;
@@ -13,7 +13,7 @@ public class Status {
     private double occupacy;
     private int maxNumberOfPeople;
 
-    public Status(String room) {
+    public Room(String room) {
         this.room = room;
     }
 

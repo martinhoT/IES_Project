@@ -1,4 +1,4 @@
-package com.fetcher.app;
+package com.getaroom;
 
 import org.bson.Document;
 import org.eclipse.paho.client.mqttv3.*;
@@ -16,6 +16,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
+
+import com.getaroom.app.entity.Event;
+import com.getaroom.app.entity.Status;
+import com.getaroom.app.repository.StatusRepository;
+import com.getaroom.app.repository.TodayRepository;
 
 // Remove the 'exclude' after the database backend has been done
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
@@ -76,7 +81,7 @@ public class App implements CommandLineRunner {
 			String timeStr = (String) doc.get("time");
 			try {
 				Date time = dateFormat.parse(timeStr);
-				todayRepository.save(new Today(
+				todayRepository.save(new Event(
 						(String) doc.get("user"),
 						(String) doc.get("email"),
 						(String) doc.get("room"),

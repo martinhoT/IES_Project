@@ -1,4 +1,4 @@
-package com.fetcher.app;
+package com.getaroom.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Document
-public class Today {
+public class Event {
 
     @Id
     private String id;
@@ -17,7 +17,7 @@ public class Today {
     private boolean entered;
     private Date time;
 
-    public Today(String user, String email, String room, boolean entered, Date time) {
+    public Event(String user, String email, String room, boolean entered, Date time) {
         this.user = user;
         this.email = email;
         this.room = room;
