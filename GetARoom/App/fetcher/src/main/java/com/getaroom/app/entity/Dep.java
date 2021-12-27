@@ -1,4 +1,4 @@
-package com.getaroom.entity;
+package com.getaroom.app.entity;
 
 import javax.persistence.Id;
 

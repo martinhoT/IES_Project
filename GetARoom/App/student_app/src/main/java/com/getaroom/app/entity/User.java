@@ -61,7 +61,7 @@ public class User {
         return name;
     }
 
-    public String getpassword() {
+    public String getPassword() {
         return password;
     }
 

@@ -1,21 +1,23 @@
-package com.getaroom.controller;
+package com.getaroom.app.controller;
 
 import java.util.List;
 import java.util.Map;
 
-import com.getaroom.entity.Dep;
-import com.getaroom.entity.Event;
-import com.getaroom.entity.Room;
-import com.getaroom.repository.StatusRepository;
-import com.getaroom.repository.TodayRepository;
+import com.getaroom.app.entity.Dep;
+import com.getaroom.app.entity.Event;
+import com.getaroom.app.entity.Room;
+import com.getaroom.app.repository.StatusRepository;
+import com.getaroom.app.repository.TodayRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequestMapping("/api")
 public class ApiController {
     
     private final StatusRepository statusRepository;
@@ -27,7 +29,7 @@ public class ApiController {
         this.todayRepository = todayRepository;
     }
 
-    @GetMapping("/api/today")
+    @GetMapping("/today")
     public List<Event> today(@RequestParam(required = false) String room) {
         /**
          * TODO
@@ -35,7 +37,7 @@ public class ApiController {
         return null;
     }
 
-    @GetMapping("/api/history")
+    @GetMapping("/history")
     public Map<String, List<Event>> history(@RequestParam(required = false) String year) {
         /**
          * TODO
@@ -43,15 +45,20 @@ public class ApiController {
         return null;
     }
 
-    @GetMapping("/api/status")
-    public Map<String, List<Room>> status(@RequestParam(required = false) int dep) {
+    @GetMapping("/status")
+    public Map<String, List<Room>> status(@RequestParam(required = false) String dep) {
         /**
          * TODO
          */
+        
+        // Used by student_app
+        if (dep != null)
+            return Map.of(dep, statusRepository.findAllRooms(dep));
+
         return null;
     }
 
-    @GetMapping("/api/department")
+    @GetMapping("/department")
     public List<Dep> department() {
         return statusRepository.findAllDep();
     }

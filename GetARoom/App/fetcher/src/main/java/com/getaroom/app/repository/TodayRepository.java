@@ -1,4 +1,4 @@
-package com.getaroom.repository;
+package com.getaroom.app.repository;
 
 import com.getaroom.app.entity.Event;
 

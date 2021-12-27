@@ -1,4 +1,4 @@
-package com.getaroom.repository;
+package com.getaroom.app.repository;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-import com.getaroom.entity.Dep;
-import com.getaroom.entity.Room;
+import com.getaroom.app.entity.Dep;
+import com.getaroom.app.entity.Room;
 
 public interface StatusRepository extends MongoRepository<Room, String> {
 

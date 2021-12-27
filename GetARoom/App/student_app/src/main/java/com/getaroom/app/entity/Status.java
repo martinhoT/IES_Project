@@ -1,7 +1,5 @@
 package com.getaroom.app.entity;
 
-import java.text.DecimalFormat;
-
 public class Status {
     private String room;
     private String occupacy;
@@ -40,6 +38,10 @@ public class Status {
 
     public String getOccupacy(){
         return occupacy;
+    }
+
+    public double getOccupacyNumber(){
+        return Double.parseDouble(occupacy);
     }
 
     //public int getCurrentOccupacy(){return Integer.parseInt(occupacy.substring(0, 3));}

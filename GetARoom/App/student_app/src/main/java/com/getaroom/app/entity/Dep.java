@@ -20,11 +20,15 @@ public class Dep {
         this.dep = dep;
     }
 
-    public String getdep(){
+    public String getDep(){
         return dep;
     }
 
+    public int getDepNumber() {
+        return Integer.parseInt(dep);
+    }
+
     public String toString() {
-        return getdep();
+        return getDep();
     }
 }
