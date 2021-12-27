@@ -5,9 +5,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import javax.validation.Valid;
 
-import com.getaroom.app.entity.Event;
-import com.getaroom.app.entity.Student;
-import com.getaroom.app.entity.User;
+import com.getaroom.app.entity.*;
+import com.getaroom.app.repository.RoomRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,19 +17,37 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
 public class MainController {
 
+	private final RoomRepository roomRepository;
 	private final Map<String, Student> blacklist;
 
-	public MainController() {
+	public MainController(RoomRepository roomRepository) {
+		this.roomRepository = roomRepository;
 		blacklist = new HashMap<>(Map.of(
 				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
 				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
 				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
 		));
+	}
+
+	@GetMapping("/blacklist")
+	public ModelAndView getBlacklist(Model model){
+		ModelAndView mav = new ModelAndView();
+
+		//List<Dep> allDepartments = roomRepository.findAllDep();
+
+		//Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));
+
+		//model.addAttribute("depList", allDepartments);
+
+		mav.setViewName("blacklist");
+
+		return mav;
 	}
 
 	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
