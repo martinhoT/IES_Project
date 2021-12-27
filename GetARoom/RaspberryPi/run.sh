@@ -22,6 +22,20 @@ trap cleanup EXIT
 
 log_file="./Data/Output/logs.txt"
 
+# If the log_file path doesn't exist, create it
+if [ ! -e "./Data/Output/logs.txt" ]
+then
+    if [ ! -d "./Data/Output" ]
+    then
+        if [ ! -d "./Data" ]
+        then
+            mkdir ./Data
+        fi
+        mkdir ./Data/Output
+    fi
+    touch ./Data/Output/logs.txt
+fi
+
 # Clear the file's contents, or else the sensor will send all the content inside at once
 > ${log_file}
 

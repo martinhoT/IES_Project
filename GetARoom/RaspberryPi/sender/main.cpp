@@ -163,7 +163,7 @@ Options:\n\
 
                         delete[] msg;
 
-                        mosquitto_publish(client, &mid, topic_stream.str().c_str(), ln, msg_str.c_str()+1, qos, true);
+                        mosquitto_publish(client, &mid, topic_stream.str().c_str(), ln-1, msg_str.c_str()+1, qos, true);
                         std::cout << "Sent message: " << msg_str.c_str()+1 << " (type " << type << ", topic '" << topic_stream.str() << "')" << std::endl;
                     }
                     // Make the current timestamp outdated, and wait for the next one

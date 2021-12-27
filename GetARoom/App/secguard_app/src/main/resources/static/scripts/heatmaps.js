@@ -1,51 +1,49 @@
-// $.ajax({
-//     type: "GET",
-//     url: "api/status",
-//     data: "data",
-//     dataType: "dataType",
-//     success: function (response) {
-        
-//     }
-// });
+// Run on localhost
+//client = new Paho.MQTT.Client("localhost", 1884, "", "");
+client = new Paho.MQTT.Client(location.hostname, 1884, "", "");
 
-// Create a client instance
-client = new Paho.MQTT.Client("localhost", 1884, "", "clientId");
-
-// set callback handlers
+// Set callback handlers
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
 
-// connect the client
+connected = false;
 client.connect({onSuccess:onConnect});
 
 
 
-// called when the client connects
+// When a new floor is chosen, subscribe to its respective topic
+// Also unsubscribe from the previously subscribed topics
+$("#map_choice").change(function(e) {
+    if (connected) {
+        client.unsubscribe(current_topic);
+        current_topic = "status/" + $("#map_choice").val().replaceAll(".", "/") + "/#";
+        client.subscribe(current_topic);
+    }
+});
+
 function onConnect() {
-    // Once a connection has been made, make a subscription and send a message
-    console.log("onConnect");
-    client.subscribe("js/test");
-    message = new Paho.MQTT.Message(JSON.stringify({
-        "4.7.8": 0,
-        "4.0.10": 0
-    }));
-    message.destinationName = "js/test";
-    client.send(message);
+    console.log("Successfully connected to the broker.");
+    current_topic = "status/" + $("#map_choice").val().replaceAll(".", "/") + "/#";
+    client.subscribe(current_topic);
+
+    connected = true;
 }
 
-// called when the client loses its connection
 function onConnectionLost(responseObject) {
     if (responseObject.errorCode !== 0) {
-        console.log("onConnectionLost:" + responseObject.errorMessage);
+        console.log("Connection lost:" + responseObject.errorMessage);
     }
 }
 
-// called when a message arrives
 function onMessageArrived(message) {
-    console.log("onMessageArrived:" + message.payloadString);
-    var stts = JSON.parse(message.payloadString);
+    msg = message.payloadString;
+    console.log("Received message:" + msg);
+    var stts = JSON.parse(msg);
     for (const roomid in stts) {
-        if (Object.hasOwnProperty.call(stts, roomid)) {
+        if (Object.hasOwnProperty.call(stts, roomid)
+            && document.getElementById("pct:" + roomid)!==null
+            && document.getElementById("clr:" + roomid)!==null)
+        {
             document.getElementById("pct:" + roomid).innerText = stts[roomid];
             occupacy = Number(stts[roomid]);
             if (occupacy < 20) {

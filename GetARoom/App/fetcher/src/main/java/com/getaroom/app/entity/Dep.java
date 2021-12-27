@@ -1,10 +1,16 @@
 package com.getaroom.app.entity;
 
+import javax.persistence.Id;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Dep {
 
-    String dep;
+    @Id
+    String id;
 
-    public Dep() {}
+    String dep;
 
     public Dep(String dep){
         this.dep = dep;
@@ -14,15 +20,11 @@ public class Dep {
         this.dep = dep;
     }
 
-    public String getDep(){
+    public String getdep(){
         return dep;
     }
 
-    public int getDepNumber() {
-        return Integer.parseInt(dep);
-    }
-
     public String toString() {
-        return getDep();
+        return getdep();
     }
 }

@@ -3,15 +3,21 @@ package com.getaroom.app.controller;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Status;
 import com.getaroom.app.entity.User;
-import com.getaroom.app.repository.RoomRepository;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,11 +25,11 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
 
-	private final RoomRepository roomRepository;
+	private final WebClient apiClient;
 
 	@Autowired
-	public MainController(RoomRepository roomRepository){
-		this.roomRepository = roomRepository;
+	public MainController(){
+		apiClient = WebClient.create("http://fetcher:8080");
 	}
 
 	@GetMapping("/")
@@ -34,9 +40,9 @@ public class MainController {
 	@GetMapping(value="/studyRooms")
 	public String getAllDepartments(Model model) {
 
-		List<Dep> allDepartments = roomRepository.findAllDep();
+		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
-		Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));
+		Collections.sort(allDepartments, Comparator.comparingInt(Dep::getDepNumber));
 
 		model.addAttribute("depList", allDepartments);
 		return "search_room";
@@ -46,21 +52,59 @@ public class MainController {
 	@ResponseBody
 	public ModelAndView getStudyRooms(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
 
-		List<Status> allRooms = roomRepository.findAllRooms(dep);
+		List<Status> allRooms = apiStatusDep(dep);
 
 		ModelAndView mav = new ModelAndView();
 
-		Collections.sort(allRooms, (o1,o2) -> o1.getOccupacy().compareTo(o2.getOccupacy()));
+		Collections.sort(allRooms, Comparator.comparingDouble(Status::getOccupacy));
 
 		mav.addObject("rooms", allRooms.stream().limit(10).collect(Collectors.toList()));
 		mav.setViewName("suggested_room");
 
 		return mav;
 	}
-	
+
 	@GetMapping("/error")
 	public String error() {
 		return "error";
 	}
+
+	/**
+	 * GET HTTP request to the API located in the fetcher instance.
+	 * This version returns a list of results.
+	 * 
+	 * @param <E>			Generic type representing the class of the objects in the list. Should be the same as the class passed as argument
+	 * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/"
+	 * @param elementClass	The class of the elements in the list
+	 * @return				The list of objects returned by the API call
+	 */
+	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass) {
+		return apiClient.get()
+			.uri("/api/" + uriAppend)
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
+			.collectList().block();
+	}
+
+	// TODO: is there a better way?
+	private List<Status> apiStatusDep(String dep) {
+		String json = apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/status")
+				.queryParam("dep", dep)
+				.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToMono(response -> response.bodyToMono(String.class))
+			.block();
+
+		Gson gson = new Gson();
+		List<Status> res = new ArrayList<>();
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
+			res.add(gson.fromJson(elem.toString(), Status.class));
+		return res;
+	}
+
 }
 
