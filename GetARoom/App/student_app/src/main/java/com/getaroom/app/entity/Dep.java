@@ -1,16 +1,10 @@
 package com.getaroom.app.entity;
 
-import javax.persistence.Id;
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document
 public class Dep {
 
-    @Id
-    String id;
-
     String dep;
+
+    public Dep() {}
 
     public Dep(String dep){
         this.dep = dep;

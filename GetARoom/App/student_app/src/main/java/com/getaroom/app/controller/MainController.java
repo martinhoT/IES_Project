@@ -3,10 +3,14 @@ package com.getaroom.app.controller;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Status;
 import com.getaroom.app.entity.User;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,18 +52,18 @@ public class MainController {
 	@ResponseBody
 	public ModelAndView getStudyRooms(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
 
-		List<Status> allRooms = apiStatusDep(dep).get(dep);
+		List<Status> allRooms = apiStatusDep(dep);
 
 		ModelAndView mav = new ModelAndView();
 
-		Collections.sort(allRooms, Comparator.comparingDouble(Status::getOccupacyNumber));
+		Collections.sort(allRooms, Comparator.comparingDouble(Status::getOccupacy));
 
 		mav.addObject("rooms", allRooms.stream().limit(10).collect(Collectors.toList()));
 		mav.setViewName("suggested_room");
 
 		return mav;
 	}
-	
+
 	@GetMapping("/error")
 	public String error() {
 		return "error";
@@ -84,17 +88,22 @@ public class MainController {
 	}
 
 	// TODO: is there a better way?
-	@SuppressWarnings("unchecked")
-	private Map<String, List<Status>> apiStatusDep(String dep) {
-		return apiClient.get()
-			.uri("/api/status")
+	private List<Status> apiStatusDep(String dep) {
+		String json = apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/status")
+				.queryParam("dep", dep)
+				.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)
-			.attribute("dep", dep)
-			.exchangeToMono(response -> {
-				return response.bodyToMono(Map.class);
-			})
+			.exchangeToMono(response -> response.bodyToMono(String.class))
 			.block();
+
+		Gson gson = new Gson();
+		List<Status> res = new ArrayList<>();
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
+			res.add(gson.fromJson(elem.toString(), Status.class));
+		return res;
 	}
 
 }
