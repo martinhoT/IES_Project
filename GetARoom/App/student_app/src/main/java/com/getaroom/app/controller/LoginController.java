@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,7 +37,7 @@ public class LoginController {
     @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        if (result.hasErrors()) {
+        if (result.hasErrors() && result.getAllErrors().size() > 1)  {
             modelAndView.setViewName("login");
             return modelAndView;
         }

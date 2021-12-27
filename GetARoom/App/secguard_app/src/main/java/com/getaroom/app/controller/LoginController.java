@@ -36,7 +36,7 @@ public class LoginController {
     @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        if (result.hasErrors()) {
+        if (result.hasErrors() && result.getAllErrors().size() > 1)  {
             modelAndView.setViewName("login");
             return modelAndView;
         }
@@ -58,7 +58,8 @@ public class LoginController {
             return modelAndView;
         }
         if (userRepository.register(user.getName(), user.getEmail(), user.getpassword(),"security") == 1){
-            modelAndView.setViewName("redirect:/studyRooms");
+            System.err.print("Hey");
+            modelAndView.setViewName("redirect:/heatmaps");
         }
         else{
             modelAndView.setViewName("register");
