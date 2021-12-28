@@ -28,7 +28,7 @@ class Person():
         if self.location == None:
             self.location = random.choice(places)
             self.action = "enter"
-            event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+            event = "0{\"room\":" + f"\"{self.location}\",\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
 
         if self.action == "enter":
@@ -36,7 +36,7 @@ class Person():
             place = mChain.next_state(self.location)
             if place != self.location:
                 self.action = "exit"
-                event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": false,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+                event = "0{\"room\":" + f"\"{self.location}\",\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"entered\": false,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
                 self.location = place
                 return event
             else:
@@ -44,7 +44,7 @@ class Person():
         
         if self.action == "exit":
             self.action = "enter"
-            event = "{\"type\": \"event\"," + f"\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"room\": \"{self.location}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
+            event = "0{\"room\":" + f"\"{self.location}\",\"user\": \"{self.name}\",\"email\": \"{self.email}\",\"entered\": true,\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             return event
         
     def __str__(self):
@@ -81,7 +81,7 @@ def main():
     try:
         # Default status
         for depName in depsDict.keys():
-            status = "{\"type\": \"status\",\"room\":" + f"\"{depName}\",\"occupacy\": {round(depsDict[depName][1]/depsDict[depName][0], 2)}, \"maxNumberOfPeople\": {depsDict[depName][0]}" + "}"
+            status = "1{\"room\":" + f"\"{depName}\",\"occupacy\": {round(depsDict[depName][1]/depsDict[depName][0], 2)}, \"maxNumberOfPeople\": {depsDict[depName][0]}" + "}"
             print(status, flush=True)
 
         # Events
@@ -89,13 +89,13 @@ def main():
             event = random.choice(people).move(depRooms)
             if event:
                 print(event, flush=True)
-                event = json.loads(event)
+                event = json.loads(event[1:])
                 name = event["room"]
                 if event["entered"]:
                     depsDict[name][1] += 1
                 else:
                     depsDict[name][1] -= 1
-                status = "{\"type\": \"status\",\"room\":" + f"\"{name}\",\"occupacy\": {round(depsDict[name][1]/depsDict[name][0], 2)}, \"maxNumberOfPeople\": {depsDict[name][0]}" + "}"
+                status = "1{\"room\":" + f"\"{name}\",\"occupacy\": {round(depsDict[name][1]/depsDict[name][0], 2)}, \"maxNumberOfPeople\": {depsDict[name][0]}" + "}"
                 print(status, flush=True)
             time.sleep(random.randrange(3, 8))
     except KeyboardInterrupt:

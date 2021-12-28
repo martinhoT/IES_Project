@@ -56,6 +56,7 @@
         <module>student_app</module>
         <module>secguard_app</module>
         <module>analyst_app</module>
+        <module>fetcher</module>
     </modules>
 
     <properties>
