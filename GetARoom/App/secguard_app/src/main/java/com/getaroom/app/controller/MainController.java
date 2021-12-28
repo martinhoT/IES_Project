@@ -24,34 +24,22 @@ import java.util.stream.Collectors;
 public class MainController {
 
 	private final RoomRepository roomRepository;
-	private final Map<String, Student> blacklist;
+	private final Map<String, List<String>> blacklist;
 
 	public MainController(RoomRepository roomRepository) {
 		this.roomRepository = roomRepository;
-		blacklist = new HashMap<>(Map.of(
-				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
-				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
-				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
-		));
+		blacklist = new HashMap<>();
 	}
 
 	@GetMapping("/blacklist")
 	public ModelAndView getBlacklist(Model model){
 		ModelAndView mav = new ModelAndView();
 
-        /*List<Dep> allDepartments = roomRepository.findAllDep();
+        List<Dep> allDepartments = roomRepository.findAllDep();
 
-		Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));*/
+		Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));
 
-		ArrayList<String> alist=new ArrayList<>();
-		alist.add("Steve");
-		alist.add("Tim");
-		alist.add("Lucy");
-		alist.add("Pat");
-		alist.add("Angela");
-		alist.add("Tom");
-
-		model.addAttribute("depList", alist);
+		model.addAttribute("depList", allDepartments);
 
 		mav.setViewName("blacklist");
 
@@ -64,26 +52,8 @@ public class MainController {
 
 		ArrayList<String> results = new ArrayList<>();
 
-		switch(res) {
-			case "Steve":
-				results.add("1");
-				results.add("2");
-				results.add("3");
-				results.add("4");
-				results.add("5");
-				results.add("6");
-				break;
-			case "Angela":
-				results.add("7");
-				results.add("8");
-				results.add("9");
-				results.add("10");
-				results.add("11");
-				results.add("12");
-				break;
-			default:
-				// code block
-		}
+		List<Status> x = roomRepository.findAllRooms(res);
+		x.forEach(elem -> results.add(elem.getRoom()));
 
 		System.out.println(res);
 		System.out.println("Success");
@@ -91,21 +61,24 @@ public class MainController {
 		return results;
 	}
 
-	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
-		return blacklist;
-	}
-
 	public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
 		return ApiController.getHistory("2020");
 	}
 
-	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
-		blacklist.remove(studentEmail);
+	/*public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
+		return blacklist;
+	}*/
+
+	public void remRoomBlacklist(String room, String studentEmail) {
+		blacklist.get(room).remove(studentEmail);
 	}
 
-	public void addRoomBlacklist(int dep, int floor, int room, String studentName, String studentEmail) {
-		if (!blacklist.containsKey(studentEmail))
-			blacklist.put(studentEmail, new Student(studentName, studentEmail));
+	public void addRoomBlacklist(String room, String studentEmail) {
+		if (!blacklist.containsKey(room))
+			blacklist.put(room, new ArrayList<>(){{add(studentEmail);}});
+		else
+			blacklist.get(room).add(studentEmail);
+
 	}
 
 	@GetMapping("/")
@@ -130,12 +103,12 @@ public class MainController {
 		));
 		return "logs";
 	}
-
+	/*
 	@GetMapping("/room/{dep}.{floor}.{room}")
 	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
-		/*
+		*//*
 		* ... obtain the room dynamically ...
-		*/
+		*//*
 
 		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
 		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
@@ -191,7 +164,7 @@ public class MainController {
 		addRoomBlacklist(dep, floor, room, studentName, studentEmail);
 		return "room";
 	}
-
+*/
 
 	@GetMapping("/heatmaps")
 	public String heatmaps(Model model) {

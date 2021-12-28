@@ -64,7 +64,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Blacklist Manager</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -73,7 +73,7 @@
                 <form action="">
                     <label>Department:</label>
                     <select id="dep" th:onchange="'setRoomValues()'" name="dep" class="form-control">
-                        <option th:each="dep :${depList}" th:value="${dep}" th:text="'Dep.' + ${dep}">
+                        <option th:each="dep :${depList}" th:value="${dep}" th:text="${dep}">
                         </option>
                     </select> </br>
                     <label>Room:</label>
@@ -82,6 +82,8 @@
                                 th:text="'Room.' + ${room}">
                         </option>
                     </select> </br>
+                    <label>Email</label>
+                    <input type="email" id="email" name="email"> </br>
                 </form>
             </div>
             <div class="modal-footer">
@@ -104,9 +106,9 @@
 
         function setRoomValues() {
             const frag = document.createDocumentFragment();
-            const s = document.getElementById("room");
-            const e = document.getElementById("dep");
-            const getDep = e.value;
+            const room = document.getElementById("room");
+            const dep = document.getElementById("dep");
+            const getDep = dep.value;
 
             console.log(getDep)
 
@@ -119,7 +121,7 @@
                 dataType: 'json', // added data type
                 success: function (res) {
 
-                    removeOptions(s);
+                    removeOptions(room);
 
                     console.log(res);
                     for (let i = 0; i < res.length; i++) {
@@ -131,7 +133,7 @@
                         frag.appendChild(option);
                     }
 
-                    s.appendChild(frag);
+                    room.appendChild(frag);
 
                 }
             });
