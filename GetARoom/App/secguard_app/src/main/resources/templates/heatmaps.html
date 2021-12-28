@@ -1,67 +1,405 @@
-<html lang="en" >
-<head>
-    <th:block th:include="base :: head" />
-    <title>Heatmaps</title>
-    <link rel="stylesheet" th:href="@{/css/heatmap.css}" href="../static/css/heatmap.css" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
-</head>
-<body>
-    <nav th:replace="base :: navbar"></nav>
-
-    <div>
-        <select name="heatmap" id="map_choice">
-            <optgroup label="Deti:">
-                <option value="4.1">1º andar</option>
-                <option value="4.2" selected>2º andar</option>
-            </optgroup>
-            <optgroup label="Biblioteca:">
-                <option value="17.1">1º andar</option>
-                <option value="17.2">2º andar</option>
-                <option value="17.3">3º andar</option>
-            </optgroup>
-        </select>
-    </div>
-    
-    <h2>Heatmaps</h2>
-
-    <div class="container" id="map">
-        <h4>Deti 1º</h4>
-        <div class="map-container">
-            <a th:href="@{/room/4.1.19}">
-                <div class="box hm-almost-full" id="clr:4.1.19" style="top:8.3%; left:42%; width:11.5%; height:13.5%">
-                    <p th:utext="${roomOccupacy.get('4.1.19')}" id="pct:4.1.19">38%</p>
-                </div>
-            </a>
-            <a th:href="@{/room/4.1.20}">
-                <div class="box hm-almost-full" id="clr:4.1.20" style="top:8.3%; left:53.5%; width:7.2%; height:13.5%">
-                    <p th:utext="${roomOccupacy.get('4.1.20')}" id="pct:4.1.20">60%</p>
-                </div>
-            </a>
-            <img id="1D" th:src="@{images/deti1.jpg}" src="../static/images/deti1.jpg" style="width: 100%;">
+<html lang="en">
+    <head>
+        <th:block th:include="base :: head" />
+        <title>Heatmaps</title>
+        <link rel="stylesheet" th:href="@{/css/heatmap.css}" type="text/css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/sec}">
+                        <i class="fa fa-home"></i>
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/heatmaps}">
+                        Map
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logs}">
+                        Logs
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">
+                        Log out
+                    </a>
+                </li>
+            </ul>
         </div>
-        <h4>Deti 2º</h4>
-        <img id="2D" th:src="@{images/deti2.jpg}" style="width: 100%;">
-        <h4>Biblioteca 1º</h4>
-        <img id="1B" th:src="@{images/biblio1.jpg}" style="width: 100%;">
-        <h4>Biblioteca 2º</h4>
-        <img id="2B" th:src="@{images/biblio2.jpg}" style="width: 100%;">
-        <h4>Biblioteca 3º</h4>
-        <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
-    </div>
+    </nav>
 
-    <th:block th:include="base :: scripts" />
-    
-    <script>
-        // $( "#map_choice" ).change(function () {
-        //     let str = "";
-        //     $( "#map_choice option:selected" ).each(function() {
-        //         str += $( this ).text() + " ";
-        //     });
-        //     $( "#update" ).text( str );
-        //     }).change();
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js'></script>
-    <script defer th:src="@{scripts/heatmaps.js}" src="../static/scripts/heatmaps.js"></script>
-</body>
+    <div class="container">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="item active">
+                <h2 style="text-align:center">Deti 1º andar</h2>
+                <div class="map-container">
+                    <a th:href="@{/room/4.1.19}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:42%; width:11.5%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.18}">
+                        <div class="box hm-almost-full" style="top:21.8%; left:42%; width:7%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.36}">
+                        <div class="box hm-almost-full" style="top:27.3%; left:51.3%; width:8%; height:17.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.20}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:53.5%; width:7.2%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.23}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:60.7%; width:7.7%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.26}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:68.4%; width:5.9%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.28}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:77.3%; width:5.9%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.32}">
+                        <div class="box hm-almost-full" style="top:8.3%; left:83.1%; width:5.9%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.30}">
+                        <div class="box hm-almost-full" style="top:26.5%; left:79.6%; width:9.5%; height:8%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.01}">
+                        <div class="box hm-almost-full" style="top:64.5%; left:11%; width:8.8%; height:11.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.02}">
+                        <div class="box hm-almost-full" style="top:76.5%; left:11%; width:11.7%; height:13.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.04}">
+                        <div class="box hm-almost-full" style="top:77%; left:22.7%; width:9%; height:13%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.1.06}">
+                        <div class="box hm-almost-full" style="top:77%; left:31.7%; width:9%; height:13%;">
+                        </div>
+                    </a>
+                    <img id="1D" th:src="@{images/deti1.jpg}" style="width: 100%;">
+                </div>
+            </div>
+            <div class="item">
+                <h2 style="text-align:center">Deti 2º andar</h2>
+                <div class="map-container">
+                    <a th:href="@{/room/4.2.28}">
+                        <div class="box hm-almost-full" style="top:2.5%; left:39.5%; width:7%; height:17%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.27}">
+                        <div class="box hm-almost-full" style="top:19.5%; left:39.5%; width:7%; height:13%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.31}">
+                        <div class="box hm-almost-full" style="top:2.5%; left:53.2%; width:7%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.34}">
+                        <div class="box hm-almost-full" style="top:2.5%; left:60.2%; width:12.5%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.25}">
+                        <div class="box hm-almost-full" style="top:24.8%; left:53.2%; width:7%; height:21%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.20}">
+                        <div class="box hm-almost-full" style="top:53.8%; left:45%; width:6.5%; height:23%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.03}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:3.5%; width:6.7%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.07}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:10.2%; width:6.7%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.08}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:17%; width:6.9%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.11}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:24%; width:6.7%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.14}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:30.6%; width:6.9%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.15}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:37.5%; width:7%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.16}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:44.5%; width:6.9%; height:15%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/4.2.17}">
+                        <div class="box hm-almost-full" style="top:82.5%; left:51.5%; width:6.7%; height:15%;">
+                        </div>
+                    </a>
+                    <img id="2D" th:src="@{images/deti2.jpg}" style="width: 100%;">
+                </div>
+            </div>
+            <div class="item">
+                <h2 style="text-align:center">Biblioteca 1º andar</h2>
+                <div class="map-container">
+                    <a th:href="@{/room/17.1.50}">
+                        <div class="box hm-almost-full" style="top:8%; left:7.5%; width:3.2%; height:12.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.51}">
+                        <div class="box hm-almost-full" style="top:10%; left:10.7%; width:2.3%; height:7.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.52}">
+                        <div class="box hm-almost-full" style="top:11%; left:13%; width:2.3%; height:6.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.53}">
+                        <div class="box hm-almost-full" style="top:11.5%; left:15.3%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.54}">
+                        <div class="box hm-almost-full" style="top:12%; left:17.6%; width:2.3%; height:5.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.42}">
+                        <div class="box hm-almost-full" style="top:17.5%; left:10.7%; width:9.2%; height:37.7%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.43}">
+                        <div class="box hm-almost-full" style="top:57.5%; left:17.6%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.44}">
+                        <div class="box hm-almost-full" style="top:55.2%; left:15.3%; width:2.3%; height:8%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.45}">
+                        <div class="box hm-almost-full" style="top:55.2%; left:13%; width:2.3%; height:7%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.1.46}">
+                        <div class="box hm-almost-full" style="top:55.2%; left:10.7%; width:2.3%; height:6%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.1.47}">
+                        <div class="box hm-almost-full" style="top:52%; left:7.5%; width:3.2%; height:8.5%;">
+                        </div>
+                    </a>   
+                    <img id="1B" th:src="@{images/biblio1.jpg}" style="width: 100%;">
+                </div> 
+            </div>
+            <div class="item">
+                <h2 style="text-align:center">Biblioteca 2º andar</h2>
+                <div class="map-container">
+                    <a th:href="@{/room/17.2.23}">
+                        <div class="box hm-almost-full" style="top:9%; left:8.6%; width:3.2%; height:12.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.24}">
+                        <div class="box hm-almost-full" style="top:12.5%; left:11.8%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.25}">
+                        <div class="box hm-almost-full" style="top:12.5%; left:14.1%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.26}">
+                        <div class="box hm-almost-full" style="top:12.5%; left:16.4%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.27}">
+                        <div class="box hm-almost-full" style="top:12.5%; left:18.7%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.1}">
+                        <div class="box hm-almost-full" style="top:12.5%; left:21%; width:36%; height:48%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.18}">
+                        <div class="box hm-almost-full" style="top:52%; left:8.6%; width:3.2%; height:8.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.14}">
+                        <div class="box hm-almost-full" style="top:57.5%; left:18.7%; width:2.3%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.15}">
+                        <div class="box hm-almost-full" style="top:55%; left:16.4%; width:2.3%; height:5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.16}">
+                        <div class="box hm-almost-full" style="top:55%; left:14%; width:2.3%; height:5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.2.17}">
+                        <div class="box hm-almost-full" style="top:55%; left:11.8%; width:2.3%; height:6%;">
+                        </div>
+                    </a>    
+                    <img id="2B" th:src="@{images/biblio2.jpg}" style="width: 100%;">
+                </div>
+            </div>
+            <div class="item">
+                <h2 style="text-align:center">Biblioteca 3º andar</h2>
+                <div class="map-container">
+                    <a th:href="@{/room/17.3.33}">
+                        <div class="box hm-almost-full" style="top:16%; left:7.5%; width:3.2%; height:12.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.34}">
+                        <div class="box hm-almost-full" style="top:18%; left:10.7%; width:2.4%; height:7.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.35}">
+                        <div class="box hm-almost-full" style="top:19%; left:13.1%; width:2.4%; height:6.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.36}">
+                        <div class="box hm-almost-full" style="top:19.5%; left:15.6%; width:2.4%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.37}">
+                        <div class="box hm-almost-full" style="top:20%; left:17.9%; width:2.4%; height:5.5%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.26}">
+                        <div class="box hm-almost-full" style="top:67%; left:17.9%; width:2.4%; height:6%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.27}">
+                        <div class="box hm-almost-full" style="top:65%; left:15.6%; width:2.4%; height:4%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.28}">
+                        <div class="box hm-almost-full" style="top:65%; left:13.1%; width:2.4%; height:4%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.29}">
+                        <div class="box hm-almost-full" style="top:65%; left:10.7%; width:2.4%; height:6%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.30}">
+                        <div class="box hm-almost-full" style="top:61%; left:7.5%; width:3.2%; height:9%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.1}">
+                        <div class="box hm-almost-full" style="top:20%; left:20.5%; width:38%; height:50%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.20}">
+                        <div class="box hm-almost-full" style="top:22%; left:68.5%; width:4.7%; height:8%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.19}">
+                        <div class="box hm-almost-full" style="top:20%; left:73.2%; width:4.7%; height:10%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.18}">
+                        <div class="box hm-almost-full" style="top:20%; left:77.9%; width:4.7%; height:10%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.17}">
+                        <div class="box hm-almost-full" style="top:20%; left:82.6%; width:4.7%; height:10%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.24}">
+                        <div class="box hm-almost-full" style="top:34%; left:68.5%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.23}">
+                        <div class="box hm-almost-full" style="top:34%; left:70.8%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.22}">
+                        <div class="box hm-almost-full" style="top:34%; left:73.1%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.21}">
+                        <div class="box hm-almost-full" style="top:34%; left:75.4%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.4}">
+                        <div class="box hm-almost-full" style="top:51%; left:68.5%; width:2.4%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.5}">
+                        <div class="box hm-almost-full" style="top:51%; left:70.8%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.6}">
+                        <div class="box hm-almost-full" style="top:51%; left:73.1%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.7}">
+                        <div class="box hm-almost-full" style="top:51%; left:75.4%; width:2.3%; height:5%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.15}">
+                        <div class="box hm-almost-full" style="top:34%; left:80%; width:7%; height:7.2%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.14}">
+                        <div class="box hm-almost-full" style="top:41.2%; left:80%; width:7%; height:7.2%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.13}">
+                        <div class="box hm-almost-full" style="top:48.4%; left:80%; width:7%; height:7.2%;">
+                        </div>
+                    </a>
+                    <a th:href="@{/room/17.3.10}">
+                        <div class="box hm-almost-full" style="top:60%; left:77.9%; width:4.7%; height:10%;">
+                        </div>
+                    </a> 
+                    <a th:href="@{/room/17.3.11}">
+                        <div class="box hm-almost-full" style="top:60%; left:82.6%; width:4.7%; height:10%;">
+                        </div>
+                    </a> 
+                    <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
+                </div>
+            </div>
+          </div>
+
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev" style="width: 5%;">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next" style="width: 5%;">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+    </body>
 </html>
