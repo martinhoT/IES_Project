@@ -13,17 +13,17 @@ client.connect({onSuccess:onConnect});
 
 // When a new floor is chosen, subscribe to its respective topic
 // Also unsubscribe from the previously subscribed topics
-$("#map_choice").change(function(e) {
+$("#department_selected").change(function(e) {
     if (connected) {
         client.unsubscribe(current_topic);
-        current_topic = "status/" + $("#map_choice").val().replaceAll(".", "/") + "/#";
+        current_topic = "status/" + $("#department_selected").val().replaceAll(".", "/") + "/#";
         client.subscribe(current_topic);
     }
 });
 
 function onConnect() {
     console.log("Successfully connected to the broker.");
-    current_topic = "status/" + $("#map_choice").val().replaceAll(".", "/") + "/#";
+    current_topic = "status/" + $("#department_selected").val().replaceAll(".", "/") + "/#";
     client.subscribe(current_topic);
 
     connected = true;

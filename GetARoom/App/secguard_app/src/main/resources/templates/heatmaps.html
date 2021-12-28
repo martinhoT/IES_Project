@@ -42,6 +42,9 @@
     </nav>
 
     <div class="container">
+        <select th:field="*{deparment_selected}">
+            <option th:each="department : ${departments}" th:value="${department.dep}" th:text="${department.dep}"></option>
+        </select>
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>

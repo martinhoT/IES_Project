@@ -17,7 +17,7 @@ public interface StatusRepository extends MongoRepository<Room, String> {
     Optional<Room> findByRoom(String room);
 
     // @Query(value = "{}", fields = "{_id:0, dep: {$arrayElemAt: [{$split: ['$room', '.']}, 0]}}")
-    @Aggregation(pipeline = {"{$project: {dep: {$arrayElemAt: [{$split: ['$room', '.']}, 0]}}}","{$group:{_id:'$dep'}}","{$project: {dep:'$_id'}}"})
+    @Aggregation(pipeline = {"{$project: {dep: {$arrayElemAt: [{$split: ['$room', '.']}, 0]}}}","{$group:{_id:'$dep',floors:{$count: {}}}}","{$project: {floors:1, dep:'$_id'}}"})
     List<Dep> findAllDep();
 
     // @Query(value = "{room:{$regex:'?0\\\\.[0-9]+\\\\.[0-9]+'}}", fields = "{'_id':0,'_class':0})")

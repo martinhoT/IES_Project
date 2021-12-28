@@ -18,10 +18,6 @@ public class Dep {
         return dep;
     }
 
-    public int getDepNumber(){
-        return Integer.parseInt(dep);
-    }
-
     public void setFloors(int floors){
         this.floors = floors;
     }
