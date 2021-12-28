@@ -39,15 +39,56 @@ public class MainController {
 	public ModelAndView getBlacklist(Model model){
 		ModelAndView mav = new ModelAndView();
 
-		//List<Dep> allDepartments = roomRepository.findAllDep();
+        /*List<Dep> allDepartments = roomRepository.findAllDep();
 
-		//Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));
+		Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));*/
 
-		//model.addAttribute("depList", allDepartments);
+		ArrayList<String> alist=new ArrayList<>();
+		alist.add("Steve");
+		alist.add("Tim");
+		alist.add("Lucy");
+		alist.add("Pat");
+		alist.add("Angela");
+		alist.add("Tom");
+
+		model.addAttribute("depList", alist);
 
 		mav.setViewName("blacklist");
 
 		return mav;
+	}
+
+	@GetMapping(value="/getRooms")
+	@ResponseBody
+	public ArrayList<String> setRoomValuesByDepartment(@RequestParam("Result") String res, Model model) {
+
+		ArrayList<String> results = new ArrayList<>();
+
+		switch(res) {
+			case "Steve":
+				results.add("1");
+				results.add("2");
+				results.add("3");
+				results.add("4");
+				results.add("5");
+				results.add("6");
+				break;
+			case "Angela":
+				results.add("7");
+				results.add("8");
+				results.add("9");
+				results.add("10");
+				results.add("11");
+				results.add("12");
+				break;
+			default:
+				// code block
+		}
+
+		System.out.println(res);
+		System.out.println("Success");
+
+		return results;
 	}
 
 	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
