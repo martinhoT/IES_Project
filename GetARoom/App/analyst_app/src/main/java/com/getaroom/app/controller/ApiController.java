@@ -1,137 +1,53 @@
 package com.getaroom.app.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import com.getaroom.app.entity.Room;
+import com.getaroom.app.entity.Status;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.getaroom.app.entity.Event;
 
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import java.io.FileReader;
-
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 public class ApiController {
 
-	public static List<Event> getToday(String roomName){
-		JSONParser parser = new JSONParser();
-		List<Event> eventList = new ArrayList<Event>();
+	private final WebClient apiClient;
 
-		try {
-			java.io.File filePath = new java.io.File("src/main/resources/static/data/today/events.json");
-			JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
-			for(Object eventJson : jsonEvents){
-				JSONObject jsonObject = (JSONObject)eventJson;
-				Event event = new Event(
-										(Long)jsonObject.get("index"), 
-										(String)jsonObject.get("user"), 
-										(String)jsonObject.get("email"),
-										(String)jsonObject.get("room"),
-										(Boolean)jsonObject.get("entered"), 
-										(String)jsonObject.get("time")
-									   );
-				if (roomName == null){
-					eventList.add(event);
-				}else if(event.getRoom().replace(".", "").equals(roomName)){
-					eventList.add(event);
-				}
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+    public ApiController() {
+        apiClient = WebClient.create("http://fetcher:8080");
+    }
+
+	public static List<Event> getToday(String StatusName){
+		List<Event> eventList = new ArrayList<Event>();
 		return eventList;
 	}
 
 	public static HashMap<String, List<Event>> getHistory(String year){
 		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
-
-		if (year != null){
-			JSONParser parser = new JSONParser();
-			List<Event> eventList = new ArrayList<Event>();
-			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + year + ".json");
-				JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
-				for(Object eventJson : jsonEvents){
-					JSONObject jsonObject = (JSONObject)eventJson;
-					Event event = new Event(
-											(Long)jsonObject.get("index"), 
-											(String)jsonObject.get("user"), 
-											(String)jsonObject.get("email"),
-											(String)jsonObject.get("room"),
-											(Boolean)jsonObject.get("entered"), 
-											(String)jsonObject.get("time")
-										);
-					eventList.add(event);
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			history.put(year + "", eventList);
-		}else {
-			for(int y = 2018; y <= 2020; y++){
-				JSONParser parser = new JSONParser();
-				List<Event> eventList = new ArrayList<Event>();
-				try {
-					java.io.File filePath = new java.io.File("src/main/resources/static/data/history/" + y + ".json");
-					JSONArray jsonEvents = (JSONArray) parser.parse(new FileReader(filePath));
-					for(Object eventJson : jsonEvents){
-						JSONObject jsonObject = (JSONObject)eventJson;
-						Event event = new Event(
-												(Long)jsonObject.get("index"), 
-												(String)jsonObject.get("user"), 
-												(String)jsonObject.get("email"),
-												(String)jsonObject.get("room"),
-												(Boolean)jsonObject.get("entered"), 
-												(String)jsonObject.get("time")
-											);
-						eventList.add(event);
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				history.put(y + "", eventList);
-			}
-		}
 		return history;
 	}
 
-	public static HashMap<String, List<Room>> getStatus(){
-		HashMap<String, List<Room>> departments = new HashMap<String, List<Room>>();
-		for(int department = 1; department <= 6; department++){
-			JSONParser parser = new JSONParser();
-			List<Room> roomList = new ArrayList<Room>();
-			try {
-				java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep" + department + ".json");
-				JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
-				for(Object roomJson : jsonRooms){
-					JSONObject jsonObject = (JSONObject)roomJson;
-					Room room = new Room(
-											(String)jsonObject.get("room"),
-											(String)jsonObject.get("occupacy"),
-											(Long)jsonObject.get("maxNumberOfPeople"),
-											(Boolean)jsonObject.get("restricted")
-										);
-					roomList.add(room);
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			departments.put("Department " + department, roomList);
-		}
+	public static HashMap<String, List<Status>> getStatus(){
+		HashMap<String, List<Status>> departments = new HashMap<String, List<Status>>();
+
+		
 		return departments;
 	}
 
 	@GetMapping("/api/today")
-	public List<Event> today(@RequestParam(required = false) String room) {
-		return getToday(room);
+	public List<Event> today(@RequestParam(required = false) String Status) {
+		return getToday(Status);
     }
 
 	@GetMapping("/api/history")
@@ -140,7 +56,43 @@ public class ApiController {
     }
 
 	@GetMapping("/api/status")
-	public HashMap<String, List<Room>> status() {
+	public HashMap<String, List<Status>> status() {
 		return getStatus();
     }
+
+	/**
+	 * GET HTTP request to the API located in the fetcher instance.
+	 * This version returns a list of results.
+	 * 
+	 * @param <E>			Generic type representing the class of the objects in the list. Should be the same as the class passed as argument
+	 * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/"
+	 * @param elementClass	The class of the elements in the list
+	 * @return				The list of objects returned by the API call
+	 */
+	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass) {
+		return apiClient.get()
+			.uri("/api/" + uriAppend)
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
+			.collectList().block();
+	}
+
+	// TODO: is there a better way?
+	private List<Status> apiStatus() {
+		String json = apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/status")
+				.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToMono(response -> response.bodyToMono(String.class))
+			.block();
+
+		Gson gson = new Gson();
+		List<Status> res = new ArrayList<>();
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray())
+			res.add(gson.fromJson(elem.toString(), Status.class));
+		return res;
+	}
 }
