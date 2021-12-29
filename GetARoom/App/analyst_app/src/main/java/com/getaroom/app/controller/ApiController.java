@@ -11,12 +11,14 @@ import com.getaroom.app.entity.Status;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
 
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.nio.charset.StandardCharsets;
 
 @RestController
@@ -57,7 +59,17 @@ public class ApiController {
 
 	@GetMapping("/api/status")
 	public HashMap<String, List<Status>> status() {
-		return getStatus();
+		HashMap<String, List<Status>> departments = new HashMap<String, List<Status>>();
+
+		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
+
+		Collections.sort(allDepartments, Comparator.comparingInt(Dep::getDepNumber));
+
+		for(Dep dep: allDepartments){
+			String department = dep.getDep();
+			departments.put("Department " + department, apiStatusDep(department));
+		}
+		return departments;
     }
 
 	/**
@@ -78,11 +90,11 @@ public class ApiController {
 			.collectList().block();
 	}
 
-	// TODO: is there a better way?
-	private List<Status> apiStatus() {
+	private List<Status> apiStatusDep(String dep) {
 		String json = apiClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path("/api/status")
+				.queryParam("dep", dep)
 				.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)
@@ -91,7 +103,7 @@ public class ApiController {
 
 		Gson gson = new Gson();
 		List<Status> res = new ArrayList<>();
-		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray())
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
 			res.add(gson.fromJson(elem.toString(), Status.class));
 		return res;
 	}

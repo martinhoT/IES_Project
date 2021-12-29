@@ -47,11 +47,7 @@ public class ApiController {
 
     @GetMapping("/status")
     public Map<String, List<Room>> status(@RequestParam(required = false) String dep) {
-        /**
-         * TODO
-         */
-        
-        // Used by student_app
+        // Used by student_app and analyst_app
         if (dep != null)
             return Map.of(dep, statusRepository.findAllRooms(dep));
 
