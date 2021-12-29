@@ -82,13 +82,13 @@
                                 th:text="'Room.' + ${room}">
                         </option>
                     </select> </br>
-                    <label>Email</label>
-                    <input type="email" id="email" name="email"> </br>
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"> </br>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Remove</button>
-                <button type="button" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-danger" id="btnRemove" th:onclick="'removeBlacklist()'">Remove</button>
+                <button type="button" class="btn btn-primary" id="btnAdd" th:onclick="'addToBlacklist()'">Add</button>
             </div>
         </div>
     </div>
@@ -96,50 +96,7 @@
 
 
 <th:block th:fragment="scripts">
-    <script>
-        function removeOptions(selectElement) {
-            let i, L = selectElement.options.length - 1;
-            for(i = L; i >= 0; i--) {
-                selectElement.remove(i);
-            }
-        }
-
-        function setRoomValues() {
-            const frag = document.createDocumentFragment();
-            const room = document.getElementById("room");
-            const dep = document.getElementById("dep");
-            const getDep = dep.value;
-
-            console.log(getDep)
-
-            $.ajax({
-                url: "/getRooms",
-                data: {
-                    Result : getDep
-                },
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function (res) {
-
-                    removeOptions(room);
-
-                    console.log(res);
-                    for (let i = 0; i < res.length; i++) {
-                        console.log(res[i]);
-
-                        const option = document.createElement("option");
-                        option.value = "" + res[i];
-                        option.text = " " + res[i];
-                        frag.appendChild(option);
-                    }
-
-                    room.appendChild(frag);
-
-                }
-            });
-
-        }
-    </script>
+    <script th:src="@{/js/blacklist.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>

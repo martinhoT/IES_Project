@@ -69,16 +69,31 @@ public class MainController {
 		return blacklist;
 	}*/
 
-	public void remRoomBlacklist(String room, String studentEmail) {
-		blacklist.get(room).remove(studentEmail);
+	@PostMapping(value = "/removeUser")
+	@ResponseBody
+	public String remRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+
+		if (blacklist.containsKey(room))
+			blacklist.get(room).remove(studentEmail);
+
+		//blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+		return "success";
 	}
 
-	public void addRoomBlacklist(String room, String studentEmail) {
+	@PostMapping(value = "/addUser")
+	@ResponseBody
+	public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+
 		if (!blacklist.containsKey(room))
 			blacklist.put(room, new ArrayList<>(){{add(studentEmail);}});
 		else
-			blacklist.get(room).add(studentEmail);
+			if (!blacklist.get(room).contains(studentEmail))
+				blacklist.get(room).add(studentEmail);
 
+		//blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+		return "success";
 	}
 
 	@GetMapping("/")
