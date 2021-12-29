@@ -14,13 +14,13 @@ CREATE TABLE users(
 );
 
 INSERT INTO users (username, email, password, role)
-VALUES ("student@gmail.com" , "Student" , SHA2('Password', 512), "student" );
+VALUES ( "Student",  "student@gmail.com", SHA2('Password', 512),  "student");
 
 INSERT INTO users (username, email, password, role)
-VALUES ("security@gmail.com", "Security", SHA2('Password', 512), "security");
+VALUES ("Security", "security@gmail.com", SHA2('Password', 512), "security");
 
 INSERT INTO users (username, email, password, role)
-VALUES ("analyst@gmail.com" , "Analyst" , SHA2('Password', 512), "analyst" );
+VALUES ( "Analyst",  "analyst@gmail.com", SHA2('Password', 512),  "analyst");
 
 DROP PROCEDURE IF EXISTS loggeIn;
 
