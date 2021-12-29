@@ -6,6 +6,8 @@ import java.util.Map;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
 import com.getaroom.app.entity.Room;
+import com.getaroom.app.entity.RoomStyle;
+import com.getaroom.app.repository.RoomStyleRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.getaroom.app.repository.TodayRepository;
 
@@ -22,11 +24,17 @@ public class ApiController {
     
     private final StatusRepository statusRepository;
     private final TodayRepository todayRepository;
+    private final RoomStyleRepository roomStyleRepository;
 
     @Autowired
-    public ApiController(StatusRepository statusRepository, TodayRepository todayRepository) {
+    public ApiController(StatusRepository statusRepository, TodayRepository todayRepository, RoomStyleRepository roomStyleRepository) {
         this.statusRepository = statusRepository;
         this.todayRepository = todayRepository;
+        this.roomStyleRepository = roomStyleRepository;
+
+        if (roomStyleRepository.count() == 0) {
+            // TODO: from static JSON file, populate database
+        }
     }
 
     @GetMapping("/today")
@@ -61,6 +69,12 @@ public class ApiController {
     @GetMapping("/department")
     public List<Dep> department() {
         return statusRepository.findAllDep();
+    }
+
+    // Used in heatmaps
+    @GetMapping("/roomStyles")
+    public List<RoomStyle> roomStyles(@RequestParam(required = false) String dep) {
+        return roomStyleRepository.findAllRooms(dep);
     }
 
 }

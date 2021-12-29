@@ -36,9 +36,9 @@ public class MainController {
 		return blacklist;
 	}
 
-	public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
-		return ApiController.getHistory("2020");
-	}
+	// public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
+	// 	return ApiController.getHistory("2020");
+	// }
 
 	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
 		blacklist.remove(studentEmail);
@@ -59,79 +59,79 @@ public class MainController {
 		return "sec";
 	}
 
-	@GetMapping("/logs")
-	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
-		List<Event> events;
-		if (room.equals("None"))
-			events = new ArrayList<>();
-		else
-			events = ApiController.getToday(room);
-		model.addAllAttributes(Map.of(
-			"events", events
-		));
-		return "logs";
-	}
+	// @GetMapping("/logs")
+	// public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+	// 	List<Event> events;
+	// 	if (room.equals("None"))
+	// 		events = new ArrayList<>();
+	// 	else
+	// 		events = ApiController.getToday(room);
+	// 	model.addAllAttributes(Map.of(
+	// 		"events", events
+	// 	));
+	// 	return "logs";
+	// }
 
-	@GetMapping("/room/{dep}.{floor}.{room}")
-	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
-		/*
-		* ... obtain the room dynamically ...
-		*/
+	// @GetMapping("/room/{dep}.{floor}.{room}")
+	// public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
+	// 	/*
+	// 	* ... obtain the room dynamically ...
+	// 	*/
 
-		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-		model.addAllAttributes(Map.of(
-			"dep", dep,
-			"floor", floor,
-			"room", room,
-			"blacklisted", blacklisted,
-			"eventMap", eventMap
-		));
-		return "room";
-	}
+	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+	// 	model.addAllAttributes(Map.of(
+	// 		"dep", dep,
+	// 		"floor", floor,
+	// 		"room", room,
+	// 		"blacklisted", blacklisted,
+	// 		"eventMap", eventMap
+	// 	));
+	// 	return "room";
+	// }
 
-	@GetMapping("/room/{dep}.{floor}.{room}/remove")
-	public String roomRemove(
-			@PathVariable int dep,
-			@PathVariable int floor,
-			@PathVariable int room,
-			@RequestParam(name="email") String studentEmail,
-			Model model) {
+	// @GetMapping("/room/{dep}.{floor}.{room}/remove")
+	// public String roomRemove(
+	// 		@PathVariable int dep,
+	// 		@PathVariable int floor,
+	// 		@PathVariable int room,
+	// 		@RequestParam(name="email") String studentEmail,
+	// 		Model model) {
 
-		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-		model.addAllAttributes(Map.of(
-				"dep", dep,
-				"floor", floor,
-				"room", room,
-				"blacklisted", blacklisted,
-				"eventMap", eventMap
-		));
-		remRoomBlacklist(dep, floor, room, studentEmail);
-		return "room";
-	}
+	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+	// 	model.addAllAttributes(Map.of(
+	// 			"dep", dep,
+	// 			"floor", floor,
+	// 			"room", room,
+	// 			"blacklisted", blacklisted,
+	// 			"eventMap", eventMap
+	// 	));
+	// 	remRoomBlacklist(dep, floor, room, studentEmail);
+	// 	return "room";
+	// }
 
-	@GetMapping("/room/{dep}.{floor}.{room}/add")
-	public String roomAdd(
-			@PathVariable int dep,
-			@PathVariable int floor,
-			@PathVariable int room,
-			@RequestParam(name="name") String studentName,
-			@RequestParam(name="email") String studentEmail,
-			Model model) {
+	// @GetMapping("/room/{dep}.{floor}.{room}/add")
+	// public String roomAdd(
+	// 		@PathVariable int dep,
+	// 		@PathVariable int floor,
+	// 		@PathVariable int room,
+	// 		@RequestParam(name="name") String studentName,
+	// 		@RequestParam(name="email") String studentEmail,
+	// 		Model model) {
 
-		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-		model.addAllAttributes(Map.of(
-				"dep", dep,
-				"floor", floor,
-				"room", room,
-				"blacklisted", blacklisted,
-				"eventMap", eventMap
-		));
-		addRoomBlacklist(dep, floor, room, studentName, studentEmail);
-		return "room";
-	}
+	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
+	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
+	// 	model.addAllAttributes(Map.of(
+	// 			"dep", dep,
+	// 			"floor", floor,
+	// 			"room", room,
+	// 			"blacklisted", blacklisted,
+	// 			"eventMap", eventMap
+	// 	));
+	// 	addRoomBlacklist(dep, floor, room, studentName, studentEmail);
+	// 	return "room";
+	// }
 
 
 	@GetMapping("/heatmaps")

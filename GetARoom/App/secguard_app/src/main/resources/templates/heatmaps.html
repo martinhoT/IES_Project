@@ -53,8 +53,20 @@
             <li data-target="#myCarousel" data-slide-to="3"></li>
             <li data-target="#myCarousel" data-slide-to="4"></li>
           </ol>
-          <div class="carousel-inner">
-            <div class="item active">
+          <div class="carousel-inner" data-bind="foreach: floors">
+            <div class="item">
+                <h2 style="text-align:center">Departamento <span data-bind="text: department"></span> <span data-bind="text: $data"></span>º andar</h2>
+                <div class="map-container">
+                    <div data-bind="foreach: rooms">
+                        <a data-bind="attr: { href: '/room/' + $data.room }">
+                            <div class="box" data-bind="style: { top: $data.top, left: $data.left, width: $data.width, height: $data.height }">
+                            </div>
+                        </a>
+                    </div>
+                    <img data-bind="attr: { src: 'dep' + department + '_' + $data }" style="width: 100%;">
+                </div>
+            </div>
+            <!-- <div class="item active">
                 <h2 style="text-align:center">Deti 1º andar</h2>
                 <div class="map-container">
                     <a th:href="@{/room/4.1.19}">
@@ -391,7 +403,7 @@
                     </a> 
                     <img id="3B" th:src="@{images/biblio3.jpg}" style="width: 100%;">
                 </div>
-            </div>
+            </div> -->
           </div>
 
           <a class="left carousel-control" href="#myCarousel" data-slide="prev" style="width: 5%;">
