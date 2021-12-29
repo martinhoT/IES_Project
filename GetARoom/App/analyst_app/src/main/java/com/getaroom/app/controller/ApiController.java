@@ -1,5 +1,6 @@
 package com.getaroom.app.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,6 @@ import com.getaroom.app.entity.Event;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.nio.charset.StandardCharsets;
 
 @RestController
@@ -26,35 +25,20 @@ public class ApiController {
 
 	private final WebClient apiClient;
 
+	@Autowired
     public ApiController() {
         apiClient = WebClient.create("http://fetcher:8080");
     }
 
-	public static List<Event> getToday(String StatusName){
-		List<Event> eventList = new ArrayList<Event>();
-		return eventList;
-	}
-
-	public static HashMap<String, List<Event>> getHistory(String year){
-		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
-		return history;
-	}
-
-	public static HashMap<String, List<Status>> getStatus(){
-		HashMap<String, List<Status>> departments = new HashMap<String, List<Status>>();
-
-		
-		return departments;
-	}
-
 	@GetMapping("/api/today")
-	public List<Event> today(@RequestParam(required = false) String Status) {
-		return getToday(Status);
+	public List<Event> today(@RequestParam(required = false) String room) {
+		return apiTodayRoom(room);
     }
 
 	@GetMapping("/api/history")
 	public HashMap<String, List<Event>> history(@RequestParam(required = false) String year) {
-		return getHistory(year);
+		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
+		return history;
     }
 
 	@GetMapping("/api/status")
@@ -62,8 +46,6 @@ public class ApiController {
 		HashMap<String, List<Status>> departments = new HashMap<String, List<Status>>();
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
-
-		Collections.sort(allDepartments, Comparator.comparingInt(Dep::getDepNumber));
 
 		for(Dep dep: allDepartments){
 			String department = dep.getDep();
@@ -106,5 +88,17 @@ public class ApiController {
 		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
 			res.add(gson.fromJson(elem.toString(), Status.class));
 		return res;
+	}
+
+	private List<Event> apiTodayRoom(String room) {
+		return apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+			.path("/api/today")
+			.queryParam("room", room)
+			.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(Event.class) )
+			.collectList().block();
 	}
 }
