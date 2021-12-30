@@ -1,29 +1,18 @@
 package com.getaroom.app.entity;
 
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "users")
 public class User {
 
-    @Column(name = "username", nullable = false)
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @Id
-    @Column(name = "email", nullable = false)
     @NotBlank(message = "Email is mandatory")
     private String email;
 
-    @Column(name = "password", nullable = false)
     @NotBlank(message = "Password is mandatory")
     private String password;
 
-    @Column(name = "role", nullable = false)
     private String role;
 
     public User() {}
@@ -61,7 +50,7 @@ public class User {
         return name;
     }
 
-    public String getpassword() {
+    public String getPassword() {
         return password;
     }
 

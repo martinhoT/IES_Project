@@ -1,29 +1,31 @@
 package com.getaroom.app.entity;
 
-import java.text.DecimalFormat;
-
 public class Status {
+    private String id;
     private String room;
-    private String occupacy;
-    private Long maxNumberOfPeople;
-    private Boolean restricted;
+    private Double occupacy;
+    private Integer maxNumberOfPeople;
+    //private Boolean restricted;
 
-    public Status(String room, String occupacy, Long maxNumberOfPeople) {
+    public Status() {}
+
+    public Status(String id, String room, Double occupacy, Integer maxNumberOfPeople) {
         this.room = room;
         this.occupacy = occupacy;
         this.maxNumberOfPeople = maxNumberOfPeople;
-        restricted = false;
+        //restricted = false;
 	}
 
-    public Status(String room, String occupacy, Long maxNumberOfPeople, Boolean restricted) {
-        this.room = room;
-        this.occupacy = occupacy;
-        this.maxNumberOfPeople = maxNumberOfPeople;
-        this.restricted = restricted;
-	}
+    // public Status(String room, String occupacy, Long maxNumberOfPeople, Boolean restricted) {
+    //     this.room = room;
+    //     this.occupacy = occupacy;
+    //     this.maxNumberOfPeople = maxNumberOfPeople;
+    //     this.restricted = restricted;
+	// }
 
-    public Status() {
 
+    public void setId(String id){
+        this.id = id;
     }
 
     public void setRoom(String room){
@@ -34,11 +36,15 @@ public class Status {
         return room;
     }
 
-    public void setOccupacy(String occupacy){
+    public void setOccupacy(Double occupacy){
         this.occupacy = occupacy;
     }
 
-    public String getOccupacy(){
+    public String getId(){
+        return id;
+    }
+
+    public Double getOccupacy(){
         return occupacy;
     }
 
@@ -46,25 +52,25 @@ public class Status {
 
 
     public String getCurrentOccupacy(){
-        Double currentOcuppanvy = Double.parseDouble(occupacy)*100;
+        Double currentOcuppanvy = ((double) occupacy)*100;
         return String.valueOf(currentOcuppanvy.intValue());
     }
 
-    public void setMaxNumberOfPeople(Long maxNumberOfPeople){
+    public void setMaxNumberOfPeople(Integer maxNumberOfPeople){
         this.maxNumberOfPeople = maxNumberOfPeople;
     }
 
-    public Long getMaxNumberOfPeople(){
+    public Integer getMaxNumberOfPeople(){
         return maxNumberOfPeople;
     }
 
-    public void setRestricted(Boolean restricted){
-        this.restricted = restricted;
-    }
+    // public void setRestricted(Boolean restricted){
+    //     this.restricted = restricted;
+    // }
 
-    public Boolean getRestricted(){
-        return restricted;
-    }
+    // public Boolean getRestricted(){
+    //     return restricted;
+    // }
 
     //public String toString() {
     //    return "Room: " + getRoom() + 
@@ -72,10 +78,10 @@ public class Status {
     //           ", maxNumberOfPeople: " + getMaxNumberOfPeople();
     //}
 
-    public String toString() {
-        return "Room: " + getRoom() + 
-               ", occupacy: " + getOccupacy() +
-               ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
-               ", restricted: " + getRestricted();
-    }
+    // public String toString() {
+    //     return "Room: " + getRoom() + 
+    //            ", occupacy: " + getOccupacy() +
+    //            ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
+    //            ", restricted: " + getRestricted();
+    // }
 }
