@@ -5,6 +5,8 @@ public class Dep {
     String dep;
     int floors;
 
+    public Dep() {}
+
     public Dep(String dep, int floors){
         this.dep = dep;
         this.floors = floors;

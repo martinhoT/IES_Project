@@ -1,5 +1,7 @@
 package com.getaroom.app.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +12,16 @@ import com.getaroom.app.entity.RoomStyle;
 import com.getaroom.app.repository.RoomStyleRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.getaroom.app.repository.TodayRepository;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping("/api")
@@ -32,8 +37,21 @@ public class ApiController {
         this.todayRepository = todayRepository;
         this.roomStyleRepository = roomStyleRepository;
 
+        // TODO: Better updates? (check if modified?)
         if (roomStyleRepository.count() == 0) {
-            // TODO: from static JSON file, populate database
+            Gson gson = new Gson();
+            FileReader f = null;
+            try {
+                f = new FileReader("src/main/resources/static/data/room_styles.json");
+            } catch (FileNotFoundException e) {
+                System.err.println("File with room styles (room_styles.json) could not be read");
+            }
+
+            if (f != null) {
+                JsonArray roomStylesList = gson.fromJson(f, JsonArray.class);
+                for (JsonElement style : roomStylesList)
+                    roomStyleRepository.save( gson.fromJson(style, RoomStyle.class) );
+            }
         }
     }
 
@@ -63,15 +81,22 @@ public class ApiController {
         return null;
     }
 
+    @CrossOrigin
     @GetMapping("/department")
     public List<Dep> department() {
         return statusRepository.findAllDep();
     }
 
     // Used in heatmaps
+    @CrossOrigin
     @GetMapping("/roomStyles")
-    public List<RoomStyle> roomStyles(@RequestParam(required = false) String dep) {
-        return roomStyleRepository.findAllRooms(dep);
+    public List<RoomStyle> roomStyles(
+        @RequestParam(required = true, defaultValue = "") String dep,
+        @RequestParam(required = true, defaultValue = "") String floor) {
+
+        // if (dep.isEmpty() || floor.isEmpty())
+        //     return roomStyleRepository.findAll();
+        return roomStyleRepository.findAllRooms(dep, floor);
     }
 
 }
