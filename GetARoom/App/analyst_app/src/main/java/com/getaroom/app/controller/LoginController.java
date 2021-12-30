@@ -68,7 +68,7 @@ public class LoginController {
             return modelAndView;
         }
         if ( apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class) ){
-            modelAndView.setViewName("redirect:/studyRooms");
+            modelAndView.setViewName("redirect:/api");
         }
         else{
             modelAndView.setViewName("register");

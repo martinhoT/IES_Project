@@ -38,11 +38,12 @@ public class ApiController {
     }
 
     @GetMapping("/today")
-    public List<Event> today(@RequestParam(required = false) String room) {
-        /**
-         * TODO
-         */
-        return null;
+    public List<Event> today(@RequestParam(defaultValue = "") String room) {
+        if (room.isEmpty()){
+            return todayRepository.findAll();
+        }else{
+            return todayRepository.findByRoom(room);
+        }
     }
 
     @GetMapping("/history")
@@ -55,11 +56,7 @@ public class ApiController {
 
     @GetMapping("/status")
     public Map<String, List<Room>> status(@RequestParam(required = false) String dep) {
-        /**
-         * TODO
-         */
-        
-        // Used by student_app
+        // Used by student_app and analyst_app
         if (dep != null)
             return Map.of(dep, statusRepository.findAllRooms(dep));
 
