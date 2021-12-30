@@ -31,8 +31,33 @@ public class ApiController {
     }
 
 	@GetMapping("/api/today")
-	public List<Event> today(@RequestParam(required = false) String room) {
-		return apiTodayRoom(room);
+	public List<Event> today(@RequestParam(defaultValue = "0", required = false, name = "pageNo") String pageNo, @RequestParam(required = false, name = "room") String room) {
+		Integer startIdx, endIdx;
+		Integer numElems = 5; // number of events per page 
+		List<Event> allEvents = apiTodayRoom(room);
+		List<Event> filteredEvents = new ArrayList<>();
+
+		if (pageNo.matches("\\d+")){
+			Integer pageNoInt = Integer.parseInt(pageNo);
+			// Check list size
+			Integer listsize = allEvents.size();
+			if (pageNoInt * numElems + numElems < listsize){
+				startIdx = pageNoInt * numElems;
+				endIdx = startIdx + numElems;
+				filteredEvents = allEvents.subList(startIdx, endIdx);
+			}else{
+				if ((listsize - numElems) < 0){
+					startIdx = 0;
+				}else{
+					startIdx = listsize - numElems;
+				}
+				endIdx = listsize;
+				filteredEvents = allEvents.subList(startIdx, endIdx);
+			}
+			return filteredEvents;
+		}else{
+			return allEvents;
+		}
     }
 
 	@GetMapping("/api/history")
