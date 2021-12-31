@@ -1,19 +1,42 @@
 function ViewModel() {
     var self = this;
+
     self.department = ko.observable("0");
-    self.floors = ko.observableArray([]);
-    self.rooms = ko.observableArray([]);
-    
-    self.full_room_name = function(room) {
-        return "/room/" + room
-    };
+    self.floors = ko.observableArray([
+        {
+            "floor": "X",
+            "img": "#",
+            "styles": [
+                {
+                    "room": "",
+                    "top": "0px",
+                    "left": "0px",
+                    "width": "0px",
+                    "height": "0px"
+                }
+            ]
+        }
+    ]);
 
-    self.heatmap_img_src = function(floor) {
-        return '/images/dep' + self.department() + '_' + floor + '.jpg';
+    // Checks whether the children of the floors observable array have already been loaded and bound in the HTML.
+    // This way, the MQTT client can safely update the HTML elements, checking first if they have been bound.
+    self.floorsBound = false;
+    self.savedStyles = [];
+    self.flagFloorsBound = function(parent) {
+        console.log("Floors loaded, data can be updated.");
+        self.floorsBound = true;
+        self.updateFloors();
     }
-
-    self.actual_floor_number = function(index) {
-        return Number(index) + 1;
+    self.updateFloors = function() {
+        for (style of self.savedStyles) {
+            percentage = document.getElementById("pct:" + style.roomid)
+            color = document.getElementById("clr:" + style.roomid)
+            // if (percentage != null)
+                percentage.innerText = style.pct;
+            // if (color != null)
+                color.className = style.clr;
+        }
+        self.savedStyles = []
     }
 };
 var viewModel = new ViewModel();
@@ -43,6 +66,7 @@ backgroundPopulatorInserted = 0;
 $("#department_selected").change(function(e) {
     let dep_number = $("#department_selected").val()
     viewModel.department(dep_number)
+    viewModel.floorsBound = false;
 
     $.getJSON("http://localhost:84/api/department", {"dep": dep_number},
         function (data, textStatus, jqXHR) {
@@ -63,11 +87,11 @@ $("#department_selected").change(function(e) {
                         // viewModel.rooms( Array.from(rooms, (v,_) => v.room.split(".")[2]) );
                         backgroundPopulator[i] = {
                             "floor": i+1,
-                            "img": '/images/dep' + viewModel.department() + '_' + (i+1) + '.jpg',
+                            "img": 'images/dep' + viewModel.department() + '_' + (i+1) + '.jpg',
                             "styles": data
                         };
                         backgroundPopulatorInserted++;
-                        if (backgroundPopulatorInserted === n_floors);
+                        if (backgroundPopulatorInserted === n_floors)
                             viewModel.floors(backgroundPopulator);
                     }
                 );
@@ -106,22 +130,32 @@ function onMessageArrived(message) {
     var stts = JSON.parse(msg);
 
     roomid = stts["room"];
-    occupacy = Number(stts["occupacy"])*100;
+    occupacy = parseInt(Number(stts["occupacy"])*100);
     
-    document.getElementById("pct:" + roomid).innerText = occupacy + "%";
+    colorClass = "box"
     if (occupacy < 20) {
-        document.getElementById("clr:" + roomid).className = "box hm-empty";
+        colorClass = "box hm-empty";
     }
     else if (occupacy < 40) {
-        document.getElementById("clr:" + roomid).className = "box hm-almost-empty";
+        colorClass = "box hm-almost-empty";
     }
     else if (occupacy < 60) {
-        document.getElementById("clr:" + roomid).className = "box hm-mid";
+        colorClass = "box hm-mid";
     }
     else if (occupacy < 80) {
-        document.getElementById("clr:" + roomid).className = "box hm-almost-full";
+        colorClass = "box hm-almost-full";
     }
     else {
-        document.getElementById("clr:" + roomid).className = "box hm-full";
+        colorClass = "box hm-full";
+    }
+    
+    viewModel.savedStyles.push({
+        roomid: roomid,
+        pct: occupacy + "%",
+        clr: colorClass
+    });
+
+    if (viewModel.floorsBound) {
+        viewModel.updateFloors();
     }
 }
