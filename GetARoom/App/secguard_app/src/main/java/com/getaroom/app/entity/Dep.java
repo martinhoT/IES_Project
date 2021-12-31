@@ -5,6 +5,8 @@ public class Dep {
     String dep;
     int floors;
 
+    public Dep() {}
+
     public Dep(String dep, int floors){
         this.dep = dep;
         this.floors = floors;
@@ -16,10 +18,6 @@ public class Dep {
 
     public String getDep(){
         return dep;
-    }
-
-    public int getDepNumber(){
-        return Integer.parseInt(dep);
     }
 
     public void setFloors(int floors){
