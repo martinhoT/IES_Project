@@ -6,14 +6,27 @@ import java.util.HashMap;
 import com.getaroom.app.entity.Event;
 import com.getaroom.app.entity.Student;
 import com.getaroom.app.entity.User;
+import com.getaroom.app.entity.Status;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
@@ -21,7 +34,11 @@ public class MainController {
 
 	private final Map<String, Student> blacklist;
 
+	private final WebClient apiClient;
+
+	@Autowired
 	public MainController() {
+		apiClient = WebClient.create("http://fetcher:8080");
 		blacklist = new HashMap<>(Map.of(
 				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
 				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
@@ -176,5 +193,24 @@ public class MainController {
     @GetMapping("/error")
 	public String error() {
 		return "error";
+	}
+
+	// TODO: is there a better way?
+	private List<Status> apiStatusDep(String dep) {
+		String json = apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/status")
+				.queryParam("dep", dep)
+				.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToMono(response -> response.bodyToMono(String.class))
+			.block();
+
+		Gson gson = new Gson();
+		List<Status> res = new ArrayList<>();
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
+			res.add(gson.fromJson(elem.toString(), Status.class));
+		return res;
 	}
 }
