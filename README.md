@@ -85,7 +85,7 @@ cd GetARoom/RaspberryPi/
 
 ### Sensors
 #### Optical Sensor
-We use a camera to verify entrances and exits for later integrity checks
+We use a camera to verify entrances and exits for status reports
 
 Code based on: https://github.com/saimj7/People-Counting-in-Real-Time
 ##### Run
@@ -119,4 +119,22 @@ url = 0
 Change to remote camera:
 ```python
 url = '<address>'
+```
+
+#### NFC Sensor
+We use a NFC sensor to get identification of people who leave and enter a room
+
+##### Run server
+```bash
+cd GetARoom/RaspberryPi/Nfc_sensor
+python -m venv ./venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+cd ..
+python Nfc_sensor/server.py
+```
+
+##### Simulate entrances and exits of people
+```bash
+curl -X POST -F 'name=<full name>' -F 'email=<email>' <flask server url>
 ```
