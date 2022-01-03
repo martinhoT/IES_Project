@@ -12,13 +12,21 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.getaroom.app.entity.Event;
+import com.fasterxml.jackson.datatype.jsr310.deser.key.ZoneOffsetKeyDeserializer;
+import com.getaroom.app.entity.Today;
 import com.getaroom.app.entity.Room;
+import com.getaroom.app.repository.HistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.getaroom.app.repository.TodayRepository;
 
@@ -31,11 +39,13 @@ public class App implements CommandLineRunner {
 
 	private final TodayRepository todayRepository;
 	private final StatusRepository statusRepository;
+	private final HistoryRepository historyRepository;
 
 	@Autowired
-	public App(TodayRepository todayRepository, StatusRepository statusRepository) {
+	public App(TodayRepository todayRepository, StatusRepository statusRepository, HistoryRepository historyRepository) {
 		this.todayRepository = todayRepository;
 		this.statusRepository = statusRepository;
+		this.historyRepository = historyRepository;
 	}
 
 	public static void main(String[] args) {
@@ -44,6 +54,23 @@ public class App implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// Schelude the batch processing of 'today' MongoDB collection into 'history' collection
+		// ZonedDateTime already handles daylight saving cases
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Lisbon"));
+		
+		ZonedDateTime nextRun = now.withHour(0).withMinute(0).withSecond(0);
+		if (now.compareTo(nextRun) > 0)
+			nextRun = nextRun.plusDays(1);
+		
+		long initialDelay = Duration.between(now, nextRun).getSeconds();
+
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+		scheduler.scheduleAtFixedRate(new TodayMigrateToHistoryBatch(),
+			initialDelay,
+			TimeUnit.DAYS.toSeconds(1),
+			TimeUnit.SECONDS);
+		
+		// Fetcher unit that reads data from the broker and puts into the MongoDB databases
 		String name = "fetcher";
 		IMqttClient mqttClient;
 
@@ -81,7 +108,7 @@ public class App implements CommandLineRunner {
 			String timeStr = (String) doc.get("time");
 			try {
 				Date time = dateFormat.parse(timeStr);
-				todayRepository.save(new Event(
+				todayRepository.save(new Today(
 						(String) doc.get("user"),
 						(String) doc.get("email"),
 						(String) doc.get("room"),
@@ -123,5 +150,16 @@ public class App implements CommandLineRunner {
 			return false;
 		}
 		return true;
+	}
+
+	private class TodayMigrateToHistoryBatch implements Runnable {
+
+		@Override
+		public void run() {
+			List<Today> todays = todayRepository.findAll();
+			historyRepository.saveAll( todays.stream().map(Today::cloneHistory).toList() );
+			todayRepository.deleteAll( todays );
+		}
+
 	}
 }
