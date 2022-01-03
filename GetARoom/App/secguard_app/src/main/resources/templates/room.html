@@ -61,23 +61,24 @@
 
         </div>
         <div class="row">
-            <div class="col-12" th:with="filterYear='2020'">
+            <!-- <div class="col-12" th:with="filterYear='2021'"> -->
+            <div class="col-12">
                 <h1>Events</h1>
-                <div>
-                    <h3>Filters</h3>
-                    <form>
-                        <label for="event-year">Year:</label>
-                        <select id="event-year" name="event-year">
-                            <option th:each="year : ${eventMap.keySet()}"
-                                th:text="${year}" th:value="${year}"
-                                th:selected="${year.equals('2020')}"></option>
-                        </select>
-                    </form>
-                </div>
+                <!-- <div> -->
+                    <!-- <h3>Filters</h3> -->
+                    <!-- <form> -->
+                        <!-- <label for="event-year">Year:</label> -->
+                        <!-- <select id="event-year" name="event-year"> -->
+                            <!-- <option th:each="year : ${eventMap.keySet()}" -->
+                                <!-- th:text="${year}" th:value="${year}" -->
+                                <!-- th:selected="${year.equals('2020')}"></option> -->
+                        <!-- </select> -->
+                    <!-- </form> -->
+                <!-- </div> -->
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
+                            <!-- <th scope="col">Id</th> -->
                             <th scope="col">Person</th>
                             <th scope="col">Email</th>
                             <th scope="col">Action</th>
@@ -85,19 +86,27 @@
                             <th scope="col">Blacklist</th>
                         </tr>
                     </thead>
-                    <tbody th:each="event : ${eventMap.get(filterYear)}">
+                    <!-- <tbody th:each="event : ${eventMap.get(filterYear)}"> -->
+                    <tbody th:each="event : ${events}" th:unless="${events.isEmpty()}">
                         <tr>
-                            <th th:text="${event.id}" scope="row">Id</th>
-                            <td th:text="${event.person}">Person</td>
+                            <!-- <th th:text="${event.id}" scope="row">Id</th> -->
+                            <td th:text="${event.user}">User</td>
                             <td th:text="${event.email}">Email</td>
-                            <td th:text="${event.action}">Action</td>
+                            <td th:switch="${event.entered}">
+                                <p th:case="true">
+                                    Entry
+                                </p>
+                                <p th:case="false">
+                                    Exit
+                                </p>
+                            </td>
                             <td th:text="${event.time}">Time</td>
                             <td>
                                 <div th:switch="${blacklisted.containsKey(event.email)}">
                                     <a th:case="true" th:href="@{/room/{dep}.{floor}.{room}/remove(dep=${dep},floor=${floor},room=${room},email=${event.email})}">
                                         <button type="button" class="btn btn-danger"><i class="fa fa-times"></i></button>
                                     </a>
-                                    <a th:case="false" th:href="@{/room/{dep}.{floor}.{room}/add(dep=${dep},floor=${floor},room=${room},name=${event.person},email=${event.email})}">
+                                    <a th:case="false" th:href="@{/room/{dep}.{floor}.{room}/add(dep=${dep},floor=${floor},room=${room},name=${event.user},email=${event.email})}">
                                         <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
                                     </a>
                                     <span th:case="*">...</span>
@@ -108,6 +117,35 @@
                 </table>
             </div>
         </div>
+
+        <!-- <div class="container"> -->
+            <!-- <h2>Logs</h2> -->
+            <!-- <form method="get" th:action="@{/logs}"> -->
+                <!-- <label for="room">Room:</label> -->
+                <!-- <input type="text" id="room" name="room"/> -->
+                <!-- <input type="submit" value="Submit" /> -->
+            <!-- </form> -->
+            <!-- <table class="table" th:unless="${events.isEmpty()}"> -->
+                <!-- <thead> -->
+                    <!-- <tr> -->
+                        <!-- <th scope="col">Id</th> -->
+                        <!-- <th scope="col">Person</th> -->
+                        <!-- <th scope="col">Email</th> -->
+                        <!-- <th scope="col">Action</th> -->
+                        <!-- <th scope="col">Time</th> -->
+                    <!-- </tr> -->
+                <!-- </thead> -->
+                <!-- <tbody th:each="event : ${events}"> -->
+                    <!-- <tr> -->
+                        <!-- <th th:text="${event.id}" scope="row">Id</th> -->
+                        <!-- <td th:text="${event.user}">Person</td> -->
+                        <!-- <td th:text="${event.email}">Email</td> -->
+                        <!-- <td th:text="${event.action}">Action</td> -->
+                        <!-- <td th:text="${event.time}">Time</td> -->
+                    <!-- </tr> -->
+                <!-- </tbody> -->
+            <!-- </table> -->
+        <!-- </div> -->
     </div>
 
     <th:block th:include="base :: scripts" />

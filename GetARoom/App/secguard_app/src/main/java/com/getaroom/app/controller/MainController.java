@@ -69,25 +69,34 @@ public class MainController {
 		return "sec";
 	}
 
-	// @GetMapping("/logs")
-	// public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+	@GetMapping("/logs")
+	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		System.err.println(RoomEvents);
 	// 	List<Event> events;
 	// 	if (room.equals("None"))
 	// 		events = new ArrayList<>();
 	// 	else
 	// 		events = ApiController.getToday(room);
-	// 	model.addAllAttributes(Map.of(
-	// 		"events", events
-	// 	));
-	// 	return "logs";
-	// }
+		model.addAllAttributes(Map.of(
+			"events", RoomEvents
+		));
+		return "logs";
+	}
 
-	// @GetMapping("/room/{dep}.{floor}.{room}")
-	// public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
+	@GetMapping("/room/{dep}.{floor}.{room}")
+	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
 	// 	/*
 	// 	* ... obtain the room dynamically ...
 	// 	*/
-
+		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
+		List<Event> currentRoomEvents = new ArrayList<Event>();
+		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		for (Event e : RoomEvents){
+			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
+		}
+	// List<Event> RoomEvents = apiRoomLogs(currentRoom);
+		Map<String, Student> blacklisted = new HashMap<String, Student>();
 	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
 	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
 	// 	model.addAllAttributes(Map.of(
@@ -98,7 +107,15 @@ public class MainController {
 	// 		"eventMap", eventMap
 	// 	));
 	// 	return "room";
-	// }
+		model.addAllAttributes(Map.of(
+			 "dep", dep,
+			 "floor", floor,
+			 "room", room,
+			 "blacklisted", blacklisted,
+			"events", currentRoomEvents
+		));
+		return "room";
+	}
 
 	// @GetMapping("/room/{dep}.{floor}.{room}/remove")
 	// public String roomRemove(
@@ -171,6 +188,24 @@ public class MainController {
 		return "error";
 	}
 
+	/**
+	 * GET HTTP request to the API located in the fetcher instance.
+	 * This version returns a list of results.
+	 * 
+	 * @param <E>			Generic type representing the class of the objects in the list. Should be the same as the class passed as argument
+	 * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/"
+	 * @param elementClass	The class of the elements in the list
+	 * @return				The list of objects returned by the API call
+	 */
+	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass) {
+		return apiClient.get()
+			.uri("/api/" + uriAppend)
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
+			.collectList().block();
+	}
+
 	// TODO: is there a better way?
 	private List<Status> apiStatusDep(String dep) {
 		String json = apiClient.get()
@@ -188,22 +223,5 @@ public class MainController {
 		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
 			res.add(gson.fromJson(elem.toString(), Status.class));
 		return res;
-	}
-	/**
-	 * GET HTTP request to the API located in the fetcher instance.
-	 * This version returns a list of results.
-	 * 
-	 * @param <E>			Generic type representing the class of the objects in the list. Should be the same as the class passed as argument
-	 * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/"
-	 * @param elementClass	The class of the elements in the list
-	 * @return				The list of objects returned by the API call
-	 */
-	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass) {
-		return apiClient.get()
-			.uri("/api/" + uriAppend)
-			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-			.acceptCharset(StandardCharsets.UTF_8)
-			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
-			.collectList().block();
 	}
 }
