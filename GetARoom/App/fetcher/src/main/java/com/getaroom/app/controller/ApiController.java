@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.getaroom.app.entity.Dep;
-import com.getaroom.app.entity.Event;
+import com.getaroom.app.entity.History;
+import com.getaroom.app.entity.Today;
 import com.getaroom.app.entity.Room;
 import com.getaroom.app.entity.RoomStyle;
+import com.getaroom.app.repository.HistoryRepository;
 import com.getaroom.app.repository.RoomStyleRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.getaroom.app.repository.TodayRepository;
@@ -29,13 +31,15 @@ public class ApiController {
     
     private final StatusRepository statusRepository;
     private final TodayRepository todayRepository;
+    private final HistoryRepository historyRepository;
     private final RoomStyleRepository roomStyleRepository;
 
     @Autowired
-    public ApiController(StatusRepository statusRepository, TodayRepository todayRepository, RoomStyleRepository roomStyleRepository) {
+    public ApiController(StatusRepository statusRepository, TodayRepository todayRepository, RoomStyleRepository roomStyleRepository, HistoryRepository historyRepository) {
         this.statusRepository = statusRepository;
         this.todayRepository = todayRepository;
         this.roomStyleRepository = roomStyleRepository;
+        this.historyRepository = historyRepository;
 
         // TODO: Better updates? (check if modified?)
         if (roomStyleRepository.count() == 0) {
@@ -56,7 +60,7 @@ public class ApiController {
     }
 
     @GetMapping("/today")
-    public List<Event> today(@RequestParam(defaultValue = "") String room) {
+    public List<Today> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
             return todayRepository.findAll();
         }else{
@@ -65,7 +69,7 @@ public class ApiController {
     }
 
     @GetMapping("/history")
-    public Map<String, List<Event>> history(@RequestParam(required = false) String year) {
+    public Map<String, List<History>> history(@RequestParam(required = false) String year) {
         /**
          * TODO
          */

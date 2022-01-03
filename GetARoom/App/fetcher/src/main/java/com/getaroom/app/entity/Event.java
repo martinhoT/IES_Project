@@ -1,16 +1,8 @@
 package com.getaroom.app.entity;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 
-@Document
 public class Event {
-
-    @Id
-    private String id;
-
     private String user;
     private final String email;
     private String room;
@@ -25,7 +17,6 @@ public class Event {
         this.time = time;
     }
 
-    public String getId() { return id; }
     public String getUser() { return user; }
     public String getEmail() { return email; }
     public String getRoom() { return room; }
