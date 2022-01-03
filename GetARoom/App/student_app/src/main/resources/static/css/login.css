@@ -1,0 +1,5 @@
+.gradient-custom {
+    background-image: url('../images/test.jpeg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd%22%3E">
+
+    <developers>
+        <developer>
+            <name>Tomás Candeias</name>
+            <email>tomascandeias@ua.pt</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+
+
+        <developer>
+            <name>Rodrigo França Lima</name>
+            <email>rodrigoflima@ua.pt</email>
+            <roles>
+                <role>devops master</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+
+
+        <developer>
+            <name>Martinho Tavares</name>
+            <email>martinho.tavares@ua.pt</email>
+            <roles>
+                <role>team leader</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+
+
+        <developer>
+            <name>Miguel Monteiro</name>
+            <email>mbeiraob@ua.pt</email>
+            <roles>
+                <role>product owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pt.link</groupId>
+    <artifactId>GetARoom</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <description>synchronizer</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>student_app</module>
+        <module>secguard_app</module>
+        <module>analyst_app</module>
+        <module>fetcher</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+</project>

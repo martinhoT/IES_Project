@@ -1,0 +1,25 @@
+# Jetbrains IDE
+**/.idea
+
+# DS Store
+**/.DS_Store
+
+# Python
+**/__pycache__
+
+# Logs
+/RaspberryPi/Data/Output/logs.txt
+
+# Compilation artifacts
+**/*.o
+
+# Docker volumes
+/App/volumes/fetcher
+/App/volumes/mysql/db
+/App/volumes/mongo
+/App/volumes/student
+/App/volumes/secguard
+/App/volumes/analyst
+
+# Fetcher
+/GetARoom/fetcher/fetcher-tcp*1883/*
