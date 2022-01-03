@@ -30,7 +30,7 @@ def update_record():
         event = "{\"room\":" + f"\"{room}\",\"user\": \"{name}\",\"email\": \"{email}\",\"entered\": \"{entered}\",\"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
         
         # Write logs
-        f = open("logs.txt", "a")
+        f = open("Data/Output/logs.txt", "a")
         f.write(event + "\n")
         f.close()
         
