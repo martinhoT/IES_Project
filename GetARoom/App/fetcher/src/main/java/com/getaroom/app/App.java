@@ -23,7 +23,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.key.ZoneOffsetKeyDeserializer;
 import com.getaroom.app.entity.Today;
 import com.getaroom.app.entity.Room;
 import com.getaroom.app.repository.HistoryRepository;

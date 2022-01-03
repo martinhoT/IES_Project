@@ -1,0 +1,259 @@
+1{"room":"4.1.19","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"4.1.18","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"4.1.36","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"4.1.20","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"4.1.23","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"4.1.26","occupacy": 0.0, "maxNumberOfPeople": 4}
+1{"room":"4.1.28","occupacy": 0.0, "maxNumberOfPeople": 3}
+1{"room":"4.1.32","occupacy": 0.0, "maxNumberOfPeople": 2}
+1{"room":"4.1.30","occupacy": 0.0, "maxNumberOfPeople": 12}
+1{"room":"4.1.01","occupacy": 0.0, "maxNumberOfPeople": 2}
+1{"room":"4.1.02","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"4.1.04","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"4.1.06","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"4.2.28","occupacy": 0.0, "maxNumberOfPeople": 13}
+1{"room":"4.2.27","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"4.2.31","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"4.2.34","occupacy": 0.0, "maxNumberOfPeople": 10}
+1{"room":"4.2.25","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"4.2.20","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"4.2.03","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"4.2.07","occupacy": 0.0, "maxNumberOfPeople": 18}
+1{"room":"4.2.08","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"4.2.11","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"4.2.14","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"4.2.15","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"4.2.16","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"4.2.17","occupacy": 0.0, "maxNumberOfPeople": 4}
+1{"room":"17.1.50","occupacy": 0.0, "maxNumberOfPeople": 12}
+1{"room":"17.1.51","occupacy": 0.0, "maxNumberOfPeople": 10}
+1{"room":"17.1.52","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"17.1.53","occupacy": 0.0, "maxNumberOfPeople": 10}
+1{"room":"17.1.54","occupacy": 0.0, "maxNumberOfPeople": 4}
+1{"room":"17.1.42","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"17.1.43","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"17.1.44","occupacy": 0.0, "maxNumberOfPeople": 4}
+1{"room":"17.1.45","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"17.1.46","occupacy": 0.0, "maxNumberOfPeople": 7}
+1{"room":"17.1.47","occupacy": 0.0, "maxNumberOfPeople": 2}
+1{"room":"17.2.23","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"17.2.24","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"17.2.25","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"17.2.26","occupacy": 0.0, "maxNumberOfPeople": 12}
+1{"room":"17.2.27","occupacy": 0.0, "maxNumberOfPeople": 10}
+1{"room":"17.2.1","occupacy": 0.0, "maxNumberOfPeople": 11}
+1{"room":"17.2.18","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"17.2.14","occupacy": 0.0, "maxNumberOfPeople": 13}
+1{"room":"17.2.15","occupacy": 0.0, "maxNumberOfPeople": 15}
+1{"room":"17.2.16","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"17.2.17","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"17.3.33","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"17.3.34","occupacy": 0.0, "maxNumberOfPeople": 17}
+1{"room":"17.3.35","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"17.3.36","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"17.3.37","occupacy": 0.0, "maxNumberOfPeople": 3}
+1{"room":"17.3.26","occupacy": 0.0, "maxNumberOfPeople": 2}
+1{"room":"17.3.27","occupacy": 0.0, "maxNumberOfPeople": 7}
+1{"room":"17.3.28","occupacy": 0.0, "maxNumberOfPeople": 9}
+1{"room":"17.3.29","occupacy": 0.0, "maxNumberOfPeople": 10}
+1{"room":"17.3.30","occupacy": 0.0, "maxNumberOfPeople": 5}
+1{"room":"17.3.1","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"17.3.20","occupacy": 0.0, "maxNumberOfPeople": 8}
+1{"room":"17.3.19","occupacy": 0.0, "maxNumberOfPeople": 6}
+1{"room":"17.3.18","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"17.3.17","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"17.3.24","occupacy": 0.0, "maxNumberOfPeople": 13}
+1{"room":"17.3.23","occupacy": 0.0, "maxNumberOfPeople": 17}
+1{"room":"17.3.22","occupacy": 0.0, "maxNumberOfPeople": 14}
+1{"room":"17.3.21","occupacy": 0.0, "maxNumberOfPeople": 13}
+1{"room":"17.3.4","occupacy": 0.0, "maxNumberOfPeople": 12}
+1{"room":"17.3.5","occupacy": 0.0, "maxNumberOfPeople": 17}
+1{"room":"17.3.6","occupacy": 0.0, "maxNumberOfPeople": 15}
+1{"room":"17.3.7","occupacy": 0.0, "maxNumberOfPeople": 18}
+1{"room":"17.3.15","occupacy": 0.0, "maxNumberOfPeople": 3}
+1{"room":"17.3.14","occupacy": 0.0, "maxNumberOfPeople": 7}
+1{"room":"17.3.13","occupacy": 0.0, "maxNumberOfPeople": 20}
+1{"room":"17.3.10","occupacy": 0.0, "maxNumberOfPeople": 16}
+1{"room":"17.3.11","occupacy": 0.0, "maxNumberOfPeople": 14}
+0{"room":"4.2.34","user": "Salazar Le","email": "salazarle@cipromox.com","entered": true,"time": "2022-01-03 18:19:03"}
+1{"room":"4.2.34","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"4.2.20","user": "Barlow Maldonado","email": "barlowmaldonado@cipromox.com","entered": true,"time": "2022-01-03 18:19:08"}
+1{"room":"4.2.20","occupacy": 0.17, "maxNumberOfPeople": 6}
+0{"room":"4.2.28","user": "Oneal Duran","email": "onealduran@cipromox.com","entered": true,"time": "2022-01-03 18:19:13"}
+1{"room":"4.2.28","occupacy": 0.08, "maxNumberOfPeople": 13}
+0{"room":"17.2.26","user": "Barnes Small","email": "barnessmall@cipromox.com","entered": true,"time": "2022-01-03 18:19:19"}
+1{"room":"17.2.26","occupacy": 0.08, "maxNumberOfPeople": 12}
+0{"room":"4.2.34","user": "Dominguez Kidd","email": "dominguezkidd@cipromox.com","entered": true,"time": "2022-01-03 18:19:23"}
+1{"room":"4.2.34","occupacy": 0.2, "maxNumberOfPeople": 10}
+0{"room":"17.3.29","user": "Obrien Kinney","email": "obrienkinney@cipromox.com","entered": true,"time": "2022-01-03 18:19:30"}
+1{"room":"17.3.29","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"4.2.34","user": "Hoover Contreras","email": "hoovercontreras@cipromox.com","entered": true,"time": "2022-01-03 18:19:35"}
+1{"room":"4.2.34","occupacy": 0.3, "maxNumberOfPeople": 10}
+0{"room":"17.3.7","user": "Bell Battle","email": "bellbattle@cipromox.com","entered": true,"time": "2022-01-03 18:19:46"}
+1{"room":"17.3.7","occupacy": 0.06, "maxNumberOfPeople": 18}
+0{"room":"17.2.26","user": "Hopper Mullen","email": "hoppermullen@cipromox.com","entered": true,"time": "2022-01-03 18:19:55"}
+1{"room":"17.2.26","occupacy": 0.17, "maxNumberOfPeople": 12}
+0{"room":"4.2.34","user": "Hoover Contreras","email": "hoovercontreras@cipromox.com","entered": false,"time": "2022-01-03 18:19:59"}
+1{"room":"4.2.34","occupacy": 0.2, "maxNumberOfPeople": 10}
+0{"room":"17.2.23","user": "Morin Soto","email": "morinsoto@cipromox.com","entered": true,"time": "2022-01-03 18:20:06"}
+1{"room":"17.2.23","occupacy": 0.12, "maxNumberOfPeople": 8}
+0{"room":"4.1.36","user": "Randolph Rocha","email": "randolphrocha@cipromox.com","entered": true,"time": "2022-01-03 18:20:11"}
+1{"room":"4.1.36","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"4.2.34","user": "Salazar Le","email": "salazarle@cipromox.com","entered": false,"time": "2022-01-03 18:20:18"}
+1{"room":"4.2.34","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"4.2.16","user": "Sloan Brady","email": "sloanbrady@cipromox.com","entered": true,"time": "2022-01-03 18:20:22"}
+1{"room":"4.2.16","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"17.3.21","user": "Wilkins Snider","email": "wilkinssnider@cipromox.com","entered": true,"time": "2022-01-03 18:20:29"}
+1{"room":"17.3.21","occupacy": 0.08, "maxNumberOfPeople": 13}
+0{"room":"4.1.18","user": "Velazquez Mccarthy","email": "velazquezmccarthy@cipromox.com","entered": true,"time": "2022-01-03 18:20:33"}
+1{"room":"4.1.18","occupacy": 0.11, "maxNumberOfPeople": 9}
+0{"room":"17.3.27","user": "Bowers Montoya","email": "bowersmontoya@cipromox.com","entered": true,"time": "2022-01-03 18:20:38"}
+1{"room":"17.3.27","occupacy": 0.14, "maxNumberOfPeople": 7}
+0{"room":"17.3.5","user": "Ochoa Elliott","email": "ochoaelliott@cipromox.com","entered": true,"time": "2022-01-03 18:20:45"}
+1{"room":"17.3.5","occupacy": 0.06, "maxNumberOfPeople": 17}
+0{"room":"4.2.27","user": "Brown Daniel","email": "browndaniel@cipromox.com","entered": true,"time": "2022-01-03 18:20:50"}
+1{"room":"4.2.27","occupacy": 0.12, "maxNumberOfPeople": 8}
+0{"room":"17.3.13","user": "Soto Case","email": "sotocase@cipromox.com","entered": true,"time": "2022-01-03 18:20:57"}
+1{"room":"17.3.13","occupacy": 0.05, "maxNumberOfPeople": 20}
+0{"room":"17.2.26","user": "Mathis Webster","email": "mathiswebster@cipromox.com","entered": true,"time": "2022-01-03 18:21:04"}
+1{"room":"17.2.26","occupacy": 0.25, "maxNumberOfPeople": 12}
+0{"room":"17.2.18","user": "Chang Bauer","email": "changbauer@cipromox.com","entered": true,"time": "2022-01-03 18:21:09"}
+1{"room":"17.2.18","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"4.1.19","user": "Day Copeland","email": "daycopeland@cipromox.com","entered": true,"time": "2022-01-03 18:21:19"}
+1{"room":"4.1.19","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"4.1.04","user": "Terrell Slater","email": "terrellslater@cipromox.com","entered": true,"time": "2022-01-03 18:21:23"}
+1{"room":"4.1.04","occupacy": 0.07, "maxNumberOfPeople": 14}
+0{"room":"17.2.18","user": "Avila Clemons","email": "avilaclemons@cipromox.com","entered": true,"time": "2022-01-03 18:21:27"}
+1{"room":"17.2.18","occupacy": 0.12, "maxNumberOfPeople": 16}
+0{"room":"4.1.19","user": "Harvey Guerra","email": "harveyguerra@cipromox.com","entered": true,"time": "2022-01-03 18:21:32"}
+1{"room":"4.1.19","occupacy": 0.4, "maxNumberOfPeople": 5}
+0{"room":"17.3.26","user": "Albert Callahan","email": "albertcallahan@cipromox.com","entered": true,"time": "2022-01-03 18:21:35"}
+1{"room":"17.3.26","occupacy": 0.5, "maxNumberOfPeople": 2}
+0{"room":"17.3.13","user": "Christensen Lane","email": "christensenlane@cipromox.com","entered": true,"time": "2022-01-03 18:21:42"}
+1{"room":"17.3.13","occupacy": 0.1, "maxNumberOfPeople": 20}
+0{"room":"4.2.03","user": "Noel Chase","email": "noelchase@cipromox.com","entered": true,"time": "2022-01-03 18:21:45"}
+1{"room":"4.2.03","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"4.1.19","user": "Harvey Guerra","email": "harveyguerra@cipromox.com","entered": false,"time": "2022-01-03 18:21:50"}
+1{"room":"4.1.19","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"17.3.11","user": "Love Mathis","email": "lovemathis@cipromox.com","entered": true,"time": "2022-01-03 18:21:57"}
+1{"room":"17.3.11","occupacy": 0.07, "maxNumberOfPeople": 14}
+0{"room":"17.3.19","user": "Salinas Velazquez","email": "salinasvelazquez@cipromox.com","entered": true,"time": "2022-01-03 18:22:04"}
+1{"room":"17.3.19","occupacy": 0.17, "maxNumberOfPeople": 6}
+0{"room":"17.2.24","user": "Fisher Berg","email": "fisherberg@cipromox.com","entered": true,"time": "2022-01-03 18:22:09"}
+1{"room":"17.2.24","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"4.2.11","user": "Merritt Obrien","email": "merrittobrien@cipromox.com","entered": true,"time": "2022-01-03 18:22:14"}
+1{"room":"4.2.11","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"17.3.33","user": "Mckee Clay","email": "mckeeclay@cipromox.com","entered": true,"time": "2022-01-03 18:22:17"}
+1{"room":"17.3.33","occupacy": 0.12, "maxNumberOfPeople": 8}
+0{"room":"17.3.33","user": "Mckee Clay","email": "mckeeclay@cipromox.com","entered": false,"time": "2022-01-03 18:22:24"}
+1{"room":"17.3.33","occupacy": 0.0, "maxNumberOfPeople": 8}
+0{"room":"17.2.26","user": "Barnes Small","email": "barnessmall@cipromox.com","entered": false,"time": "2022-01-03 18:22:27"}
+1{"room":"17.2.26","occupacy": 0.17, "maxNumberOfPeople": 12}
+0{"room":"17.1.51","user": "Garcia William","email": "garciawilliam@cipromox.com","entered": true,"time": "2022-01-03 18:22:37"}
+1{"room":"17.1.51","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"17.1.54","user": "Howard Arnold","email": "howardarnold@cipromox.com","entered": true,"time": "2022-01-03 18:22:42"}
+1{"room":"17.1.54","occupacy": 0.25, "maxNumberOfPeople": 4}
+0{"room":"17.2.18","user": "Leonard Terrell","email": "leonardterrell@cipromox.com","entered": true,"time": "2022-01-03 18:22:47"}
+1{"room":"17.2.18","occupacy": 0.19, "maxNumberOfPeople": 16}
+0{"room":"4.1.18","user": "Velazquez Mccarthy","email": "velazquezmccarthy@cipromox.com","entered": false,"time": "2022-01-03 18:22:54"}
+1{"room":"4.1.18","occupacy": 0.0, "maxNumberOfPeople": 9}
+0{"room":"4.2.20","user": "Drake Vega","email": "drakevega@cipromox.com","entered": true,"time": "2022-01-03 18:23:16"}
+1{"room":"4.2.20","occupacy": 0.33, "maxNumberOfPeople": 6}
+0{"room":"17.2.15","user": "Larsen Torres","email": "larsentorres@cipromox.com","entered": true,"time": "2022-01-03 18:23:19"}
+1{"room":"17.2.15","occupacy": 0.07, "maxNumberOfPeople": 15}
+0{"room":"4.1.32","user": "English Moss","email": "englishmoss@cipromox.com","entered": true,"time": "2022-01-03 18:23:24"}
+1{"room":"4.1.32","occupacy": 0.5, "maxNumberOfPeople": 2}
+0{"room":"4.1.32","user": "Norman Salas","email": "normansalas@cipromox.com","entered": true,"time": "2022-01-03 18:23:30"}
+1{"room":"4.1.32","occupacy": 1.0, "maxNumberOfPeople": 2}
+0{"room":"17.3.28","user": "Bentley Merritt","email": "bentleymerritt@cipromox.com","entered": true,"time": "2022-01-03 18:23:33"}
+1{"room":"17.3.28","occupacy": 0.11, "maxNumberOfPeople": 9}
+0{"room":"4.1.19","user": "Mcbride Collier","email": "mcbridecollier@cipromox.com","entered": true,"time": "2022-01-03 18:23:39"}
+1{"room":"4.1.19","occupacy": 0.4, "maxNumberOfPeople": 5}
+0{"room":"17.3.10","user": "Joyce Hoover","email": "joycehoover@cipromox.com","entered": true,"time": "2022-01-03 18:23:52"}
+1{"room":"17.3.10","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"17.3.21","user": "Garrett Reeves","email": "garrettreeves@cipromox.com","entered": true,"time": "2022-01-03 18:23:58"}
+1{"room":"17.3.21","occupacy": 0.15, "maxNumberOfPeople": 13}
+0{"room":"4.1.32","user": "Craft Mann","email": "craftmann@cipromox.com","entered": true,"time": "2022-01-03 18:24:04"}
+1{"room":"4.1.32","occupacy": 1.5, "maxNumberOfPeople": 2}
+0{"room":"17.2.23","user": "Jacobs Fernandez","email": "jacobsfernandez@cipromox.com","entered": true,"time": "2022-01-03 18:24:09"}
+1{"room":"17.2.23","occupacy": 0.25, "maxNumberOfPeople": 8}
+0{"room":"17.3.11","user": "Love Mathis","email": "lovemathis@cipromox.com","entered": false,"time": "2022-01-03 18:24:33"}
+1{"room":"17.3.11","occupacy": 0.0, "maxNumberOfPeople": 14}
+0{"room":"17.3.10","user": "Joyce Hoover","email": "joycehoover@cipromox.com","entered": false,"time": "2022-01-03 18:24:39"}
+1{"room":"17.3.10","occupacy": 0.0, "maxNumberOfPeople": 16}
+0{"room":"17.2.14","user": "Vaughn Bonner","email": "vaughnbonner@cipromox.com","entered": true,"time": "2022-01-03 18:24:42"}
+1{"room":"17.2.14","occupacy": 0.08, "maxNumberOfPeople": 13}
+0{"room":"17.3.13","user": "Soto Case","email": "sotocase@cipromox.com","entered": false,"time": "2022-01-03 18:24:49"}
+1{"room":"17.3.13","occupacy": 0.05, "maxNumberOfPeople": 20}
+0{"room":"17.2.27","user": "Tucker Tucker","email": "tuckertucker@cipromox.com","entered": true,"time": "2022-01-03 18:24:56"}
+1{"room":"17.2.27","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"17.3.18","user": "Mccarthy Mullins","email": "mccarthymullins@cipromox.com","entered": true,"time": "2022-01-03 18:25:09"}
+1{"room":"17.3.18","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"17.1.46","user": "Fuller Richardson","email": "fullerrichardson@cipromox.com","entered": true,"time": "2022-01-03 18:25:23"}
+1{"room":"17.1.46","occupacy": 0.14, "maxNumberOfPeople": 7}
+0{"room":"17.2.15","user": "Burns Acosta","email": "burnsacosta@cipromox.com","entered": true,"time": "2022-01-03 18:25:28"}
+1{"room":"17.2.15","occupacy": 0.13, "maxNumberOfPeople": 15}
+0{"room":"17.3.34","user": "Raymond Chang","email": "raymondchang@cipromox.com","entered": true,"time": "2022-01-03 18:25:35"}
+1{"room":"17.3.34","occupacy": 0.06, "maxNumberOfPeople": 17}
+0{"room":"4.1.23","user": "Sampson Cameron","email": "sampsoncameron@cipromox.com","entered": true,"time": "2022-01-03 18:25:38"}
+1{"room":"4.1.23","occupacy": 0.11, "maxNumberOfPeople": 9}
+0{"room":"17.2.26","user": "Carrillo Tillman","email": "carrillotillman@cipromox.com","entered": true,"time": "2022-01-03 18:25:49"}
+1{"room":"17.2.26","occupacy": 0.25, "maxNumberOfPeople": 12}
+0{"room":"17.2.14","user": "Wise Fitzpatrick","email": "wisefitzpatrick@cipromox.com","entered": true,"time": "2022-01-03 18:25:53"}
+1{"room":"17.2.14","occupacy": 0.15, "maxNumberOfPeople": 13}
+0{"room":"4.2.11","user": "Flowers Madden","email": "flowersmadden@cipromox.com","entered": true,"time": "2022-01-03 18:26:00"}
+1{"room":"4.2.11","occupacy": 0.12, "maxNumberOfPeople": 16}
+0{"room":"17.2.27","user": "Conley Harmon","email": "conleyharmon@cipromox.com","entered": true,"time": "2022-01-03 18:26:03"}
+1{"room":"17.2.27","occupacy": 0.2, "maxNumberOfPeople": 10}
+0{"room":"4.2.08","user": "Salazar Le","email": "salazarle@cipromox.com","entered": true,"time": "2022-01-03 18:26:06"}
+1{"room":"4.2.08","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"4.2.31","user": "Conway Swanson","email": "conwayswanson@cipromox.com","entered": true,"time": "2022-01-03 18:26:19"}
+1{"room":"4.2.31","occupacy": 0.11, "maxNumberOfPeople": 9}
+0{"room":"17.3.7","user": "Pacheco Hanson","email": "pachecohanson@cipromox.com","entered": true,"time": "2022-01-03 18:26:31"}
+1{"room":"17.3.7","occupacy": 0.11, "maxNumberOfPeople": 18}
+0{"room":"17.2.18","user": "Avila Clemons","email": "avilaclemons@cipromox.com","entered": false,"time": "2022-01-03 18:26:40"}
+1{"room":"17.2.18","occupacy": 0.12, "maxNumberOfPeople": 16}
+0{"room":"17.3.19","user": "Rogers Mcpherson","email": "rogersmcpherson@cipromox.com","entered": true,"time": "2022-01-03 18:26:51"}
+1{"room":"17.3.19","occupacy": 0.33, "maxNumberOfPeople": 6}
+0{"room":"4.1.26","user": "Padilla Riggs","email": "padillariggs@cipromox.com","entered": true,"time": "2022-01-03 18:26:55"}
+1{"room":"4.1.26","occupacy": 0.25, "maxNumberOfPeople": 4}
+0{"room":"17.3.23","user": "Savage Hensley","email": "savagehensley@cipromox.com","entered": true,"time": "2022-01-03 18:27:01"}
+1{"room":"17.3.23","occupacy": 0.06, "maxNumberOfPeople": 17}
+0{"room":"17.3.4","user": "Burnett Sherman","email": "burnettsherman@cipromox.com","entered": true,"time": "2022-01-03 18:27:05"}
+1{"room":"17.3.4","occupacy": 0.08, "maxNumberOfPeople": 12}
+0{"room":"17.1.53","user": "Mcknight Richard","email": "mcknightrichard@cipromox.com","entered": true,"time": "2022-01-03 18:27:09"}
+1{"room":"17.1.53","occupacy": 0.1, "maxNumberOfPeople": 10}
+0{"room":"4.2.20","user": "Kirby Foreman","email": "kirbyforeman@cipromox.com","entered": true,"time": "2022-01-03 18:27:14"}
+1{"room":"4.2.20","occupacy": 0.5, "maxNumberOfPeople": 6}
+0{"room":"17.1.42","user": "Gould Carter","email": "gouldcarter@cipromox.com","entered": true,"time": "2022-01-03 18:27:25"}
+1{"room":"17.1.42","occupacy": 0.12, "maxNumberOfPeople": 8}
+0{"room":"4.2.03","user": "Barnes Small","email": "barnessmall@cipromox.com","entered": true,"time": "2022-01-03 18:27:46"}
+1{"room":"4.2.03","occupacy": 0.4, "maxNumberOfPeople": 5}
+0{"room":"17.3.11","user": "Harvey Guerra","email": "harveyguerra@cipromox.com","entered": true,"time": "2022-01-03 18:28:06"}
+1{"room":"17.3.11","occupacy": 0.07, "maxNumberOfPeople": 14}
+0{"room":"4.2.03","user": "Ballard Solis","email": "ballardsolis@cipromox.com","entered": true,"time": "2022-01-03 18:28:09"}
+1{"room":"4.2.03","occupacy": 0.6, "maxNumberOfPeople": 5}
+0{"room":"17.1.54","user": "Howard Arnold","email": "howardarnold@cipromox.com","entered": false,"time": "2022-01-03 18:28:16"}
+1{"room":"17.1.54","occupacy": 0.0, "maxNumberOfPeople": 4}
+0{"room":"4.2.28","user": "Soto Case","email": "sotocase@cipromox.com","entered": true,"time": "2022-01-03 18:28:27"}
+1{"room":"4.2.28","occupacy": 0.15, "maxNumberOfPeople": 13}
+0{"room":"17.1.52","user": "Avila Clemons","email": "avilaclemons@cipromox.com","entered": true,"time": "2022-01-03 18:28:34"}
+1{"room":"17.1.52","occupacy": 0.2, "maxNumberOfPeople": 5}
+0{"room":"4.1.32","user": "Howard Arnold","email": "howardarnold@cipromox.com","entered": true,"time": "2022-01-03 18:28:48"}
+1{"room":"4.1.32","occupacy": 2.0, "maxNumberOfPeople": 2}
+0{"room":"17.1.47","user": "Joyce Hoover","email": "joycehoover@cipromox.com","entered": true,"time": "2022-01-03 18:28:54"}
+1{"room":"17.1.47","occupacy": 0.5, "maxNumberOfPeople": 2}
+0{"room":"4.2.31","user": "Herrera Kramer","email": "herrerakramer@cipromox.com","entered": true,"time": "2022-01-03 18:28:57"}
+1{"room":"4.2.31","occupacy": 0.22, "maxNumberOfPeople": 9}
+0{"room":"4.2.11","user": "Russell Blankenship","email": "russellblankenship@cipromox.com","entered": true,"time": "2022-01-03 18:29:02"}
+1{"room":"4.2.11","occupacy": 0.19, "maxNumberOfPeople": 16}
+0{"room":"4.2.03","user": "Bauer Norman","email": "bauernorman@cipromox.com","entered": true,"time": "2022-01-03 18:29:33"}
+1{"room":"4.2.03","occupacy": 0.8, "maxNumberOfPeople": 5}
+0{"room":"17.3.13","user": "Buck Glenn","email": "buckglenn@cipromox.com","entered": true,"time": "2022-01-03 18:29:52"}
+1{"room":"17.3.13","occupacy": 0.1, "maxNumberOfPeople": 20}
+0{"room":"17.2.25","user": "Dyer Sellers","email": "dyersellers@cipromox.com","entered": true,"time": "2022-01-03 18:29:55"}
+1{"room":"17.2.25","occupacy": 0.06, "maxNumberOfPeople": 16}
+0{"room":"4.1.20","user": "Wilson Adams","email": "wilsonadams@cipromox.com","entered": true,"time": "2022-01-03 18:30:10"}
+1{"room":"4.1.20","occupacy": 0.12, "maxNumberOfPeople": 8}
+0{"room":"17.3.21","user": "Finley Ewing","email": "finleyewing@cipromox.com","entered": true,"time": "2022-01-03 18:30:19"}
+1{"room":"17.3.21","occupacy": 0.23, "maxNumberOfPeople": 13}
