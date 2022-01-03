@@ -30,3 +30,13 @@
 .hm-empty {
     background-color: #00ff00;
 }
+
+.percentage-outlined {
+    color: white;
+    font-weight: bolder;
+    text-shadow:
+        -1px -1px #000,
+         1px  1px #000,
+        -1px  1px #000,
+         1px  1px #000;
+}

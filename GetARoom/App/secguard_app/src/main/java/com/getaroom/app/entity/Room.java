@@ -1,30 +1,32 @@
 package com.getaroom.app.entity;
 
 public class Room {
-    private String room;
-    private String occupacy;
-    private Long maxNumberOfPeople;
-    private Boolean restricted;
 
+<<<<<<< HEAD
     public Room(String room, String occupacy, Long maxNumberOfPeople, Boolean restricted) {
         this.room = room;
         this.occupacy = occupacy;
         this.maxNumberOfPeople = maxNumberOfPeople;
         this.restricted = restricted;
     }
+=======
+    private String id;
+>>>>>>> 4d14f02be5bc77f13fe67670b4301fa88f1a24e6
 
-    public Room() {
+    private final String room;
+    private double occupacy;
+    private int maxNumberOfPeople;
 
-    }
-
-    public void setRoom(String room){
+    public Room(String room) {
         this.room = room;
     }
 
-    public String getRoom(){
-        return room;
-    }
+    public String getId() { return id; }
+    public String getRoom() { return room; }
+    public double getOccupacy() { return occupacy; }
+    public int getMaxNumberOfPeople() { return maxNumberOfPeople; }
 
+<<<<<<< HEAD
     public void setOccupacy(String occupacy){
         this.occupacy = occupacy;
     }
@@ -58,3 +60,8 @@ public class Room {
                 ", restricted: " + getRestricted();
     }
 }
+=======
+    public void setOccupacy(double occupacy) { this.occupacy = occupacy; }
+    public void setMaxNumberOfPeople(int maxNumberOfPeople) { this.maxNumberOfPeople = maxNumberOfPeople; }
+}
+>>>>>>> 4d14f02be5bc77f13fe67670b4301fa88f1a24e6
