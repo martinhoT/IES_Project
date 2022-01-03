@@ -7,6 +7,13 @@ import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
 import com.getaroom.app.entity.Student;
 import com.getaroom.app.entity.User;
+import com.getaroom.app.entity.Status;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,7 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
@@ -23,13 +32,14 @@ public class MainController {
 	private final Map<String, Student> blacklist;
 	private final WebClient apiClient;
 
+	@Autowired
 	public MainController() {
+		apiClient = WebClient.create("http://fetcher:8080");
 		blacklist = new HashMap<>(Map.of(
 				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
 				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
 				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
 		));
-		apiClient = WebClient.create("http://fetcher:8080");
 	}
 
 	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
@@ -59,25 +69,34 @@ public class MainController {
 		return "sec";
 	}
 
-	// @GetMapping("/logs")
-	// public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+	@GetMapping("/logs")
+	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		System.err.println(RoomEvents);
 	// 	List<Event> events;
 	// 	if (room.equals("None"))
 	// 		events = new ArrayList<>();
 	// 	else
 	// 		events = ApiController.getToday(room);
-	// 	model.addAllAttributes(Map.of(
-	// 		"events", events
-	// 	));
-	// 	return "logs";
-	// }
+		model.addAllAttributes(Map.of(
+			"events", RoomEvents
+		));
+		return "logs";
+	}
 
-	// @GetMapping("/room/{dep}.{floor}.{room}")
-	// public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
+	@GetMapping("/room/{dep}.{floor}.{room}")
+	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
 	// 	/*
 	// 	* ... obtain the room dynamically ...
 	// 	*/
-
+		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
+		List<Event> currentRoomEvents = new ArrayList<Event>();
+		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		for (Event e : RoomEvents){
+			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
+		}
+	// List<Event> RoomEvents = apiRoomLogs(currentRoom);
+		Map<String, Student> blacklisted = new HashMap<String, Student>();
 	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
 	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
 	// 	model.addAllAttributes(Map.of(
@@ -88,7 +107,15 @@ public class MainController {
 	// 		"eventMap", eventMap
 	// 	));
 	// 	return "room";
-	// }
+		model.addAllAttributes(Map.of(
+			 "dep", dep,
+			 "floor", floor,
+			 "room", room,
+			 "blacklisted", blacklisted,
+			"events", currentRoomEvents
+		));
+		return "room";
+	}
 
 	// @GetMapping("/room/{dep}.{floor}.{room}/remove")
 	// public String roomRemove(
@@ -177,5 +204,24 @@ public class MainController {
 			.acceptCharset(StandardCharsets.UTF_8)
 			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
 			.collectList().block();
+	}
+
+	// TODO: is there a better way?
+	private List<Status> apiStatusDep(String dep) {
+		String json = apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/status")
+				.queryParam("dep", dep)
+				.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToMono(response -> response.bodyToMono(String.class))
+			.block();
+
+		Gson gson = new Gson();
+		List<Status> res = new ArrayList<>();
+		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
+			res.add(gson.fromJson(elem.toString(), Status.class));
+		return res;
 	}
 }

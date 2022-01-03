@@ -1,36 +1,39 @@
 package com.getaroom.app.entity;
 
 public class Event {
-    private Long id;
-    private String person;
+    private String id;
+    private String user;
     private String email;
     private String room;
-    private String action;
+    private Boolean entered;
     private String time;
 
-    public Event(Long id, String person, String email, String room, Boolean entered, String time) {
+    public Event(){}
+
+    public Event(String id, String user, String email, String room, Boolean entered, String time) {
         this.id = id;
-        this.person = person;
+        this.user = user;
         this.email = email;
         this.room = room;
-        this.action = entered ? "Entry" : "Exit";
+        // this.entered = entered ? "Entry" : "Exit";
+        this.entered = entered;
         this.time = time;
 	}
 
-    public void setId(Long id){
+    public void setId(String id){
         this.id = id;
     }
 
-    public Long getId(){
+    public String getId(){
         return id;
     }
 
-    public void setPerson(String person){
-        this.person = person;
+    public void setUser(String user){
+        this.user = user;
     }
 
-    public String getPerson(){
-        return person;
+    public String getUser(){
+        return user;
     }
 
     public void setEmail(String email){
@@ -49,12 +52,13 @@ public class Event {
         return room;
     }
 
-    public void setAction(Boolean entered){
-        this.action = entered ? "Entry" : "Exit";
+    public void setEntered(Boolean entered){
+        // this.entered = entered ? "Entry" : "Exit";
+        this.entered = entered;
     }
 
-    public String getAction(){
-        return action;
+    public Boolean getEntered(){
+        return entered;
     }
 
     public void setTime(String time){
@@ -67,10 +71,10 @@ public class Event {
 
     public String toString() {
         return "id: " + getId() + 
-               ", person: " + getPerson() +
+               ", user: " + getUser() +
                ", email: " + getEmail() +
                ", room: " + getRoom() +
-               ", action: " + getAction() +
+               ", entered: " + getEntered() +
                ", time: " + getTime();
     }
 }
