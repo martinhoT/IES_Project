@@ -13,26 +13,27 @@ CREATE TABLE users(
     role VARCHAR(20)
 );
 
-INSERT INTO users
-VALUES ("Student" , "student@gmail.com" , SHA2('Password', 512), "student" );
+INSERT INTO users (username, email, password, role)
+VALUES ( "Student",  "student@gmail.com", SHA2('Password', 512),  "student");
 
-INSERT INTO users
+INSERT INTO users (username, email, password, role)
 VALUES ("Security", "security@gmail.com", SHA2('Password', 512), "security");
 
-INSERT INTO users
-VALUES ("Analyst" , "analyst@gmail.com" , SHA2('Password', 512), "analyst" );
+INSERT INTO users (username, email, password, role)
+VALUES ( "Analyst",  "analyst@gmail.com", SHA2('Password', 512),  "analyst");
 
 DROP PROCEDURE IF EXISTS loggeIn;
 
 DELIMITER &&
-CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(255))
+CREATE PROCEDURE loggeIn (IN username VARCHAR(20), IN password VARCHAR(20), IN role VARCHAR(20))
     BEGIN
         SELECT EXISTS(
             SELECT * FROM users
             WHERE users.username = username
-            AND  users.password = SHA2(password,512));
+            AND users.password = SHA2(password,512)
+            AND users.role = role);
     END &&  
-DELIMITER ;  
+DELIMITER ; 
 
 -- CALL loggeIn("Student", "Password");
 -- CALL loggeIn("Student", "Passwor");
@@ -50,7 +51,8 @@ CREATE FUNCTION register (username VARCHAR(20), email VARCHAR(20), password VARC
             OR users.email = email
         )) THEN RETURN 0;
         ELSE
-            INSERT INTO users VALUES (username, email, SHA2(password,512), role);
+            INSERT INTO users (username, email, password, role) 
+            VALUES (username, email, SHA2(password,512), role);
             RETURN 1;
         END IF;
     END &&

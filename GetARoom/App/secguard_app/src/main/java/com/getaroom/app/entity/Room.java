@@ -11,7 +11,7 @@ public class Room {
         this.occupacy = occupacy;
         this.maxNumberOfPeople = maxNumberOfPeople;
         this.restricted = restricted;
-	}
+    }
 
     public Room() {
 
@@ -52,9 +52,9 @@ public class Room {
     }
 
     public String toString() {
-        return "Room: " + getRoom() + 
-               ", occupacy: " + getOccupacy() +
-               ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
-               ", restricted: " + getRestricted();
+        return "Room: " + getRoom() +
+                ", occupacy: " + getOccupacy() +
+                ", maxNumberOfPeople: " + getMaxNumberOfPeople() +
+                ", restricted: " + getRestricted();
     }
 }

@@ -1,79 +1,102 @@
 package com.getaroom.app.controller;
 
-
 import java.io.FileReader;
 import java.util.HashMap;
-import javax.validation.Valid;
 
-import com.getaroom.app.entity.Event;
-import com.getaroom.app.entity.Student;
-import com.getaroom.app.entity.User;
+import com.getaroom.app.entity.*;
+import com.getaroom.app.repository.RoomRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
 public class MainController {
 
-	private final Map<String, Student> blacklist;
+	private final RoomRepository roomRepository;
+	private final Map<String, List<String>> blacklist;
 
-	public MainController() {
-		blacklist = new HashMap<>(Map.of(
-				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
-				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
-				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
-		));
+	public MainController(RoomRepository roomRepository) {
+		this.roomRepository = roomRepository;
+		blacklist = new HashMap<>();
 	}
 
-	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
-		return blacklist;
+	@GetMapping("/blacklist")
+	public ModelAndView getBlacklist(Model model){
+		ModelAndView mav = new ModelAndView();
+
+        List<Dep> allDepartments = roomRepository.findAllDep();
+
+		Collections.sort(allDepartments, (o1,o2) -> o1.getdep().compareTo(o2.getdep()));
+
+		model.addAttribute("depList", allDepartments);
+
+		mav.setViewName("blacklist");
+
+		return mav;
+	}
+
+	@GetMapping(value="/getRooms")
+	@ResponseBody
+	public ArrayList<String> setRoomValuesByDepartment(@RequestParam("Result") String res, Model model) {
+
+		ArrayList<String> results = new ArrayList<>();
+
+		List<Status> x = roomRepository.findAllRooms(res);
+		x.forEach(elem -> results.add(elem.getRoom()));
+
+		System.out.println(res);
+		System.out.println("Success");
+
+		return results;
 	}
 
 	public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
 		return ApiController.getHistory("2020");
 	}
 
-	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
-		blacklist.remove(studentEmail);
+	/*public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
+		return blacklist;
+	}*/
+
+	@PostMapping(value = "/removeUser")
+	@ResponseBody
+	public String remRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+
+		if (blacklist.containsKey(room))
+			blacklist.get(room).remove(studentEmail);
+
+		//blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+		return "success";
 	}
 
-	public void addRoomBlacklist(int dep, int floor, int room, String studentName, String studentEmail) {
-		if (!blacklist.containsKey(studentEmail))
-			blacklist.put(studentEmail, new Student(studentName, studentEmail));
+	@PostMapping(value = "/addUser")
+	@ResponseBody
+	public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+
+		if (!blacklist.containsKey(room))
+			blacklist.put(room, new ArrayList<>(){{add(studentEmail);}});
+		else
+			if (!blacklist.get(room).contains(studentEmail))
+				blacklist.get(room).add(studentEmail);
+
+		//blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+		return "success";
 	}
 
 	@GetMapping("/")
 	public String entryPoint(User user) {
 		return "redirect:/login";
 	}
-
-	@GetMapping("/login")
-	public String showLoginForm(User user) {
-		return "login";
-	}
-
-	@PostMapping("/login")
-	public String login(@Valid User user, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			return "login";
-		}
-
-		if (user.getName().equals("Security") && user.getpassword().equals("Password")){
-			return "redirect:/sec";
-		}else{
-			model.addAttribute("wrong", true);
-			return "login";
-		}
-	}
-
+	
 	@GetMapping("/sec")
 	public String sec() {
 		return "sec";
@@ -91,12 +114,12 @@ public class MainController {
 		));
 		return "logs";
 	}
-
+	/*
 	@GetMapping("/room/{dep}.{floor}.{room}")
 	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
-		/*
+		*//*
 		* ... obtain the room dynamically ...
-		*/
+		*//*
 
 		Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
 		Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
@@ -152,7 +175,7 @@ public class MainController {
 		addRoomBlacklist(dep, floor, room, studentName, studentEmail);
 		return "room";
 	}
-
+*/
 
 	@GetMapping("/heatmaps")
 	public String heatmaps(Model model) {
