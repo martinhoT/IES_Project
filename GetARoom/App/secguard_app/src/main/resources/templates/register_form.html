@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+
+</head>
+<body>
+<div class="bg">
+    <div class="main">
+        <!-- Sign up form -->
+        <section class="sign-in">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Register</h2>
+                        <form method="POST" th:action="@{/register}" th:object="${user}" class="register-form" id="register-form">
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" th:field="*{name}" name="name" id="name" placeholder="Your Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" th:field="*{email}" name="email" id="email" placeholder="Your Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" th:field="*{password}" name="password" id="password" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="repassword"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" th:field="*{repassword}" name="repassword" id="repassword" placeholder="Repeat your password"/>
+                            </div>
+
+
+                            <!--Mandatory fields handler-->
+                            <div class="container" style="justify-content: center;">
+                                            <span th:if="${#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password') || #fields.hasErrors('repassword')}"
+                                                  class="text-danger">All fields are mandatory!</span>
+                                <span th:if="${wrong}" class="text-danger">Email or username is already being used!</span>
+                                <span
+                                        th:if="${not (#fields.hasErrors('email') || #fields.hasErrors('name') || #fields.hasErrors('password') || #fields.hasErrors('passwordsEqual'))}"
+                                        class="text-danger"><br></span>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img th:src="@{/images/logo.png}" alt="sing up image"></figure>
+                        <a th:href="@{login}" class="signup-image-link">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script th:src="@{/jquery/jquery.min.js}"></script>
+</body>
+</html>

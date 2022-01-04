@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import reactor.core.publisher.Mono;
 
-@RestController 
+@RestController
 @RequestMapping("/")
 public class LoginController {
 
@@ -32,29 +33,31 @@ public class LoginController {
     @GetMapping("/login")
     public ModelAndView showLoginForm(User user) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("login_form");
         return modelAndView;
     }
 
     @GetMapping("/register")
     public ModelAndView showRegisterForm(User user) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register");
+        modelAndView.setViewName("register_form");
         return modelAndView;
     }
 
     @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model) {
+
         ModelAndView modelAndView = new ModelAndView();
-        if (result.hasErrors() && result.getAllErrors().size() > 1)  {
-            modelAndView.setViewName("login");
+        if (result.hasErrors() && result.getAllErrors().size() > 2)  {
+            modelAndView.setViewName("login_form");
             return modelAndView;
         }
-        if (apiAuthPost("login", new LoginData(user.getName(), user.getpassword()), LoginData.class)){
+
+        if (apiAuthPost("login", new LoginData(user.getName(), user.getPassword()), LoginData.class)){
             modelAndView.setViewName("redirect:/heatmaps");
         }
         else{
-            modelAndView.setViewName("login");
+            modelAndView.setViewName("login_form");
             model.addAttribute("wrong", true);
         }
         return modelAndView;
@@ -64,36 +67,37 @@ public class LoginController {
     public ModelAndView register(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors()) {
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("register_form");
             return modelAndView;
         }
-        if (apiAuthPost("register", new RegisterData(user.getName(), user.getpassword(), user.getEmail()), RegisterData.class)){
-            modelAndView.setViewName("redirect:/studyRooms");
+
+        if (apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class)){
+            modelAndView.setViewName("redirect:/heatmaps");
         }
         else{
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("register_form");
             model.addAttribute("wrong", true);
         }
         return modelAndView;
     }
 
     /**
-	 * POST HTTP request to the API located in the fetcher instance.
-	 * This version tries to authenticate a user or register them.
-	 * 
-	 * @param <E>			Generic type representing the class of the object in the body. Should be the same as the class passed as argument
-	 * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/auth/"
-	 * @param elementClass	The class of the elements in the body
-	 * @return				A boolean value indicating whether the request was successful or not
-	 */
+     * POST HTTP request to the API located in the fetcher instance.
+     * This version tries to authenticate a user or register them.
+     *
+     * @param <E>			Generic type representing the class of the object in the body. Should be the same as the class passed as argument
+     * @param uriAppend		The final location specification on the API. It will essentially be appended to the uri "http://localhost:8080/api/auth/"
+     * @param elementClass	The class of the elements in the body
+     * @return				A boolean value indicating whether the request was successful or not
+     */
     private <T> Boolean apiAuthPost(String uriAppend, T body, Class<T> bodyClass) {
         return apiClient.post()
-            .uri("api/auth/" + uriAppend)
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .acceptCharset(StandardCharsets.UTF_8)
-            .body(Mono.just(body), bodyClass)
-            .retrieve()
-            .bodyToMono(Boolean.class)
-            .block();
+                .uri("api/auth/" + uriAppend)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .acceptCharset(StandardCharsets.UTF_8)
+                .body(Mono.just(body), bodyClass)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .block();
     }
 }
