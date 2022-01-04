@@ -6,12 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Document
-public class History extends Event {
+public class EventHistory extends Event {
 
     @Id
     private String id;
 
-    public History(String user, String email, String room, boolean entered, Date time) {
+    public EventHistory(String user, String email, String room, boolean entered, Date time) {
         super(user, email, room, entered, time);
     }
 

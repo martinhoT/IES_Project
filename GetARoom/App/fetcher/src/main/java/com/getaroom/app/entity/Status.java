@@ -1,23 +1,21 @@
 package com.getaroom.app.entity;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document
-public class Room {
-
-    @Id
-    private String id;
+public class Status {
 
     private final String room;
     private double occupacy;
     private int maxNumberOfPeople;
 
-    public Room(String room) {
+    public Status(String room) {
         this.room = room;
     }
 
-    public String getId() { return id; }
+    public Status(String room, double occupacy, int maxNumberOfPeople) {
+        this.room = room;
+        this.occupacy = occupacy;
+        this.maxNumberOfPeople = maxNumberOfPeople;
+    }
+
     public String getRoom() { return room; }
     public double getOccupacy() { return occupacy; }
     public int getMaxNumberOfPeople() { return maxNumberOfPeople; }
