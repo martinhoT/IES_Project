@@ -60,6 +60,7 @@
             </div>
 
         </div>
+        <div id="room"  th:text="${dep} + '.' + ${floor} + '.' + ${room}"  hidden></div>
         <div class="row">
             <!-- <div class="col-12" th:with="filterYear='2021'"> -->
             <div class="col-12">
@@ -75,43 +76,70 @@
                         <!-- </select> -->
                     <!-- </form> -->
                 <!-- </div> -->
+                <!-- <table class="table"> -->
+                    <!-- <thead> -->
+                        <!-- <tr> -->
+                            <!-- <th scope="col">Id</th> -->
+                            <!-- <th scope="col">Person</th> -->
+                            <!-- <th scope="col">Email</th> -->
+                            <!-- <th scope="col">Action</th> -->
+                            <!-- <th scope="col">Time</th> -->
+                            <!-- <th scope="col">Blacklist</th> -->
+                        <!-- </tr> -->
+                    <!-- </thead> -->
+                    <!-- <tbody th:each="event : ${eventMap.get(filterYear)}"> -->
+                    <!-- <tbody th:each="event : ${events}" th:unless="${events.isEmpty()}"> -->
+                        <!-- <tr> -->
+                            <!-- <th th:text="${event.id}" scope="row">Id</th> -->
+                            <!-- <td th:text="${event.user}">User</td> -->
+                            <!-- <td th:text="${event.email}">Email</td> -->
+                            <!-- <td th:switch="${event.entered}"> -->
+                                <!-- <p th:case="true"> -->
+                                    <!-- Entry -->
+                                <!-- </p> -->
+                                <!-- <p th:case="false"> -->
+                                    <!-- Exit -->
+                                <!-- </p> -->
+                            <!-- </td> -->
+                            <!-- <td th:text="${event.time}">Time</td> -->
+                            <!-- <td> -->
+                                <!-- <div th:switch="${blacklisted.containsKey(event.email)}"> -->
+                                    <!-- <a th:case="true" th:href="@{/room/{dep}.{floor}.{room}/remove(dep=${dep},floor=${floor},room=${room},email=${event.email})}"> -->
+                                        <!-- <button type="button" class="btn btn-danger"><i class="fa fa-times"></i></button> -->
+                                    <!-- </a> -->
+                                    <!-- <a th:case="false" th:href="@{/room/{dep}.{floor}.{room}/add(dep=${dep},floor=${floor},room=${room},name=${event.user},email=${event.email})}"> -->
+                                        <!-- <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button> -->
+                                    <!-- </a> -->
+                                    <!-- <span th:case="*">...</span> -->
+                                <!-- </div> -->
+                            <!-- </td> -->
+                        <!-- </tr> -->
+                    <!-- </tbody> -->
+                <!-- </table> -->
                 <table class="table">
                     <thead>
                         <tr>
                             <!-- <th scope="col">Id</th> -->
                             <th scope="col">Person</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Room</th>
                             <th scope="col">Action</th>
                             <th scope="col">Time</th>
-                            <th scope="col">Blacklist</th>
                         </tr>
                     </thead>
-                    <!-- <tbody th:each="event : ${eventMap.get(filterYear)}"> -->
-                    <tbody th:each="event : ${events}" th:unless="${events.isEmpty()}">
+                    <tbody data-bind="foreach: Events">
                         <tr>
                             <!-- <th th:text="${event.id}" scope="row">Id</th> -->
-                            <td th:text="${event.user}">User</td>
-                            <td th:text="${event.email}">Email</td>
-                            <td th:switch="${event.entered}">
-                                <p th:case="true">
-                                    Entry
-                                </p>
-                                <p th:case="false">
-                                    Exit
-                                </p>
-                            </td>
-                            <td th:text="${event.time}">Time</td>
-                            <td>
-                                <div th:switch="${blacklisted.containsKey(event.email)}">
-                                    <a th:case="true" th:href="@{/room/{dep}.{floor}.{room}/remove(dep=${dep},floor=${floor},room=${room},email=${event.email})}">
-                                        <button type="button" class="btn btn-danger"><i class="fa fa-times"></i></button>
-                                    </a>
-                                    <a th:case="false" th:href="@{/room/{dep}.{floor}.{room}/add(dep=${dep},floor=${floor},room=${room},name=${event.user},email=${event.email})}">
-                                        <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
-                                    </a>
-                                    <span th:case="*">...</span>
-                                </div>
-                            </td>
+                            <td data-bind="text: user">User</td>
+                            <td data-bind="text: email">Email</td>
+                            <td data-bind="text: room">Room</td>
+                            <!-- ko if: entered -->
+                            <td>Entry</td>
+                            <!-- /ko -->
+                            <!-- ko ifnot: entered -->
+                            <td>Exit</td>
+                            <!-- /ko -->
+                            <td data-bind="text: time">Time</td>
                         </tr>
                     </tbody>
                 </table>
@@ -173,5 +201,8 @@
 
         demo();
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    <script th:src="@{/scripts/room.js}" src="../static/scripts/room.js"></script>
 </body>
 </html>

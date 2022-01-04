@@ -72,7 +72,7 @@ public class MainController {
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
 		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
-		System.err.println(RoomEvents);
+	//  System.err.println(RoomEvents);
 	// 	List<Event> events;
 	// 	if (room.equals("None"))
 	// 		events = new ArrayList<>();

@@ -59,6 +59,7 @@ public class ApiController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/today")
     public List<Today> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
