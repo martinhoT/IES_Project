@@ -23,28 +23,31 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.getaroom.app.entity.Today;
-import com.getaroom.app.entity.Room;
-import com.getaroom.app.repository.HistoryRepository;
+import com.getaroom.app.entity.EventNow;
+import com.getaroom.app.entity.Status;
+import com.getaroom.app.entity.StatusHistory;
+import com.getaroom.app.entity.StatusNow;
+import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
-import com.getaroom.app.repository.TodayRepository;
+import com.getaroom.app.repository.EventRepository;
+import com.getaroom.app.repository.StatusHistoryRepository;
 
-// Remove the 'exclude' after the database backend has been done
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-	private final TodayRepository todayRepository;
 	private final StatusRepository statusRepository;
-	private final HistoryRepository historyRepository;
+	private final StatusHistoryRepository statusHistoryRepository;
+	private final EventRepository eventRepository;
+	private final EventHistoryRepository eventHistoryRepository;
 
 	@Autowired
-	public App(TodayRepository todayRepository, StatusRepository statusRepository, HistoryRepository historyRepository) {
-		this.todayRepository = todayRepository;
+	public App(EventRepository todayRepository, StatusRepository statusRepository, EventHistoryRepository eventHistoryRepository, StatusHistoryRepository statusHistoryRepository) {
+		this.eventRepository = todayRepository;
 		this.statusRepository = statusRepository;
-		this.historyRepository = historyRepository;
+		this.eventHistoryRepository = eventHistoryRepository;
+		this.statusHistoryRepository = statusHistoryRepository;
 	}
 
 	public static void main(String[] args) {
@@ -91,12 +94,18 @@ public class App implements CommandLineRunner {
 			if (!verifyDocumentType(doc, List.of("room", "occupacy", "maxNumberOfPeople")))
 				return;
 
+			// Obtain current room status on DB
 			String room = (String) doc.get("room");
-			Room status = statusRepository.findByRoom(room)
-					.orElse(new Room(room));
+			StatusNow status = statusRepository.findByRoom(room)
+					.orElse(new StatusNow(room));
+			
+			// Put that status on the history collection
+			StatusHistory statusOld = status.cloneHistory();
+			statusHistoryRepository.save(statusOld);
+			
+			// Update the current status
 			status.setOccupacy((double) doc.get("occupacy"));
 			status.setMaxNumberOfPeople((int) doc.get("maxNumberOfPeople"));
-
 			statusRepository.save(status);
 		}));
 		mqttClient.subscribe("event/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
@@ -107,7 +116,7 @@ public class App implements CommandLineRunner {
 			String timeStr = (String) doc.get("time");
 			try {
 				Date time = dateFormat.parse(timeStr);
-				todayRepository.save(new Today(
+				eventRepository.save(new EventNow(
 						(String) doc.get("user"),
 						(String) doc.get("email"),
 						(String) doc.get("room"),
@@ -155,9 +164,9 @@ public class App implements CommandLineRunner {
 
 		@Override
 		public void run() {
-			List<Today> todays = todayRepository.findAll();
-			historyRepository.saveAll( todays.stream().map(Today::cloneHistory).toList() );
-			todayRepository.deleteAll( todays );
+			List<EventNow> todays = eventRepository.findAll();
+			eventHistoryRepository.saveAll( todays.stream().map(EventNow::cloneHistory).toList() );
+			eventRepository.deleteAll( todays );
 		}
 
 	}
