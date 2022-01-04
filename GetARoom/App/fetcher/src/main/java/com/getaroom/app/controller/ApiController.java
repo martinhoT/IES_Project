@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.getaroom.app.entity.Dep;
-import com.getaroom.app.entity.History;
-import com.getaroom.app.entity.Today;
-import com.getaroom.app.entity.Room;
+import com.getaroom.app.entity.EventHistory;
+import com.getaroom.app.entity.EventNow;
+import com.getaroom.app.entity.StatusHistory;
+import com.getaroom.app.entity.StatusNow;
 import com.getaroom.app.entity.RoomStyle;
-import com.getaroom.app.repository.HistoryRepository;
+import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.RoomStyleRepository;
+import com.getaroom.app.repository.StatusHistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
-import com.getaroom.app.repository.TodayRepository;
+import com.getaroom.app.repository.EventRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,16 +32,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiController {
     
     private final StatusRepository statusRepository;
-    private final TodayRepository todayRepository;
-    private final HistoryRepository historyRepository;
+    private final StatusHistoryRepository statusHistoryRepository;
+    private final EventRepository eventRepository;
+    private final EventHistoryRepository eventHistoryRepository;
     private final RoomStyleRepository roomStyleRepository;
 
     @Autowired
-    public ApiController(StatusRepository statusRepository, TodayRepository todayRepository, RoomStyleRepository roomStyleRepository, HistoryRepository historyRepository) {
+    public ApiController(StatusRepository statusRepository, StatusHistoryRepository statusHistoryRepository, EventRepository eventRepository, RoomStyleRepository roomStyleRepository, EventHistoryRepository eventHistoryRepository) {
         this.statusRepository = statusRepository;
-        this.todayRepository = todayRepository;
+        this.statusHistoryRepository = statusHistoryRepository;
+        this.eventRepository = eventRepository;
         this.roomStyleRepository = roomStyleRepository;
-        this.historyRepository = historyRepository;
+        this.eventHistoryRepository = eventHistoryRepository;
 
         // TODO: Better updates? (check if modified?)
         if (roomStyleRepository.count() == 0) {
@@ -61,22 +65,26 @@ public class ApiController {
 
     @CrossOrigin
     @GetMapping("/today")
-    public List<Today> today(@RequestParam(defaultValue = "") String room) {
+    public List<EventNow> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
-            return todayRepository.findAll();
+            return eventRepository.findAll();
         }else{
-            return todayRepository.findByRoom(room);
+            return eventRepository.findByRoom(room);
         }
     }
 
-    @GetMapping("/history")
-    public List<History> history() {
-        List<History> allHistory = historyRepository.findAll();
-        return allHistory;
+    @GetMapping("/today_history")
+    public List<EventHistory> todayHistory() {
+        return eventHistoryRepository.findAll();
+    }
+
+    @GetMapping("/status_history")
+    public List<StatusHistory> statusHistory() {
+        return statusHistoryRepository.findAll();
     }
 
     @GetMapping("/status")
-    public Map<String, List<Room>> status(@RequestParam(required = false) String dep) {
+    public Map<String, List<StatusNow>> status(@RequestParam(required = false) String dep) {
         // Used by student_app and analyst_app
         if (dep != null)
             return Map.of(dep, statusRepository.findAllRooms(dep));
