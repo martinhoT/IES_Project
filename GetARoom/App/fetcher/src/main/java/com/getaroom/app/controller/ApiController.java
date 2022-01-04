@@ -70,11 +70,9 @@ public class ApiController {
     }
 
     @GetMapping("/history")
-    public Map<String, List<History>> history(@RequestParam(required = false) String year) {
-        /**
-         * TODO
-         */
-        return null;
+    public List<History> history() {
+        List<History> allHistory = historyRepository.findAll();
+        return allHistory;
     }
 
     @GetMapping("/status")

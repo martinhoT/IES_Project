@@ -31,10 +31,11 @@ function ViewModel() {
         for (style of self.savedStyles) {
             percentage = document.getElementById("pct:" + style.roomid)
             color = document.getElementById("clr:" + style.roomid)
-            // if (percentage != null)
+            if (percentage != null)
                 percentage.innerText = style.pct;
-            // if (color != null)
-                color.className = style.clr;
+            if (color != null) {
+                color.style.backgroundColor = style.clr;
+            }
         }
         self.savedStyles = []
     }
@@ -61,9 +62,9 @@ current_topic = null;
 backgroundPopulator = [];
 backgroundPopulatorInserted = 0;
 
-// When a new floor is chosen, subscribe to its respective topic
-// Also unsubscribe from the previously subscribed topics
-$("#department_selected").change(function(e) {
+// Obtain room style data (position and size of the clickable boxes on the floor maps)
+// Switch from a topic to another (unsubscribe to old, subscribe to new)
+updateDepFloors = function(e) {
     let dep_number = $("#department_selected").val()
     viewModel.department(dep_number)
     viewModel.floorsBound = false;
@@ -108,14 +109,17 @@ $("#department_selected").change(function(e) {
         client.subscribe(current_topic);
         console.log("Subscribed to new topic " + current_topic);
     }
-});
+}
+
+// When a new floor is chosen, subscribe to its respective topic
+// Also unsubscribe from the previously subscribed topics
+$("#department_selected").change( updateDepFloors );
 
 function onConnect() {
     console.log("Successfully connected to the broker.");
-    // current_topic = "status/" + dep_number.replaceAll(".", "/") + "/#";
-    // client.subscribe(current_topic);
-
+    
     connected = true;
+    updateDepFloors()
 }
 
 function onConnectionLost(responseObject) {
@@ -130,29 +134,20 @@ function onMessageArrived(message) {
     var stts = JSON.parse(msg);
 
     roomid = stts["room"];
-    occupacy = parseInt(Number(stts["occupacy"])*100);
-    
-    colorClass = "box"
-    if (occupacy < 20) {
-        colorClass = "box hm-empty";
-    }
-    else if (occupacy < 40) {
-        colorClass = "box hm-almost-empty";
-    }
-    else if (occupacy < 60) {
-        colorClass = "box hm-mid";
-    }
-    else if (occupacy < 80) {
-        colorClass = "box hm-almost-full";
-    }
-    else {
-        colorClass = "box hm-full";
-    }
+    occupacy = stts["occupacy"]
+    occupacyPercentage = parseInt(Number(occupacy)*100);
+
+    hexRange = "0123456789abcdef";
+
+    hexIndex = parseInt(occupacy*16)
+    hexIndex = hexIndex > 15 ? 15 : hexIndex;
+
+    colorStyle = "#" + hexRange[hexIndex] + hexRange[hexIndex] + hexRange[15-hexIndex] + hexRange[15-hexIndex] + "00";
     
     viewModel.savedStyles.push({
         roomid: roomid,
-        pct: occupacy + "%",
-        clr: colorClass
+        pct: occupacyPercentage + "%",
+        clr: colorStyle
     });
 
     if (viewModel.floorsBound) {

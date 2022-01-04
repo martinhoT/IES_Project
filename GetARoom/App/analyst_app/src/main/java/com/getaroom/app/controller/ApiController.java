@@ -18,6 +18,7 @@ import com.getaroom.app.entity.Event;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.nio.charset.StandardCharsets;
 
 @RestController
@@ -61,8 +62,81 @@ public class ApiController {
     }
 
 	@GetMapping("/api/history")
-	public HashMap<String, List<Event>> history(@RequestParam(required = false) String year) {
-		HashMap<String, List<Event>> history = new HashMap<String, List<Event>>();
+	public HashMap<Integer, HashMap<Integer, List<Event>>> history(@RequestParam(defaultValue = "") String yfilter, @RequestParam(defaultValue = "") String mfilter, @RequestParam(defaultValue = "") String dfilter) {
+		Integer evntMonth, evntYear;
+
+		List<Event> allHistory = apiHistoryYear();
+		HashMap<Integer, HashMap<Integer, List<Event>>> history = new HashMap<>();
+		
+		// Insertion of data
+		for (Event event : allHistory){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(event.getTime());
+			evntYear = calendar.get(Calendar.YEAR);
+			evntMonth = calendar.get(Calendar.MONTH) + 1;
+
+			// Add year if doesnt exist
+			if(!history.containsKey(evntYear)){
+				HashMap<Integer, List<Event>> month = new HashMap<>();
+				history.put(evntYear, month);
+			}
+
+			// Add month if doesnt exist
+			if(!history.get(evntYear).containsKey(evntMonth)){
+				List<Event> day = new ArrayList<>();
+				history.get(evntYear).put(evntMonth, day);
+			}
+
+			// Add event into history
+			history.get(evntYear).get(evntMonth).add(event);
+		}
+
+		// Filtering of Data
+		// Check if there is a year filter
+		if(!yfilter.isEmpty()){
+			System.out.print("YEAR" + yfilter);
+			HashMap<Integer, HashMap<Integer, List<Event>>> filteredHistory = new HashMap<>();
+			Integer yearInt = Integer.parseInt(yfilter);
+
+			// Check if there is a month filter
+			if(!mfilter.isEmpty()){
+				Integer monthInt = Integer.parseInt(mfilter);
+
+				// Check if there is a day filter
+				if(!dfilter.isEmpty()){
+					Integer dayInt = Integer.parseInt(dfilter);
+					List<Event> dayEvents = new ArrayList<>();
+
+					// For each event in that month and year
+					for(Event event: history.get(yearInt).get(monthInt)){
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(event.getTime());
+						Integer evntDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+						// Check if day is equal
+						if(dayInt == evntDay){
+							dayEvents.add(event);
+						}
+					}
+
+					// Add day events to filted
+					filteredHistory.put(yearInt, new HashMap<>());
+					filteredHistory.get(yearInt).put(monthInt, dayEvents);
+					return filteredHistory;
+				}else{
+
+					// Just filter with month and year
+					filteredHistory.put(yearInt, new HashMap<>());
+					filteredHistory.get(yearInt).put(monthInt, history.get(yearInt).get(monthInt));
+					return filteredHistory;
+				}
+			}else{
+
+				// Just filter with year
+				filteredHistory.put(yearInt, history.get(yearInt));
+				return filteredHistory;
+			}
+		}
 		return history;
     }
 
@@ -120,6 +194,17 @@ public class ApiController {
 			.uri(uriBuilder -> uriBuilder
 			.path("/api/today")
 			.queryParam("room", room)
+			.build())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(Event.class) )
+			.collectList().block();
+	}
+
+	private List<Event> apiHistoryYear() {
+		return apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+			.path("/api/history")
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)

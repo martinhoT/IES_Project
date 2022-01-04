@@ -9,26 +9,13 @@
 
 .box:hover {
     opacity: 0.5;
+    outline: 3px dashed black;
 }
 
-.hm-full {
-    background-color: #ff0000;
-}
-
-.hm-almost-full {
-    background-color: #cc5500;
-}
-
-.hm-mid {
-    background-color: #aaaa00;
-}
-
-.hm-almost-empty {
-    background-color: #55cc00;
-}
-
-.hm-empty {
-    background-color: #00ff00;
+.carousel-control-next-icon,
+.carousel-control-prev-icon,
+.carousel-indicators {
+    filter: invert(1);
 }
 
 .percentage-outlined {
