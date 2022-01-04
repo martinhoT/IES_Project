@@ -49,9 +49,9 @@
         <select id="department_selected" name="department_selected">
             <option th:each="department : ${departments}" th:value="${department.dep}" th:text="${department.dep}"></option>
         </select>
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel carousel-dark slide" data-ride="carousel">
           <ol class="carousel-indicators" data-bind="foreach: floors">
-            <li data-target="#myCarousel" data-bind="attr: { dataSlideTo: $index }, css: { active: $index() == 0 }"></li>
+            <li data-target="#myCarousel" data-bind="attr: { 'data-slide-to': $index }, css: { active: $index() == 0 }"></li>
           </ol>
           <div id="carousel-inner" class="carousel-inner" data-bind="foreach: floors, childrenComplete: flagFloorsBound">
             <div class="carousel-item" data-bind="css: { active: $index() == 0 }" >
