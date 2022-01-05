@@ -23,10 +23,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import com.getaroom.app.entity.BlacklistNotification;
 import com.getaroom.app.entity.EventNow;
-import com.getaroom.app.entity.Status;
 import com.getaroom.app.entity.StatusHistory;
 import com.getaroom.app.entity.StatusNow;
+import com.getaroom.app.repository.BlacklistNotificationRepository;
 import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.getaroom.app.repository.EventRepository;
@@ -41,13 +42,21 @@ public class App implements CommandLineRunner {
 	private final StatusHistoryRepository statusHistoryRepository;
 	private final EventRepository eventRepository;
 	private final EventHistoryRepository eventHistoryRepository;
+	private final BlacklistNotificationRepository blacklistNotificationRepository;
 
 	@Autowired
-	public App(EventRepository todayRepository, StatusRepository statusRepository, EventHistoryRepository eventHistoryRepository, StatusHistoryRepository statusHistoryRepository) {
+	public App(
+		EventRepository todayRepository,
+		StatusRepository statusRepository,
+		EventHistoryRepository eventHistoryRepository,
+		StatusHistoryRepository statusHistoryRepository,
+		BlacklistNotificationRepository blacklistNotificationRepository) {
+
 		this.eventRepository = todayRepository;
 		this.statusRepository = statusRepository;
 		this.eventHistoryRepository = eventHistoryRepository;
 		this.statusHistoryRepository = statusHistoryRepository;
+		this.blacklistNotificationRepository = blacklistNotificationRepository;
 	}
 
 	public static void main(String[] args) {
@@ -114,19 +123,45 @@ public class App implements CommandLineRunner {
 				return;
 
 			String timeStr = (String) doc.get("time");
+			Date time = null;
 			try {
-				Date time = dateFormat.parse(timeStr);
-				eventRepository.save(new EventNow(
-						(String) doc.get("user"),
-						(String) doc.get("email"),
-						(String) doc.get("room"),
-						(boolean) doc.get("entered"),
-						time
-				));
+				time = dateFormat.parse(timeStr);
 			} catch (ParseException e) {
-				System.err.println("Error: Failure parsing date in Today object: " + timeStr);
-				e.printStackTrace();
+				System.err.println("Error: Failure parsing date in EVENT object: " + timeStr);
 			}
+
+			if (time == null) return;
+			
+			String email = (String) doc.get("email");
+			String room = (String) doc.get("room");
+			boolean entered = (boolean) doc.get("entered");
+
+			EventNow event = new EventNow(
+				(String) doc.get("user"),
+				email,
+				room,
+				entered,
+				time
+			);
+
+			if ( entered && isBlacklisted(room, email) ) {
+				MqttMessage notificationMsg = new MqttMessage();
+				notificationMsg.setQos(2);
+				notificationMsg.setPayload( event.toString().getBytes(Charset.forName("UTF-8")) );
+				notificationMsg.setRetained(true);
+
+				try {
+					mqttClient.publish("blacklist_notification", notificationMsg);
+				} catch (MqttPersistenceException e) {
+					System.err.println("Error: MQTT persistence exception when giving an alert for " + event);
+				} catch (MqttException e) {
+					System.err.println("Error: Unspecified MQTT exception when giving an alert for " + event);
+				}
+
+				blacklistNotificationRepository.save( BlacklistNotification.fromEvent(event) );
+			}
+
+			eventRepository.save(event);
 		}));
 		receivedMsg.await();
 
@@ -158,6 +193,13 @@ public class App implements CommandLineRunner {
 			return false;
 		}
 		return true;
+	}
+
+	// TODO: requires access to the storage of blacklists on the database
+	// TODO: allow for multiple security guards? Instead of this returning a boolean, returns a list of guards that blacklisted that event
+	// Simply returns if events of that room and email are blacklisted on the database
+	private boolean isBlacklisted(String room, String email) {
+		return false;
 	}
 
 	private class TodayMigrateToHistoryBatch implements Runnable {

@@ -26,3 +26,20 @@
 .hide{
  display: none; 
 }
+
+
+
+.notification-window {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+}
+
+.notification-list {
+  padding: 0;
+}
+
+.notification-amount {
+  background-color: darkred;
+  color: white;
+}

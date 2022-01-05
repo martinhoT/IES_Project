@@ -69,7 +69,7 @@ updateDepFloors = function(e) {
     viewModel.department(dep_number)
     viewModel.floorsBound = false;
 
-    $.getJSON("http://localhost:84/api/department", {"dep": dep_number},
+    $.getJSON("http://" + location.hostname + ":84/api/department", {"dep": dep_number},
         function (data, textStatus, jqXHR) {
             n_floors = 0;
             viewModel.floors([]);
@@ -83,7 +83,7 @@ updateDepFloors = function(e) {
                 }
             // viewModel.floors( Array.from(Array(n_floors), (_,i) => 1 + i) );
             for (let i = 0; i < n_floors; i++) {
-                $.getJSON("http://localhost:84/api/roomStyles", {"dep": dep_number, "floor": i+1},
+                $.getJSON("http://" + location.hostname + ":84/api/room_styles", {"dep": dep_number, "floor": i+1},
                     function (data, textStatus, jqXHR) {
                         // viewModel.rooms( Array.from(rooms, (v,_) => v.room.split(".")[2]) );
                         backgroundPopulator[i] = {
@@ -119,7 +119,7 @@ function onConnect() {
     console.log("Successfully connected to the broker.");
     
     connected = true;
-    updateDepFloors()
+    updateDepFloors();
 }
 
 function onConnectionLost(responseObject) {
