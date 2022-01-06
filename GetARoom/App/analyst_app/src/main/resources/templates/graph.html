@@ -12,33 +12,63 @@
         <link rel="stylesheet" th:href="@{/css/api.css}" type="text/css">
     </th:block>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Time', 'Room', 'Room', 'Room', 'Room', 'Room', 'Room', 'Room'],
-            ['2004',  1000 ,  1000 ,  1000 ,  1000 ,  1000 ,  1000 ,  1000 ],
-            ['2005',  1170 ,  1170 ,  1170 ,  1170 ,  1170 ,  1170 ,  1170 ],
-            ['2006',  660  ,  660  ,  660  ,  660  ,  660  ,  660  ,  660  ],
-            ['2007',  1030 ,  1030 ,  1030 ,  1030 ,  1030 ,  1030 ,  1030 ]
-        ]);
-        
-        var options = {
-            title: 'Company Performance',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-        };
-        
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        
-        chart.draw(data, options);
-    }
+    <!-- <script th:inline="javascript" th:src="@{/scripts/graphs.js}" src="../static/scripts/graphs.js"></script> -->
+    <script th:inline="javascript">
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        /*<![CDATA[*/
+        var events = /*[[${status_events}]]*/ "";
+        /*]]>*/
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            var rooms = {};
+
+            data.addColumn('date', 'Time');
+            for(let event of events){
+                if(!(event['room'] in rooms)){
+                    rooms[event['room']] = event['occupacy'];
+                    data.addColumn('number', event['room']);
+                }
+            }
+
+            for(let event of events){
+                var row = [new Date(event['time'])];
+                for(var key in rooms){
+                    if(event['room'] === key){
+                        console.log("hey");
+                        row.push(event['occupacy']);
+                        // rooms[event['room']] = event['occupacy'];
+                    }
+                    else{
+                        row.push(rooms[key]);
+                    }
+                }
+                console.log(row);
+                // data.addRow([event['occupacy'],new Date(event['time'])]);
+                data.addRow(row);
+            }
+
+            var options = {
+                title: 'Room occupacy by time',
+                curveType: 'function',
+                legend: { position: 'bottom' },
+                vAxis: { format:'#,###%'}
+            };
+
+            var chart = new google.charts.Line(document.getElementById('curve_chart'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+        }
     </script>
 </head>
 <body>
-  <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <div>
+        <select id="department_selected" name="department_selected">
+            <option th:each="department : ${departments}" th:value="${department.dep}" th:text="${department.dep}"></option>
+        </select>
+    </div>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
 </body>
 </html>
   
