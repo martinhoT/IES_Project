@@ -228,7 +228,7 @@ def run():
 					if direction < 0 and centroid[1] < H // 2:
 						totalUp += 1
 						empty.append(totalUp)
-						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}" + "}")
+						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
 						to.counted = True
 
 					# if the direction is positive (indicating the object
@@ -237,7 +237,7 @@ def run():
 					elif direction > 0 and centroid[1] > H // 2:
 						totalDown += 1
 						empty1.append(totalDown)
-						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}" + "}")
+						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
 						#print(empty1[-1])
 						# if the people limit exceeds over threshold, send an email alert
 						if sum(x) >= config.Threshold:

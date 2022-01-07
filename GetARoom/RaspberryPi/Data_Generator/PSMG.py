@@ -81,7 +81,7 @@ def main():
     try:
         # Default status
         for depName in depsDict.keys():
-            status = "1{\"room\":" + f"\"{depName}\",\"occupacy\": {round(depsDict[depName][1]/depsDict[depName][0], 2)}, \"maxNumberOfPeople\": {depsDict[depName][0]}" + "}"
+            status = "1{\"room\":" + f"\"{depName}\",\"occupacy\": {round(depsDict[depName][1]/depsDict[depName][0], 2)}, \"maxNumberOfPeople\": {depsDict[depName][0]}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
             print(status, flush=True)
 
         # Events
@@ -95,7 +95,7 @@ def main():
                     depsDict[name][1] += 1
                 else:
                     depsDict[name][1] -= 1
-                status = "1{\"room\":" + f"\"{name}\",\"occupacy\": {round(depsDict[name][1]/depsDict[name][0], 2)}, \"maxNumberOfPeople\": {depsDict[name][0]}" + "}"
+                status = "1{\"room\":" + f"\"{name}\",\"occupacy\": {round(depsDict[name][1]/depsDict[name][0], 2)}, \"maxNumberOfPeople\": {depsDict[name][0]}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}"
                 print(status, flush=True)
             time.sleep(random.randrange(3, 8))
     except KeyboardInterrupt:
