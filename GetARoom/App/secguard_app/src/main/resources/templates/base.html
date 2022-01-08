@@ -53,7 +53,7 @@
         </nav>
 
         <div class="notification-window" th:fragment="alerts">
-            <ul class="notification-list" data-bind="foreach: notifications">
+            <ul class="notification-list" data-bind="foreach: notifications_popups">
               <li>
                 Alert for <span data-bind="text: room"></span>: User '<span data-bind="text: user"></span>' with email '<span data-bind="text: email"></span>' entered.
               </li>

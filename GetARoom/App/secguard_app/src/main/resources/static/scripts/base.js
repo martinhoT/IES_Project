@@ -2,6 +2,7 @@ function ViewModel() {
     var self = this;
 
     self.notifications = ko.observableArray(),
+    self.notifications_popups = ko.observableArray(),
     self.commitSeen = function(e) {
         // Obtain first the array of notifications to be deleted, so that only one POST request is done.
         to_be_deleted = []
@@ -20,13 +21,18 @@ var viewModel = new ViewModel();
 ko.applyBindings( viewModel );
 
 
+
+// Max size of the blacklist notification popups
+const NOTIFICATIONS_POPUPS_MAX_SIZE = 3;
+
+
+
 // MQTT client that will listen for blacklist alerts
 client = new Paho.MQTT.Client(location.hostname, 1884, "", "");
 
 // Set callback handlers
 client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
-
 
 client.connect({onSuccess:onConnect});
 
@@ -73,4 +79,8 @@ function onMessageArrived(message) {
     var evnt = JSON.parse(msg);
 
     viewModel.notifications().push(evnt);
+    
+    viewModel.notifications_popups().push(evnt);
+    if (viewModel.notifications_popups().length > 3)
+        viewModel.notifications_popups().shift();
 }

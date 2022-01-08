@@ -76,7 +76,7 @@ public class App implements CommandLineRunner {
 		long initialDelay = Duration.between(now, nextRun).getSeconds();
 
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(new TodayMigrateToHistoryBatch(),
+		scheduler.scheduleAtFixedRate(new NowMigrateToHistoryBatch(),
 			initialDelay,
 			TimeUnit.DAYS.toSeconds(1),
 			TimeUnit.SECONDS);
@@ -202,7 +202,7 @@ public class App implements CommandLineRunner {
 		return false;
 	}
 
-	private class TodayMigrateToHistoryBatch implements Runnable {
+	private class NowMigrateToHistoryBatch implements Runnable {
 
 		@Override
 		public void run() {
