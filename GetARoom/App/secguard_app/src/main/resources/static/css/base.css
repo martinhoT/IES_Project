@@ -1,9 +1,9 @@
 /* The alert message box */
 .alert {
-   padding: 20px;
+   padding: 10px;
    background-color: #f44336; /* Red */
    color: white;
-   margin-bottom: 15px;
+   margin-bottom: 0;
  }
  
  /* The close button */
@@ -33,10 +33,12 @@
   position: absolute;
   z-index: 1;
   width: 100%;
+  height: min-content;
 }
 
 .notification-list {
   padding: 0;
+  margin: 0;
 }
 
 .notification-amount {

@@ -2,6 +2,7 @@ package com.getaroom.app.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -110,7 +111,7 @@ public class ApiController {
         return statusRepository.findAllDep();
     }
 
-    // Used in heatmaps
+    /* FOR THE SECURITY GUARD APP */
     @CrossOrigin
     @GetMapping("/room_styles")
     public List<RoomStyle> roomStyles(
@@ -121,16 +122,21 @@ public class ApiController {
         //     return roomStyleRepository.findAll();
         return roomStyleRepository.findAllRooms(dep, floor);
     }
-
     @CrossOrigin
     @GetMapping("/alerts/unseen")
     public List<BlacklistNotification> unseenNotifications() {
         return blacklistNotificationRepository.findAll();
     }
-
     @CrossOrigin
     @PostMapping("/alerts/mark_read")
     public void markRead(@RequestBody List<BlacklistNotification> notifications) {
-        blacklistNotificationRepository.deleteAll( notifications );
+        List<BlacklistNotification> toRemove = new ArrayList<>();
+        for (BlacklistNotification notification : notifications) {
+            BlacklistNotification repoNotification = blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())
+                .orElse(null);
+            if (repoNotification != null)
+                toRemove.add(repoNotification);
+        }
+        blacklistNotificationRepository.deleteAll( toRemove );
     }
 }

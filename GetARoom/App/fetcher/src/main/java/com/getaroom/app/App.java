@@ -15,8 +15,10 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +32,8 @@ import com.getaroom.app.entity.StatusNow;
 import com.getaroom.app.repository.BlacklistNotificationRepository;
 import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.getaroom.app.repository.EventRepository;
 import com.getaroom.app.repository.StatusHistoryRepository;
 
@@ -44,6 +48,8 @@ public class App implements CommandLineRunner {
 	private final EventHistoryRepository eventHistoryRepository;
 	private final BlacklistNotificationRepository blacklistNotificationRepository;
 
+	private final Gson gson;
+
 	@Autowired
 	public App(
 		EventRepository todayRepository,
@@ -57,6 +63,11 @@ public class App implements CommandLineRunner {
 		this.eventHistoryRepository = eventHistoryRepository;
 		this.statusHistoryRepository = statusHistoryRepository;
 		this.blacklistNotificationRepository = blacklistNotificationRepository;
+
+		this.gson = new GsonBuilder()
+			// This is required for correct Jackson serialization of the Date type 'time' attribute on BlacklistNotification
+			.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+			.create();
 	}
 
 	public static void main(String[] args) {
@@ -100,22 +111,38 @@ public class App implements CommandLineRunner {
 		CountDownLatch receivedMsg = new CountDownLatch(1);
 		mqttClient.subscribe("status/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
 			System.out.println("Obtaining STATUS document");
-			if (!verifyDocumentType(doc, List.of("room", "occupacy", "maxNumberOfPeople")))
+			if (!verifyDocumentType(doc, List.of("room", "occupacy", "maxNumberOfPeople", "time")))
 				return;
 
 			// Obtain current room status on DB
 			String room = (String) doc.get("room");
 			StatusNow status = statusRepository.findByRoom(room)
-					.orElse(new StatusNow(room));
-			
-			// Put that status on the history collection
-			StatusHistory statusOld = status.cloneHistory();
-			statusHistoryRepository.save(statusOld);
-			
-			// Update the current status
-			status.setOccupacy((double) doc.get("occupacy"));
-			status.setMaxNumberOfPeople((int) doc.get("maxNumberOfPeople"));
-			statusRepository.save(status);
+					.orElse(null);
+			try {
+				// Put that status on the history collection
+				if (status != null) {
+					StatusHistory statusOld = status.cloneHistory();
+					statusHistoryRepository.save(statusOld);
+				}
+				// If it was never in the repository, create a new one
+				else
+					status = new StatusNow(room);
+				
+				// Update the current status
+				String timeStr = (String) doc.get("time");
+				Date time = null;
+				try {
+					time = dateFormat.parse(timeStr);
+				} catch (ParseException e) {
+					System.err.println("Error: Failure parsing date in EVENT object: " + timeStr);
+				}
+				status.setOccupacy((double) doc.get("occupacy"));
+				status.setMaxNumberOfPeople((int) doc.get("maxNumberOfPeople"));
+				status.setTime(time);
+				statusRepository.save(status);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}));
 		mqttClient.subscribe("event/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
 			System.out.println("Obtaining EVENT document");
@@ -136,18 +163,14 @@ public class App implements CommandLineRunner {
 			String room = (String) doc.get("room");
 			boolean entered = (boolean) doc.get("entered");
 
-			EventNow event = new EventNow(
-				(String) doc.get("user"),
-				email,
-				room,
-				entered,
-				time
-			);
+			EventNow event = eventRepository.save(new EventNow( (String) doc.get("user"), email, room, entered, time ));
 
 			if ( entered && isBlacklisted(room, email) ) {
+				BlacklistNotification notification = blacklistNotificationRepository.save( BlacklistNotification.fromEvent(event) );
+
 				MqttMessage notificationMsg = new MqttMessage();
 				notificationMsg.setQos(2);
-				notificationMsg.setPayload( event.toString().getBytes(Charset.forName("UTF-8")) );
+				notificationMsg.setPayload( gson.toJson( notification ).getBytes(Charset.forName("UTF-8")) );
 				notificationMsg.setRetained(true);
 
 				try {
@@ -157,11 +180,7 @@ public class App implements CommandLineRunner {
 				} catch (MqttException e) {
 					System.err.println("Error: Unspecified MQTT exception when giving an alert for " + event);
 				}
-
-				blacklistNotificationRepository.save( BlacklistNotification.fromEvent(event) );
 			}
-
-			eventRepository.save(event);
 		}));
 		receivedMsg.await();
 
@@ -199,7 +218,11 @@ public class App implements CommandLineRunner {
 	// TODO: allow for multiple security guards? Instead of this returning a boolean, returns a list of guards that blacklisted that event
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		return false;
+		Map<String, List<String>> blacklisted = Map.of(
+			"4.1.19", List.of("morinsoto@cipromox.com", "bauernorman@cipromox.com", "drakevega@cipromox.com"),
+			"4.1.30", List.of("merrittobrien@cipromox.com", "velazquezmccarthy@cipromox.com")
+		);
+		return blacklisted.getOrDefault(room, new ArrayList<>()).contains(email);
 	}
 
 	private class NowMigrateToHistoryBatch implements Runnable {

@@ -9,31 +9,41 @@
         </th:block>
     </head>
     <body>
+      <!-- NOTE: wrap the navbar and the notification window in a 'div' element with id 'notification-consumers' -->
+        
         <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">
+                <a class="nav-link" th:href="@{/sec}">
                   <i class="fa fa-home"></i>
                   Home
                   <span class="sr-only">(current)</span>
                   </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link hide" th:href="@{/heatmaps}">
+                <a class="nav-link" th:href="@{/heatmaps}">
                   Map
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link hide" th:href="@{/logs}">
+                <a class="nav-link" th:href="@{/logs}">
                   Logs
                 </a>
               </li>
             </ul>
             <ul class="navbar-nav ">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link hide" href="#">
                   Login/Register
+                </a>
+              </li> -->
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/notifications}">
+                  Notifications
+                  <!-- ko if: notifications_length > 0 -->
+                  <span class="notification-amount" data-bind="text: notifications_length"></span>
+                  <!-- /ko -->
                 </a>
               </li>
               <li class="nav-item">
@@ -42,20 +52,13 @@
                 </a>
               </li>
             </ul>
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" th:href="@{/notifications}">
-                  Notifications <span class="notification-amount" data-bind="text: notifications().length"></span>
-                </a>
-              </li>
-            </ul>
           </div>
         </nav>
 
         <div class="notification-window" th:fragment="alerts">
             <ul class="notification-list" data-bind="foreach: notifications_popups">
-              <li>
-                Alert for <span data-bind="text: room"></span>: User '<span data-bind="text: user"></span>' with email '<span data-bind="text: email"></span>' entered.
+              <li class="alert">
+                <button class="btn btn-info" data-bind="click: $root.commitSeen">&times;</button>Alert for <span data-bind="text: room"></span>: User '<span data-bind="text: user"></span>' with email '<span data-bind="text: email"></span>' entered.
               </li>
             </ul>
         </div>

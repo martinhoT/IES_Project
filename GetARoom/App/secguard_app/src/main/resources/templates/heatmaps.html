@@ -6,11 +6,13 @@
 </head>
 <body>
 
-    <th:block th:include="base :: navbar" />
+    <div id="notification-consumers">
+        <th:block th:replace="base :: navbar" />
+    
+        <th:block th:replace="base :: alerts" />
+    </div>
 
-    <th:block th:include="base :: alerts" />
-
-    <div class="container">
+    <div id="ko-body" class="container">
         <label for="department_selected">Department</label>
         <select id="department_selected" name="department_selected">
             <option th:each="department : ${departments}" th:value="${department.dep}" th:text="${department.dep}"></option>
