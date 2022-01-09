@@ -31,4 +31,10 @@ public class BlacklistNotification {
     public String getEmail() { return email; }
     public String getRoom() { return room; }
     public Date getTime() { return time; }
+
+    @Override
+    public String toString() {
+        return "[email=" + email + ", id=" + id + ", room=" + room + ", time=" + time + ", user="
+                + user + "]";
+    }
 }

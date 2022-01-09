@@ -18,18 +18,20 @@ $(document).ready(function() {
         self.commitSeenList = function(e) {
             // Obtain first the array of notifications to be deleted, so that only one POST request is done.
             to_be_deleted = []
-            $("#unseen-notification-list > input:checked").each(function(elem) {
-                to_be_deleted.push( self.notifications.splice( elem.val(), 1 )[0] );
+            $("#unseen-notification-list > tr > td > input:checked").each(function(idx) {
+                to_be_deleted.push( self.notifications.splice( this.value, 1 )[0] );
             });
     
-            $.ajax({
-                type: "POST",
-                url: "http://" + location.hostname + ":84/api/alerts/mark_read",
-                data: JSON.stringify(to_be_deleted),
-                function (data, textStatus, jqXHR) {},
-                contentType: "application/json",
-                dataType: "json"
-            });
+            if (to_be_deleted.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://" + location.hostname + ":84/api/alerts/mark_read",
+                    data: JSON.stringify(to_be_deleted),
+                    function (data, textStatus, jqXHR) {},
+                    contentType: "application/json",
+                    dataType: "json"
+                });
+            }
         }
         self.commitSeen = function(notification_popup) {
             console.log(notification_popup);
@@ -37,7 +39,7 @@ $(document).ready(function() {
                 return item.user === notification_popup.user &&
                     item.email === notification_popup.email &&
                     item.room === notification_popup.room &&
-                    item.time === notification_popup.time;
+                    new Date(item.time).getTime() === new Date(notification_popup.time).getTime();
             });
             
             $.ajax({

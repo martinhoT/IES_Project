@@ -77,7 +77,7 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/today")
+    @GetMapping("/event")
     public List<EventNow> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
             return eventRepository.findAll();
@@ -86,7 +86,7 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/today_history")
+    @GetMapping("/event_history")
     public List<EventHistory> todayHistory() {
         return eventHistoryRepository.findAll();
     }
@@ -131,12 +131,15 @@ public class ApiController {
     @PostMapping("/alerts/mark_read")
     public void markRead(@RequestBody List<BlacklistNotification> notifications) {
         List<BlacklistNotification> toRemove = new ArrayList<>();
-        for (BlacklistNotification notification : notifications) {
-            BlacklistNotification repoNotification = blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())
-                .orElse(null);
-            if (repoNotification != null)
-                toRemove.add(repoNotification);
-        }
+        // for (BlacklistNotification notification : notifications) {
+        //     BlacklistNotification repoNotification = blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())
+        //         .orElse(null);
+        //     if (repoNotification != null)
+        //         toRemove.add(repoNotification);
+        // }
+        // blacklistNotificationRepository.deleteAll( toRemove );
+        for (BlacklistNotification notification : notifications)
+            toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
         blacklistNotificationRepository.deleteAll( toRemove );
     }
 }

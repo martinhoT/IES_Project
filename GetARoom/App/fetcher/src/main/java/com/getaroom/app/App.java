@@ -80,7 +80,7 @@ public class App implements CommandLineRunner {
 		// ZonedDateTime already handles daylight saving cases
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Lisbon"));
 		
-		ZonedDateTime nextRun = now.withHour(0).withMinute(0).withSecond(0);
+		ZonedDateTime nextRun = now.withHour(15).withMinute(30).withSecond(30);
 		if (now.compareTo(nextRun) > 0)
 			nextRun = nextRun.plusDays(1);
 		
