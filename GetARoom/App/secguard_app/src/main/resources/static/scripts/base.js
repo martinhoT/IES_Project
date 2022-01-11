@@ -11,7 +11,7 @@ $(document).ready(function() {
         self.notifications = ko.observableArray([]),
         self.notifications_popups = ko.observableArray([]),
 
-        self.notifications_length = ko.computed(function() {
+        self.notifications_length = ko.pureComputed(function() {
             return self.notifications().length;
         })
 
@@ -34,22 +34,32 @@ $(document).ready(function() {
             }
         }
         self.commitSeen = function(notification_popup) {
-            console.log(notification_popup);
-            self.notifications.remove( function(item) {
+            let prev_length = self.notifications().length;
+            
+            // ew
+            self.notifications.remove(function(item) {
                 return item.user === notification_popup.user &&
                     item.email === notification_popup.email &&
                     item.room === notification_popup.room &&
                     new Date(item.time).getTime() === new Date(notification_popup.time).getTime();
             });
-            
-            $.ajax({
-                type: "POST",
-                url: "http://" + location.hostname + ":84/api/alerts/mark_read",
-                data: JSON.stringify([notification_popup]),
-                function (data, textStatus, jqXHR) {},
-                contentType: "application/json",
-                dataType: "json"
-            });
+            self.notifications_popups.remove(function(item) {
+                return item.user === notification_popup.user &&
+                    item.email === notification_popup.email &&
+                    item.room === notification_popup.room &&
+                    new Date(item.time).getTime() === new Date(notification_popup.time).getTime();
+            })
+
+            if (prev_length > self.notifications().length) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://" + location.hostname + ":84/api/alerts/mark_read",
+                    data: JSON.stringify([notification_popup]),
+                    function (data, textStatus, jqXHR) {},
+                    contentType: "application/json",
+                    dataType: "json"
+                });
+            }
         }
     }
 
@@ -111,7 +121,7 @@ $(document).ready(function() {
 
     function onMessageArrived(message) {
         msg = message.payloadString;
-        console.log("Received message:" + msg);
+        console.log("Received notification:" + msg);
         var evnt = JSON.parse(msg);
     
         baseScriptVars.viewModel.notifications.push(evnt);

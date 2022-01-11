@@ -41,9 +41,9 @@
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/notifications}">
                   Notifications
-                  <!-- ko if: notifications_length > 0 -->
-                  <span class="notification-amount" data-bind="text: notifications_length"></span>
-                  <!-- /ko -->
+                  <span data-bind="if: notifications().length > 0">
+                    <span class="notification-amount" data-bind="text: notifications().length"></span>
+                  </span>
                 </a>
               </li>
               <li class="nav-item">

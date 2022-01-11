@@ -163,15 +163,15 @@ public class App implements CommandLineRunner {
 			String room = (String) doc.get("room");
 			boolean entered = (boolean) doc.get("entered");
 
-			EventNow event = eventRepository.save(new EventNow( (String) doc.get("user"), email, room, entered, time ));
+			EventNow event = new EventNow( (String) doc.get("user"), email, room, entered, time );
 
 			if ( entered && isBlacklisted(room, email) ) {
-				BlacklistNotification notification = blacklistNotificationRepository.save( BlacklistNotification.fromEvent(event) );
+				BlacklistNotification notification = BlacklistNotification.fromEvent(event);
 
 				MqttMessage notificationMsg = new MqttMessage();
 				notificationMsg.setQos(2);
 				notificationMsg.setPayload( gson.toJson( notification ).getBytes(Charset.forName("UTF-8")) );
-				notificationMsg.setRetained(true);
+				notificationMsg.setRetained(false);
 
 				try {
 					mqttClient.publish("blacklist_notification", notificationMsg);
@@ -180,7 +180,11 @@ public class App implements CommandLineRunner {
 				} catch (MqttException e) {
 					System.err.println("Error: Unspecified MQTT exception when giving an alert for " + event);
 				}
+
+				blacklistNotificationRepository.save( notification );
 			}
+
+			eventRepository.save( event );
 		}));
 		receivedMsg.await();
 

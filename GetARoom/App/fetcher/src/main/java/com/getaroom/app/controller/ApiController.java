@@ -138,8 +138,11 @@ public class ApiController {
         //         toRemove.add(repoNotification);
         // }
         // blacklistNotificationRepository.deleteAll( toRemove );
-        for (BlacklistNotification notification : notifications)
+        for (BlacklistNotification notification : notifications) {
+            System.out.println("Notification to be deleted: " + notification);
             toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
+            System.out.println("To be deleted so far: " + toRemove);
+        }
         blacklistNotificationRepository.deleteAll( toRemove );
     }
 }
