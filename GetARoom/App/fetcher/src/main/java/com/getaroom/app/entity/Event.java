@@ -2,7 +2,8 @@ package com.getaroom.app.entity;
 
 import java.util.Date;
 
-public class Event {
+public abstract class Event {
+    
     private String user;
     private final String email;
     private String room;

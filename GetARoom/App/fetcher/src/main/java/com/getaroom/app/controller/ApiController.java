@@ -2,15 +2,18 @@ package com.getaroom.app.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.getaroom.app.entity.BlacklistNotification;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.EventHistory;
 import com.getaroom.app.entity.EventNow;
 import com.getaroom.app.entity.StatusHistory;
 import com.getaroom.app.entity.StatusNow;
 import com.getaroom.app.entity.RoomStyle;
+import com.getaroom.app.repository.BlacklistNotificationRepository;
 import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.RoomStyleRepository;
 import com.getaroom.app.repository.StatusHistoryRepository;
@@ -23,6 +26,8 @@ import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,14 +41,23 @@ public class ApiController {
     private final EventRepository eventRepository;
     private final EventHistoryRepository eventHistoryRepository;
     private final RoomStyleRepository roomStyleRepository;
+    private final BlacklistNotificationRepository blacklistNotificationRepository;
 
     @Autowired
-    public ApiController(StatusRepository statusRepository, StatusHistoryRepository statusHistoryRepository, EventRepository eventRepository, RoomStyleRepository roomStyleRepository, EventHistoryRepository eventHistoryRepository) {
+    public ApiController(
+        StatusRepository statusRepository, 
+        StatusHistoryRepository statusHistoryRepository, 
+        EventRepository eventRepository, 
+        RoomStyleRepository roomStyleRepository, 
+        EventHistoryRepository eventHistoryRepository,
+        BlacklistNotificationRepository blacklistNotificationRepository) {
+            
         this.statusRepository = statusRepository;
         this.statusHistoryRepository = statusHistoryRepository;
         this.eventRepository = eventRepository;
         this.roomStyleRepository = roomStyleRepository;
         this.eventHistoryRepository = eventHistoryRepository;
+        this.blacklistNotificationRepository = blacklistNotificationRepository;
 
         // TODO: Better updates? (check if modified?)
         if (roomStyleRepository.count() == 0) {
@@ -63,7 +77,7 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/today")
+    @GetMapping("/event")
     public List<EventNow> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
             return eventRepository.findAll();
@@ -72,7 +86,7 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/today_history")
+    @GetMapping("/event_history")
     public List<EventHistory> todayHistory() {
         return eventHistoryRepository.findAll();
     }
@@ -97,9 +111,9 @@ public class ApiController {
         return statusRepository.findAllDep();
     }
 
-    // Used in heatmaps
+    /* FOR THE SECURITY GUARD APP */
     @CrossOrigin
-    @GetMapping("/roomStyles")
+    @GetMapping("/room_styles")
     public List<RoomStyle> roomStyles(
         @RequestParam(required = true, defaultValue = "") String dep,
         @RequestParam(required = true, defaultValue = "") String floor) {
@@ -108,5 +122,27 @@ public class ApiController {
         //     return roomStyleRepository.findAll();
         return roomStyleRepository.findAllRooms(dep, floor);
     }
-
+    @CrossOrigin
+    @GetMapping("/alerts/unseen")
+    public List<BlacklistNotification> unseenNotifications() {
+        return blacklistNotificationRepository.findAll();
+    }
+    @CrossOrigin
+    @PostMapping("/alerts/mark_read")
+    public void markRead(@RequestBody List<BlacklistNotification> notifications) {
+        List<BlacklistNotification> toRemove = new ArrayList<>();
+        // for (BlacklistNotification notification : notifications) {
+        //     BlacklistNotification repoNotification = blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())
+        //         .orElse(null);
+        //     if (repoNotification != null)
+        //         toRemove.add(repoNotification);
+        // }
+        // blacklistNotificationRepository.deleteAll( toRemove );
+        for (BlacklistNotification notification : notifications) {
+            System.out.println("Notification to be deleted: " + notification);
+            toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
+            System.out.println("To be deleted so far: " + toRemove);
+        }
+        blacklistNotificationRepository.deleteAll( toRemove );
+    }
 }

@@ -19,4 +19,7 @@ public class EventNow extends Event {
         return new EventHistory(this.getUser(), this.getEmail(), this.getRoom(), this.isEntered(), this.getTime());
     }
     
+    public String toString() {
+        return super.toString();
+    }
 }
