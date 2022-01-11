@@ -11,6 +11,6 @@ public class StatusNow extends Status {
 
     public StatusNow(String room) { super(room); }
 
-    public StatusHistory cloneHistory() { return new StatusHistory(this.getRoom(), this.getOccupacy(), this.getMaxNumberOfPeople()); }
+    public StatusHistory cloneHistory() { return new StatusHistory(this.getRoom(), this.getOccupacy(), this.getMaxNumberOfPeople(), this.getTime()); }
 
 }

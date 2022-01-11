@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequestMapping("")
 @Controller
@@ -183,23 +181,15 @@ public class MainController {
 	@GetMapping("/heatmaps")
 	public String heatmaps(Model model) {
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
-		// Map<String,String> roomOccupacy = new HashMap<String,String>();
-		// for(int department = 1; department <= 6; department++){
-		// 	JSONParser parser = new JSONParser();
-		// 	try {
-		// 		java.io.File filePath = new java.io.File("src/main/resources/static/data/status/dep"+department+".json");
-		// 		JSONArray jsonRooms = (JSONArray) parser.parse(new FileReader(filePath));
-		// 		for(Object roomJson : jsonRooms){
-		// 			JSONObject jsonObject = (JSONObject)roomJson;
-		// 			roomOccupacy.put((String)jsonObject.get("room"),(String)jsonObject.get("occupacy"));
-		// 		}
-		// 	} catch(Exception e) {
-		// 		e.printStackTrace();
-		// 	}
-		// }
+
 		model.addAllAttributes(Map.of(
 			"departments", allDepartments));
 		return "heatmaps";
+	}
+
+	@GetMapping("/notifications")
+	public String notifications() {
+		return "notifications";
 	}
 
     @GetMapping("/error")

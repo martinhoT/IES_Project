@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+    <th:block th:include="base :: head" />
+    <title>Notifications</title>
+</head>
+<body>
+
+    <div id="notification-consumers">
+        <th:block th:replace="base :: navbar" />
+    
+        <th:block th:replace="base :: alerts" />
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Unseen notifications</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Person</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Room</th>
+                            </tr>
+                        </thead>
+                        <tbody id="unseen-notification-list" data-bind="foreach: notifications">
+                            <tr>
+                                <td data-bind="text: user"></td>
+                                <td data-bind="text: email"></td>
+                                <td data-bind="text: time"></td>
+                                <td data-bind="text: room"></td>
+                                <td><input type="checkbox" data-bind="value: $index" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-primary" data-bind="click: commitSeenList">Mark as seen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="base :: scripts" />
+
+</body>
+</html>

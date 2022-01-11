@@ -93,17 +93,16 @@ public class ApiController {
 
 		// Filtering of Data
 		// Check if there is a year filter
-		if(!yfilter.isEmpty()){
-			System.out.print("YEAR" + yfilter);
+		if(yfilter.matches("\\d+")){
 			HashMap<Integer, HashMap<Integer, List<Event>>> filteredHistory = new HashMap<>();
 			Integer yearInt = Integer.parseInt(yfilter);
 
 			// Check if there is a month filter
-			if(!mfilter.isEmpty()){
+			if(mfilter.matches("\\d+")){
 				Integer monthInt = Integer.parseInt(mfilter);
 
 				// Check if there is a day filter
-				if(!dfilter.isEmpty()){
+				if(dfilter.matches("\\d+")){
 					Integer dayInt = Integer.parseInt(dfilter);
 					List<Event> dayEvents = new ArrayList<>();
 
@@ -204,7 +203,7 @@ public class ApiController {
 	private List<Event> apiHistoryYear() {
 		return apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-			.path("/api/history")
+			.path("/api/today_history")
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)
