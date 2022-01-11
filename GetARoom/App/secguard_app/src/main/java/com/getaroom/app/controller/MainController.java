@@ -88,7 +88,7 @@ public class MainController {
 
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
-		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
 		System.err.println(RoomEvents);
 	// 	List<Event> events;
 	// 	if (room.equals("None"))
@@ -108,8 +108,9 @@ public class MainController {
 	// 	*/
 		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
 		List<Event> currentRoomEvents = new ArrayList<Event>();
-		List<Event> RoomEvents = apiGetRequestList("today", Event.class);
+		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
 		for (Event e : RoomEvents){
+			System.out.println(e);
 			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
 		}
 	// List<Event> RoomEvents = apiRoomLogs(currentRoom);

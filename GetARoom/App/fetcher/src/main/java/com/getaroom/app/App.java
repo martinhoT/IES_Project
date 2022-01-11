@@ -225,7 +225,7 @@ public class App implements CommandLineRunner {
 	// TODO: allow for multiple security guards? Instead of this returning a boolean, returns a list of guards that blacklisted that event
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		return blacklistRepository.findByRoom_idAndEmail(room, email).orElse(null) != null;
+		return blacklistRepository.findByRoomIdAndEmail(room, email).orElse(null) != null;
 	}
 
 	private class NowMigrateToHistoryBatch implements Runnable {

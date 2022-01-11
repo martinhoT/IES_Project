@@ -191,7 +191,7 @@ public class ApiController {
 	private List<Event> apiTodayRoom(String room) {
 		return apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-			.path("/api/today")
+			.path("/api/event")
 			.queryParam("room", room)
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -203,7 +203,7 @@ public class ApiController {
 	private List<Event> apiHistoryYear() {
 		return apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-			.path("/api/today_history")
+			.path("/api/event_history")
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)

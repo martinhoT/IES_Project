@@ -12,23 +12,23 @@ public class Blacklist {
 
 	@Id
 	@Column(name = "room_id")
-	private String room_id;
+	private String roomId;
 
 
 	protected Blacklist() {
 
 	}
 
-	public Blacklist(String email, String room_id) {
+	public Blacklist(String email, String roomId) {
 		this.email = email;
-		this.room_id = room_id;
+		this.roomId = roomId;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public String getRoom_id() {
-		return room_id;
+	public String getRoomId() {
+		return roomId;
 	}
 }

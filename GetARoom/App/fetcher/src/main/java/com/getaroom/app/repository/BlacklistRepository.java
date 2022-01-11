@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BlacklistRepository extends JpaRepository<Blacklist, String> {
 
-    Optional<Blacklist> findByRoom_idAndEmail(String room_id, String email);
+    Optional<Blacklist> findByRoomIdAndEmail(String room_id, String email);
 
 }
