@@ -1,7 +1,6 @@
 package com.getaroom.app.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @IdClass(BlacklistId.class)

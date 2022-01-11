@@ -30,6 +30,7 @@ import com.getaroom.app.entity.EventNow;
 import com.getaroom.app.entity.StatusHistory;
 import com.getaroom.app.entity.StatusNow;
 import com.getaroom.app.repository.BlacklistNotificationRepository;
+import com.getaroom.app.repository.BlacklistRepository;
 import com.getaroom.app.repository.EventHistoryRepository;
 import com.getaroom.app.repository.StatusRepository;
 import com.google.gson.Gson;
@@ -47,6 +48,7 @@ public class App implements CommandLineRunner {
 	private final EventRepository eventRepository;
 	private final EventHistoryRepository eventHistoryRepository;
 	private final BlacklistNotificationRepository blacklistNotificationRepository;
+	private final BlacklistRepository blacklistRepository;
 
 	private final Gson gson;
 
@@ -56,13 +58,15 @@ public class App implements CommandLineRunner {
 		StatusRepository statusRepository,
 		EventHistoryRepository eventHistoryRepository,
 		StatusHistoryRepository statusHistoryRepository,
-		BlacklistNotificationRepository blacklistNotificationRepository) {
+		BlacklistNotificationRepository blacklistNotificationRepository,
+		BlacklistRepository blacklistRepository) {
 
 		this.eventRepository = todayRepository;
 		this.statusRepository = statusRepository;
 		this.eventHistoryRepository = eventHistoryRepository;
 		this.statusHistoryRepository = statusHistoryRepository;
 		this.blacklistNotificationRepository = blacklistNotificationRepository;
+		this.blacklistRepository = blacklistRepository;
 
 		this.gson = new GsonBuilder()
 			// This is required for correct Jackson serialization of the Date type 'time' attribute on BlacklistNotification
@@ -218,15 +222,10 @@ public class App implements CommandLineRunner {
 		return true;
 	}
 
-	// TODO: requires access to the storage of blacklists on the database
 	// TODO: allow for multiple security guards? Instead of this returning a boolean, returns a list of guards that blacklisted that event
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		Map<String, List<String>> blacklisted = Map.of(
-			"4.1.19", List.of("morinsoto@cipromox.com", "bauernorman@cipromox.com", "drakevega@cipromox.com"),
-			"4.1.30", List.of("merrittobrien@cipromox.com", "velazquezmccarthy@cipromox.com")
-		);
-		return blacklisted.getOrDefault(room, new ArrayList<>()).contains(email);
+		return blacklistRepository.findByRoom_idAndEmail(room, email).orElse(null) != null;
 	}
 
 	private class NowMigrateToHistoryBatch implements Runnable {
