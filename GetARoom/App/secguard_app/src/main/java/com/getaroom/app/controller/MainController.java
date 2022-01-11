@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
@@ -66,6 +67,24 @@ public class MainController {
 	public String sec() {
 		return "sec";
 	}
+
+	@GetMapping("/blacklist")
+	public ModelAndView getBlacklist(Model model){
+		ModelAndView mav = new ModelAndView();
+
+		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
+
+		Collections.sort(allDepartments, Comparator.comparing(Dep::getDep).reversed());
+
+		model.addAttribute("depList", allDepartments);
+
+		mav.setViewName("blacklist");
+
+		return mav;
+	}
+
+
+
 
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {

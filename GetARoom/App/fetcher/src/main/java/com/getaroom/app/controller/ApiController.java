@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+import com.getaroom.app.entity.*;
+import com.getaroom.app.repository.*;
 import com.getaroom.app.entity.BlacklistNotification;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.EventHistory;
@@ -24,6 +27,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +46,7 @@ public class ApiController {
     private final EventRepository eventRepository;
     private final EventHistoryRepository eventHistoryRepository;
     private final RoomStyleRepository roomStyleRepository;
+    private final BlacklistRepository blacklistRepository;
     private final BlacklistNotificationRepository blacklistNotificationRepository;
 
     @Autowired
@@ -50,13 +56,15 @@ public class ApiController {
         EventRepository eventRepository, 
         RoomStyleRepository roomStyleRepository, 
         EventHistoryRepository eventHistoryRepository,
+        BlacklistRepository blacklistRepository,
         BlacklistNotificationRepository blacklistNotificationRepository) {
-            
+
         this.statusRepository = statusRepository;
         this.statusHistoryRepository = statusHistoryRepository;
         this.eventRepository = eventRepository;
         this.roomStyleRepository = roomStyleRepository;
         this.eventHistoryRepository = eventHistoryRepository;
+        this.blacklistRepository = blacklistRepository;
         this.blacklistNotificationRepository = blacklistNotificationRepository;
 
         // TODO: Better updates? (check if modified?)
@@ -122,6 +130,50 @@ public class ApiController {
         //     return roomStyleRepository.findAll();
         return roomStyleRepository.findAllRooms(dep, floor);
     }
+
+    @CrossOrigin
+    @GetMapping(value="/getRooms")
+    @ResponseBody
+    public ArrayList<String> setRoomValuesByDepartment(@RequestParam("Result") String res, Model model) {
+        System.out.println(res);
+        ArrayList<String> results = new ArrayList<>();
+
+        List<StatusNow> x = statusRepository.findAllRooms(res);
+        x.forEach(elem -> results.add(elem.getRoom()));
+
+        System.out.println(res);
+        System.out.println("Success");
+
+        return results;
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "/addUserBlacklist")
+    @ResponseBody
+    public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+        blacklistRepository.save(new Blacklist(studentEmail, room));
+
+        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+        return "success";
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "/removeUserBlacklist")
+    @ResponseBody
+    public String remRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
+        try{
+            blacklistRepository.delete(new Blacklist(studentEmail, room));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
+
+        return "success";
+    }
+
     @CrossOrigin
     @GetMapping("/alerts/unseen")
     public List<BlacklistNotification> unseenNotifications() {
