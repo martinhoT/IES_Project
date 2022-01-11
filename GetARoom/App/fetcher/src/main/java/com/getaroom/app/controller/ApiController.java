@@ -78,6 +78,7 @@ public class ApiController {
         return eventHistoryRepository.findAll();
     }
 
+    @CrossOrigin
     @GetMapping("/status_history")
     public List<StatusHistory> statusHistory() {
         return statusHistoryRepository.findAll();

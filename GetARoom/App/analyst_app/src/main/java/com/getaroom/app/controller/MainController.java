@@ -44,15 +44,11 @@ public class MainController {
 
 	@GetMapping("/graphs")
 	public String graphs(Model model) {
-		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
-		// List<Dep> allRooms = apiGetRequestList("roomStyles", Dep.class);
 		List<Status_event> Status_Events = apiGetRequestList("status_history", Status_event.class);
-		// model.addAttribute("status_events", Status_Events);
 		model.addAllAttributes(Map.of(
-			"status_events", Status_Events,
-			"departments", allDepartments
+			"status_events", Status_Events
 		));
-		return "graph";
+		return "graphs";
 	}
 
     @GetMapping("/error")
