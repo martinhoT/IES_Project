@@ -3,7 +3,6 @@ package com.getaroom.app.entity;
 import java.util.Date;
 
 public class Event {
-    private String id;
     private String user;
     private String email;
     private String room;
@@ -12,20 +11,12 @@ public class Event {
 
     public Event(){}
 
-    public Event(String id, String user, String email, String room, boolean entered, Date time) {
+    public Event(String user, String email, String room, boolean entered, Date time) {
         this.user = user;
         this.email = email;
         this.room = room;
         this.entered = entered;
         this.time = time;
-    }
-
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getId(){
-        return id;
     }
 
     public void setuser(String user){
@@ -69,8 +60,7 @@ public class Event {
     }
 
     public String toString() {
-        return "id: " + getId() + 
-               ", user: " + getuser() +
+        return "user: " + getuser() +
                ", email: " + getEmail() +
                ", room: " + getRoom() +
                ", entered: " + getentered() +
