@@ -7,11 +7,6 @@ import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
 import com.getaroom.app.entity.Student;
 import com.getaroom.app.entity.User;
-import com.getaroom.app.entity.Status;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -63,10 +58,10 @@ public class MainController {
 		return "redirect:/login";
 	}
 	
-	@GetMapping("/sec")
-	public String sec() {
-		return "sec";
-	}
+	// @GetMapping("/sec")
+	// public String sec() {
+	// 	return "sec";
+	// }
 
 	@GetMapping("/blacklist")
 	public ModelAndView getBlacklist(Model model){
@@ -82,9 +77,6 @@ public class MainController {
 
 		return mav;
 	}
-
-
-
 
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
@@ -110,7 +102,6 @@ public class MainController {
 		List<Event> currentRoomEvents = new ArrayList<Event>();
 		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
 		for (Event e : RoomEvents){
-			System.out.println(e);
 			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
 		}
 	// List<Event> RoomEvents = apiRoomLogs(currentRoom);
@@ -216,22 +207,21 @@ public class MainController {
 			.collectList().block();
 	}
 
-	// TODO: is there a better way?
-	private List<Status> apiStatusDep(String dep) {
-		String json = apiClient.get()
-			.uri(uriBuilder -> uriBuilder
-				.path("/api/status")
-				.queryParam("dep", dep)
-				.build())
-			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-			.acceptCharset(StandardCharsets.UTF_8)
-			.exchangeToMono(response -> response.bodyToMono(String.class))
-			.block();
+	// private List<Status> apiStatusDep(String dep) {
+	// 	String json = apiClient.get()
+	// 		.uri(uriBuilder -> uriBuilder
+	// 			.path("/api/status")
+	// 			.queryParam("dep", dep)
+	// 			.build())
+	// 		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+	// 		.acceptCharset(StandardCharsets.UTF_8)
+	// 		.exchangeToMono(response -> response.bodyToMono(String.class))
+	// 		.block();
 
-		Gson gson = new Gson();
-		List<Status> res = new ArrayList<>();
-		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
-			res.add(gson.fromJson(elem.toString(), Status.class));
-		return res;
-	}
+	// 	Gson gson = new Gson();
+	// 	List<Status> res = new ArrayList<>();
+	// 	for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
+	// 		res.add(gson.fromJson(elem.toString(), Status.class));
+	// 	return res;
+	// }
 }

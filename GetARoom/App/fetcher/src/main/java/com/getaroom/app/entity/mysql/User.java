@@ -1,4 +1,4 @@
-package com.getaroom.app.entity;
+package com.getaroom.app.entity.mysql;
 
 import javax.persistence.Id;
 import javax.persistence.Column;

@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -15,63 +17,91 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.getaroom.app.entity.BlacklistNotification;
-import com.getaroom.app.entity.EventNow;
-import com.getaroom.app.entity.StatusHistory;
-import com.getaroom.app.entity.StatusNow;
-import com.getaroom.app.repository.BlacklistNotificationRepository;
-import com.getaroom.app.repository.BlacklistRepository;
-import com.getaroom.app.repository.EventHistoryRepository;
-import com.getaroom.app.repository.StatusRepository;
+import com.getaroom.app.entity.mongodb.BlacklistNotification;
+import com.getaroom.app.entity.mysql.Department;
+import com.getaroom.app.entity.mongodb.EventNow;
+import com.getaroom.app.entity.mysql.Room;
+import com.getaroom.app.other.DepartmentInfo;
+import com.getaroom.app.repository.mongodb.BlacklistNotificationRepository;
+import com.getaroom.app.repository.mongodb.EventHistoryRepository;
+import com.getaroom.app.repository.mongodb.StatusRepository;
+import com.getaroom.app.repository.mysql.BlacklistRepository;
+import com.getaroom.app.repository.mysql.DepartmentRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.getaroom.app.repository.EventRepository;
-import com.getaroom.app.repository.StatusHistoryRepository;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.getaroom.app.repository.mongodb.EventRepository;
+import com.getaroom.app.repository.mysql.RoomRepository;
 
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
+	// MongoDB repositories
 	private final StatusRepository statusRepository;
-	private final StatusHistoryRepository statusHistoryRepository;
 	private final EventRepository eventRepository;
 	private final EventHistoryRepository eventHistoryRepository;
 	private final BlacklistNotificationRepository blacklistNotificationRepository;
+	
+	// MySQL repositories
 	private final BlacklistRepository blacklistRepository;
+	private final DepartmentRepository departmentRepository;
+	private final RoomRepository roomRepository;
 
 	private final Gson gson;
+
+	private Map<Integer, DepartmentInfo> departmentInfoMap;
 
 	@Autowired
 	public App(
 		EventRepository todayRepository,
 		StatusRepository statusRepository,
 		EventHistoryRepository eventHistoryRepository,
-		StatusHistoryRepository statusHistoryRepository,
 		BlacklistNotificationRepository blacklistNotificationRepository,
-		BlacklistRepository blacklistRepository) {
+		BlacklistRepository blacklistRepository,
+		DepartmentRepository departmentRepository,
+		RoomRepository roomRepository) {
 
 		this.eventRepository = todayRepository;
 		this.statusRepository = statusRepository;
 		this.eventHistoryRepository = eventHistoryRepository;
-		this.statusHistoryRepository = statusHistoryRepository;
 		this.blacklistNotificationRepository = blacklistNotificationRepository;
 		this.blacklistRepository = blacklistRepository;
+		this.departmentRepository = departmentRepository;
+		this.roomRepository = roomRepository;
 
-		this.gson = new GsonBuilder()
+		gson = new GsonBuilder()
 			// This is required for correct Jackson serialization of the Date type 'time' attribute on BlacklistNotification
 			.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 			.create();
+
+		// Obtain static department names for dynamic name assignment as STATUS messages are received
+		FileReader f = null;
+		try {
+			f = new FileReader("src/main/resources/static/data/department_info.json");
+		} catch (FileNotFoundException e) {
+			System.err.println("File with room styles (department_info.json) could not be read");
+		}
+
+		departmentInfoMap = new HashMap<>();
+		if (f != null) {
+			JsonObject dInfoAll = gson.fromJson(f, JsonObject.class);
+			for (Entry<String, JsonElement> dInfo : dInfoAll.entrySet())
+				departmentInfoMap.put(Integer.parseInt(dInfo.getKey()), gson.fromJson(dInfo.getValue(), DepartmentInfo.class));
+		}
 	}
 
 	public static void main(String[] args) {
@@ -115,22 +145,21 @@ public class App implements CommandLineRunner {
 		CountDownLatch receivedMsg = new CountDownLatch(1);
 		mqttClient.subscribe("status/#", 2, (topic, msg) -> uploadToDatabase(msg, (doc) -> {
 			System.out.println("Obtaining STATUS document");
-			if (!verifyDocumentType(doc, List.of("room", "occupacy", "maxNumberOfPeople", "time")))
+			if (!verifyDocumentType(doc, List.of("room", "occupancy", "maxNumberOfPeople", "time")))
 				return;
 
-			// Obtain current room status on DB
-			String room = (String) doc.get("room");
-			StatusNow status = statusRepository.findByRoom(room)
-					.orElse(null);
 			try {
-				// Put that status on the history collection
-				if (status != null) {
-					StatusHistory statusOld = status.cloneHistory();
-					statusHistoryRepository.save(statusOld);
-				}
+				// Obtain current room status on DB and the room on MySQL
+				String roomStr = (String) doc.get("room");
+				Room room = roomRepository.findById(roomStr)
+						.orElse(null);
+	
+				// Put the old room stats on the status repository
+				if (room != null)
+					statusRepository.save( room.createStatus() );
 				// If it was never in the repository, create a new one
 				else
-					status = new StatusNow(room);
+					room = new Room(roomStr);
 				
 				// Update the current status
 				String timeStr = (String) doc.get("time");
@@ -140,10 +169,22 @@ public class App implements CommandLineRunner {
 				} catch (ParseException e) {
 					System.err.println("Error: Failure parsing date in EVENT object: " + timeStr);
 				}
-				status.setOccupacy((double) doc.get("occupacy"));
-				status.setMaxNumberOfPeople((int) doc.get("maxNumberOfPeople"));
-				status.setTime(time);
-				statusRepository.save(status);
+				room.setOccupancy( (double) doc.get("occupancy") );
+				room.setMaxNumberOfPeople( (int) doc.get("maxNumberOfPeople") );
+				room.setLastUpdateTime(time);
+	
+				// Update Department entity using static info
+				int departmentNum = Integer.parseInt(roomStr.split(".")[0]);
+				Department department = departmentRepository.findById(departmentNum)
+						.orElse(new Department(departmentNum));
+				
+				DepartmentInfo departmentInfo = departmentInfoMap.get( departmentNum );
+				department.setFullName( departmentInfo.getFullName() );
+				department.setShortName( departmentInfo.getShortName() );
+				departmentRepository.save( department );
+	
+				// Finally save/update the room's statistics
+				roomRepository.save(room);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -169,6 +210,7 @@ public class App implements CommandLineRunner {
 
 			EventNow event = new EventNow( (String) doc.get("user"), email, room, entered, time );
 
+			// Create a notification if this event matches a blacklist
 			if ( entered && isBlacklisted(room, email) ) {
 				BlacklistNotification notification = BlacklistNotification.fromEvent(event);
 
@@ -187,7 +229,6 @@ public class App implements CommandLineRunner {
 
 				blacklistNotificationRepository.save( notification );
 			}
-
 			eventRepository.save( event );
 		}));
 		receivedMsg.await();
@@ -222,10 +263,10 @@ public class App implements CommandLineRunner {
 		return true;
 	}
 
-	// TODO: allow for multiple security guards? Instead of this returning a boolean, returns a list of guards that blacklisted that event
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		return blacklistRepository.findByRoomIdAndEmail(room, email).orElse(null) != null;
+		// return blacklistRepository.findByRoomIdAndEmail(room, email).orElse(null) != null;
+		return blacklistRepository.existsByRoomIdAndEmail(room, email);
 	}
 
 	private class NowMigrateToHistoryBatch implements Runnable {

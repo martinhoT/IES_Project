@@ -1,8 +1,8 @@
-package com.getaroom.app.repository;
+package com.getaroom.app.repository.mongodb;
 
 import java.util.List;
 
-import com.getaroom.app.entity.EventNow;
+import com.getaroom.app.entity.mongodb.EventNow;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

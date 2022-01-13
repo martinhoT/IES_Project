@@ -1,6 +1,6 @@
-package com.getaroom.app.repository;
+package com.getaroom.app.repository.mongodb;
 
-import com.getaroom.app.entity.EventHistory;
+import com.getaroom.app.entity.mongodb.EventHistory;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

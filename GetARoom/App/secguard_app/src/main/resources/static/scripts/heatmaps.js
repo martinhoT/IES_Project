@@ -34,8 +34,8 @@ $(document).ready(function() {
         }
         self.updateFloors = function() {
             for (style of self.savedStyles) {
-                percentage = document.getElementById("pct:" + style.roomid)
-                color = document.getElementById("clr:" + style.roomid)
+                percentage = document.getElementById("pct:" + style.room)
+                color = document.getElementById("clr:" + style.room)
                 if (percentage != null)
                     percentage.innerText = style.pct;
                 if (color != null) {
@@ -138,19 +138,19 @@ $(document).ready(function() {
         var stts = JSON.parse(msg);
     
         roomid = stts["room"];
-        occupacy = stts["occupacy"]
-        occupacyPercentage = parseInt(Number(occupacy)*100);
+        occupancy = stts["occupancy"]
+        occupancyPercentage = parseInt(Number(occupancy)*100);
     
         hexRange = "0123456789abcdef";
     
-        hexIndex = parseInt(occupacy*16)
+        hexIndex = parseInt(occupancy*16)
         hexIndex = hexIndex > 15 ? 15 : hexIndex;
     
         colorStyle = "#" + hexRange[hexIndex] + hexRange[hexIndex] + hexRange[15-hexIndex] + hexRange[15-hexIndex] + "00";
         
         heatmapsScriptVars.viewModel.savedStyles.push({
             roomid: roomid,
-            pct: occupacyPercentage + "%",
+            pct: occupancyPercentage + "%",
             clr: colorStyle
         });
     

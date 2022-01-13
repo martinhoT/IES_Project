@@ -3,15 +3,15 @@ package com.getaroom.app.entity;
 public class Status {
     private String id;
     private String room;
-    private Double occupacy;
+    private Double occupancy;
     private Integer maxNumberOfPeople;
     //private Boolean restricted;
 
     public Status() {}
 
-    public Status(String id, String room, Double occupacy, Integer maxNumberOfPeople) {
+    public Status(String id, String room, Double occupancy, Integer maxNumberOfPeople) {
         this.room = room;
-        this.occupacy = occupacy;
+        this.occupancy = occupancy;
         this.maxNumberOfPeople = maxNumberOfPeople;
         //restricted = false;
 	}
@@ -36,24 +36,24 @@ public class Status {
         return room;
     }
 
-    public void setOccupacy(Double occupacy){
-        this.occupacy = occupacy;
+    public void setOccupnacy(Double occupancy){
+        this.occupancy = occupancy;
     }
 
     public String getId(){
         return id;
     }
 
-    public Double getOccupacy(){
-        return occupacy;
+    public Double getOccupancy(){
+        return occupancy;
     }
 
     //public int getCurrentOccupacy(){return Integer.parseInt(occupacy.substring(0, 3));}
 
 
-    public String getCurrentOccupacy(){
-        Double currentOcuppanvy = ((double) occupacy)*100;
-        return String.valueOf(currentOcuppanvy.intValue());
+    public String getCurrentOccupancy(){
+        Double currentOcuppancy = ((double) occupancy)*100;
+        return String.valueOf(currentOcuppancy.intValue());
     }
 
     public void setMaxNumberOfPeople(Integer maxNumberOfPeople){

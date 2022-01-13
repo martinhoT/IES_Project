@@ -2,7 +2,7 @@ package com.getaroom.app.controller;
 
 import com.getaroom.app.other.LoginData;
 import com.getaroom.app.other.RegisterData;
-import com.getaroom.app.repository.UserRepository;
+import com.getaroom.app.repository.mysql.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

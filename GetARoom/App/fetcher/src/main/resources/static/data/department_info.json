@@ -1,0 +1,13 @@
+{
+    "4": {
+        "shortName": "DETI",
+        "fullName": "Departamento de Eletrónica, Telecomunicações e Informática",
+        "floors": 2
+    },
+
+    "17": {
+        "shortName": "Biblio",
+        "fullName": "Biblioteca",
+        "floors": 3
+    }
+}

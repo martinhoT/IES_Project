@@ -1,4 +1,4 @@
-package com.getaroom.app.entity;
+package com.getaroom.app.entity.mongodb;
 
 import java.util.Date;
 

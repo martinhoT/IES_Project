@@ -86,7 +86,6 @@ public class MainController {
 			.collectList().block();
 	}
 
-	// TODO: is there a better way?
 	private List<Status> apiStatusDep(String dep) {
 		String json = apiClient.get()
 			.uri(uriBuilder -> uriBuilder

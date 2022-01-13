@@ -1,8 +1,8 @@
-package com.getaroom.app.repository;
+package com.getaroom.app.repository.mongodb;
 
 import java.util.List;
 
-import com.getaroom.app.entity.RoomStyle;
+import com.getaroom.app.entity.mongodb.RoomStyle;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
