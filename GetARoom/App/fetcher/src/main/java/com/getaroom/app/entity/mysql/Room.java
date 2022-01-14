@@ -27,8 +27,9 @@ public class Room {
 
 	public Room() {}
 
-	public Room(String id) {
+	public Room(String id, int depId) {
 		this.id = id;
+		this.depId = depId;
 	}
 
 	public Room(String id, int depId, double occupancy, int maxNumberOfPeople) {

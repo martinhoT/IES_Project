@@ -69,7 +69,7 @@ public class MainController {
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
-		Collections.sort(allDepartments, Comparator.comparing(Dep::getDep).reversed());
+		Collections.sort(allDepartments, Comparator.comparing(Dep::getId).reversed());
 
 		model.addAttribute("depList", allDepartments);
 

@@ -73,7 +73,7 @@ public class ApiController {
         this.departmentRepository = departmentRepository;
         this.roomRepository = roomRepository;
 
-        // TODO: Better updates? (check if modified?)
+        // Only updates if the roomStyle MongoDB collection is dropped
         if (roomStyleRepository.count() == 0) {
             Gson gson = new Gson();
             FileReader f = null;
@@ -121,7 +121,12 @@ public class ApiController {
 
     @CrossOrigin
     @GetMapping("/department")
-    public List<Department> department() {
+    public List<Department> department(@RequestParam(required = false) Integer dep) {
+        if (dep != null) {
+            Department department = departmentRepository.findById(dep)
+                    .orElse(null);
+            return department != null ? List.of(department) : new ArrayList<>();
+        }
         return departmentRepository.findAll();
     }
 

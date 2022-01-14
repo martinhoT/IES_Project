@@ -1,16 +1,14 @@
 package com.getaroom.app.entity;
 
-public class Status {
+public class Room {
     private String id;
-    private String room;
     private Double occupancy;
     private Integer maxNumberOfPeople;
     //private Boolean restricted;
 
-    public Status() {}
+    public Room() {}
 
-    public Status(String id, String room, Double occupancy, Integer maxNumberOfPeople) {
-        this.room = room;
+    public Room(Double occupancy, Integer maxNumberOfPeople) {
         this.occupancy = occupancy;
         this.maxNumberOfPeople = maxNumberOfPeople;
         //restricted = false;
@@ -28,15 +26,7 @@ public class Status {
         this.id = id;
     }
 
-    public void setRoom(String room){
-        this.room = room;
-    }
-
-    public String getRoom(){
-        return room;
-    }
-
-    public void setOccupnacy(Double occupancy){
+    public void setOccupancy(Double occupancy){
         this.occupancy = occupancy;
     }
 

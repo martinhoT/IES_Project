@@ -151,6 +151,7 @@ public class App implements CommandLineRunner {
 			try {
 				// Obtain current room status on DB and the room on MySQL
 				String roomStr = (String) doc.get("room");
+				int departmentNum = Integer.parseInt(roomStr.split("\\.")[0]);
 				Room room = roomRepository.findById(roomStr)
 						.orElse(null);
 	
@@ -159,7 +160,7 @@ public class App implements CommandLineRunner {
 					statusRepository.save( room.createStatus() );
 				// If it was never in the repository, create a new one
 				else
-					room = new Room(roomStr);
+					room = new Room(roomStr, departmentNum);
 				
 				// Update the current status
 				String timeStr = (String) doc.get("time");
@@ -174,13 +175,9 @@ public class App implements CommandLineRunner {
 				room.setLastUpdateTime(time);
 	
 				// Update Department entity using static info
-				int departmentNum = Integer.parseInt(roomStr.split(".")[0]);
 				Department department = departmentRepository.findById(departmentNum)
 						.orElse(new Department(departmentNum));
-				
-				DepartmentInfo departmentInfo = departmentInfoMap.get( departmentNum );
-				department.setFullName( departmentInfo.getFullName() );
-				department.setShortName( departmentInfo.getShortName() );
+				department.updateFromInfo( departmentInfoMap.get( departmentNum ) );
 				departmentRepository.save( department );
 	
 				// Finally save/update the room's statistics

@@ -48,8 +48,8 @@
                         </thead>
                         <tbody>
                         <tr th:each="room : ${rooms}">
-                            <td class="column1" th:text="${room.getRoom()}"></td>
-                            <td class="column2" th:text="${room.getCurrentOccupacy()} + '%'"></td>
+                            <td class="column1" th:text="${room.getId()}"></td>
+                            <td class="column2" th:text="${room.getCurrentOccupancy()} + '%'"></td>
                         </tr>
                         </tbody>
                     </table>

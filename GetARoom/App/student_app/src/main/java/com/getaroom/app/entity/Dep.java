@@ -2,35 +2,22 @@ package com.getaroom.app.entity;
 
 public class Dep {
 
-    String dep;
+    int id;
+    String fullName;
+    String shortName;
     int floors;
 
-    public Dep(String dep, int floors){
-        this.dep = dep;
-        this.floors = floors;
-    }
+    public Dep() {}
 
-    public void setDep(String dep){
-        this.dep = dep;
-    }
+    public int getId() { return id; }
+    public String getShortName() { return shortName; }
+    public String getFullName() { return fullName; }
+    public int getFloors() { return floors; }
 
-    public String getDep(){
-        return dep;
-    }
-
-    public int getDepNumber(){
-        return Integer.parseInt(dep);
-    }
-
-    public void setFloors(int floors){
-        this.floors = floors;
-    }
-
-    public int getFloors(){
-        return floors;
-    }
-
-    public String toString() {
-        return getDep();
-    }
+    public void setId(int id) { this.id = id; }
+    public void setShortName(String shortName) { this.shortName = shortName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setFloors(int floors) { this.floors = floors; }
+    
+    public String toString() { return fullName; }
 }

@@ -73,7 +73,7 @@
                 <form action="">
                     <label>Department:</label>
                     <select id="dep" th:onchange="'setRoomValues()'" name="dep" class="form-control">
-                        <option th:each="dep :${depList}" th:value="${dep}" th:text="${dep}">
+                        <option th:each="dep :${depList}" th:value="${dep.id}" th:text="${dep.id} + ' - ' + ${dep.fullName}">
                         </option>
                     </select> </br>
                     <label>Room:</label>

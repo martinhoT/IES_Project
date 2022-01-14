@@ -10,10 +10,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Status {
 
     @Id
-    private String room;
+    private String id;
     
+    private String room;
     private double occupancy;
     private Date time;
+
+    public Status() {}
 
     public Status(String room) {
         this.room = room;

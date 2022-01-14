@@ -34,8 +34,8 @@ $(document).ready(function() {
         }
         self.updateFloors = function() {
             for (style of self.savedStyles) {
-                percentage = document.getElementById("pct:" + style.room)
-                color = document.getElementById("clr:" + style.room)
+                percentage = document.getElementById("pct:" + style.roomid)
+                color = document.getElementById("clr:" + style.roomid)
                 if (percentage != null)
                     percentage.innerText = style.pct;
                 if (color != null) {
@@ -76,16 +76,16 @@ $(document).ready(function() {
     
         $.getJSON("http://" + location.hostname + ":84/api/department", {"dep": dep_number},
             function (data, textStatus, jqXHR) {
-                n_floors = 0;
+                n_floors = data[0].floors;
                 heatmapsScriptVars.viewModel.floors([]);
                 backgroundPopulator = [];
                 backgroundPopulatorInserted = 0;
     
-                for (let department of data)
-                    if (department.dep === dep_number) {
-                        n_floors = department.floors;
-                        break;
-                    }
+                // for (let department of data)
+                //     if (department.dep === dep_number) {
+                //         n_floors = department.floors;
+                //         break;
+                //     }
                 // viewModel.floors( Array.from(Array(n_floors), (_,i) => 1 + i) );
                 for (let i = 0; i < n_floors; i++) {
                     $.getJSON("http://" + location.hostname + ":84/api/room_styles", {"dep": dep_number, "floor": i+1},

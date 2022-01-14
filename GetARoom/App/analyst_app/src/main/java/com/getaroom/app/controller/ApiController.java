@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.getaroom.app.entity.Status;
+import com.getaroom.app.entity.Room;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -140,14 +140,14 @@ public class ApiController {
     }
 
 	@GetMapping("/api/status")
-	public HashMap<String, List<Status>> status() {
-		HashMap<String, List<Status>> departments = new HashMap<String, List<Status>>();
+	public HashMap<String, List<Room>> status() {
+		HashMap<String, List<Room>> departments = new HashMap<String, List<Room>>();
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
 		for(Dep dep: allDepartments){
-			String department = dep.getDep();
-			departments.put("Department " + department, apiStatusDep(department));
+			String department = String.valueOf(dep.getId());
+			departments.put("Department " + department, apiRoomByDep(department));
 		}
 		return departments;
     }
@@ -170,10 +170,10 @@ public class ApiController {
 			.collectList().block();
 	}
 
-	private List<Status> apiStatusDep(String dep) {
+	private List<Room> apiRoomByDep(String dep) {
 		String json = apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-				.path("/api/status")
+				.path("/api/room")
 				.queryParam("dep", dep)
 				.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -182,9 +182,9 @@ public class ApiController {
 			.block();
 
 		Gson gson = new Gson();
-		List<Status> res = new ArrayList<>();
+		List<Room> res = new ArrayList<>();
 		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
-			res.add(gson.fromJson(elem.toString(), Status.class));
+			res.add(gson.fromJson(elem.toString(), Room.class));
 		return res;
 	}
 

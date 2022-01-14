@@ -1,7 +1,7 @@
 package com.getaroom.app.controller;
 
 import com.getaroom.app.entity.Dep;
-import com.getaroom.app.entity.Status;
+import com.getaroom.app.entity.Room;
 import com.getaroom.app.entity.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -41,7 +41,7 @@ public class MainController {
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
-		Collections.sort(allDepartments, Comparator.comparingInt(Dep::getDepNumber));
+		Collections.sort(allDepartments, Comparator.comparingInt(Dep::getId));
 
 		model.addAttribute("depList", allDepartments);
 		return "search_room";
@@ -51,11 +51,11 @@ public class MainController {
 	@ResponseBody
 	public ModelAndView getStudyRooms(Model model, @RequestParam("npeople") int npeople, @RequestParam("dep") String dep){
 
-		List<Status> allRooms = apiStatusDep(dep);
+		List<Room> allRooms = apiRoomByDep(dep);
 
 		ModelAndView mav = new ModelAndView();
 
-		Collections.sort(allRooms, Comparator.comparingDouble(Status::getOccupacy));
+		Collections.sort(allRooms, Comparator.comparingDouble(Room::getOccupancy));
 
 		mav.addObject("rooms", allRooms.stream().limit(10).collect(Collectors.toList()));
 		mav.setViewName("suggested_room");
@@ -86,10 +86,10 @@ public class MainController {
 			.collectList().block();
 	}
 
-	private List<Status> apiStatusDep(String dep) {
+	private List<Room> apiRoomByDep(String dep) {
 		String json = apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-				.path("/api/status")
+				.path("/api/room")
 				.queryParam("dep", dep)
 				.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -98,9 +98,9 @@ public class MainController {
 			.block();
 
 		Gson gson = new Gson();
-		List<Status> res = new ArrayList<>();
+		List<Room> res = new ArrayList<>();
 		for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
-			res.add(gson.fromJson(elem.toString(), Status.class));
+			res.add(gson.fromJson(elem.toString(), Room.class));
 		return res;
 	}
 
