@@ -67,8 +67,8 @@
                                 <div class="col-sm-4">
                                     <div class="form-group" >
                                         <span class="form-label">Department:</span>
-                                        <select  id="dep" name="dep" class="form-control" >
-                                            <option th:each="dep :${depList}" th:value="${dep}" th:text="'Dep.' + ${dep}">
+                                        <select id="dep" name="dep" class="form-control" >
+                                            <option th:each="dep :${depList}" th:value="${dep.Id}" th:text="'Dep.' + ${dep.Id}">
                                             </option>
                                         </select>
                                         <span class="select-arrow"></span>

@@ -15,9 +15,9 @@
     <div id="ko-body" class="container">
         <label for="department_selected">Department</label>
         <select id="department_selected" name="department_selected">
-            <option th:each="department : ${departments}" th:value="${department.dep}" th:text="${department.dep}"></option>
+            <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.id + ' - ' + department.shortName}"></option>
         </select>
-        <div id="myCarousel" class="carousel carousel-dark slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel carousel-dark slide" data-ride="false" data-interval="false">
             <ol class="carousel-indicators" data-bind="foreach: floors">
             <li data-target="#myCarousel" data-bind="attr: { 'data-slide-to': $index }, css: { active: $index() == 0 }"></li>
             </ol>

@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-import com.getaroom.app.entity.*;
-import com.getaroom.app.repository.*;
-import com.getaroom.app.entity.BlacklistNotification;
-import com.getaroom.app.entity.Dep;
-import com.getaroom.app.entity.EventHistory;
-import com.getaroom.app.entity.EventNow;
-import com.getaroom.app.entity.StatusHistory;
-import com.getaroom.app.entity.StatusNow;
-import com.getaroom.app.entity.RoomStyle;
-import com.getaroom.app.repository.BlacklistNotificationRepository;
-import com.getaroom.app.repository.EventHistoryRepository;
-import com.getaroom.app.repository.RoomStyleRepository;
-import com.getaroom.app.repository.StatusHistoryRepository;
-import com.getaroom.app.repository.StatusRepository;
-import com.getaroom.app.repository.EventRepository;
+import com.getaroom.app.entity.mongodb.BlacklistNotification;
+import com.getaroom.app.entity.mongodb.EventHistory;
+import com.getaroom.app.entity.mongodb.EventNow;
+import com.getaroom.app.entity.mongodb.RoomStyle;
+import com.getaroom.app.entity.mongodb.Status;
+import com.getaroom.app.entity.mysql.Blacklist;
+import com.getaroom.app.entity.mysql.Department;
+import com.getaroom.app.entity.mysql.Room;
+import com.getaroom.app.repository.mongodb.BlacklistNotificationRepository;
+import com.getaroom.app.repository.mongodb.EventHistoryRepository;
+import com.getaroom.app.repository.mongodb.RoomStyleRepository;
+import com.getaroom.app.repository.mongodb.StatusRepository;
+import com.getaroom.app.repository.mysql.BlacklistRepository;
+import com.getaroom.app.repository.mysql.DepartmentRepository;
+import com.getaroom.app.repository.mysql.RoomRepository;
+import com.getaroom.app.repository.mongodb.EventRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,33 +41,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
     
+    // MongoDB repositories
     private final StatusRepository statusRepository;
-    private final StatusHistoryRepository statusHistoryRepository;
     private final EventRepository eventRepository;
     private final EventHistoryRepository eventHistoryRepository;
     private final RoomStyleRepository roomStyleRepository;
-    private final BlacklistRepository blacklistRepository;
     private final BlacklistNotificationRepository blacklistNotificationRepository;
+    
+    // MySQL
+    private final BlacklistRepository blacklistRepository;
+    private final DepartmentRepository departmentRepository;
+    private final RoomRepository roomRepository;
 
     @Autowired
     public ApiController(
         StatusRepository statusRepository, 
-        StatusHistoryRepository statusHistoryRepository, 
         EventRepository eventRepository, 
         RoomStyleRepository roomStyleRepository, 
         EventHistoryRepository eventHistoryRepository,
         BlacklistRepository blacklistRepository,
-        BlacklistNotificationRepository blacklistNotificationRepository) {
+        BlacklistNotificationRepository blacklistNotificationRepository,
+        DepartmentRepository departmentRepository,
+        RoomRepository roomRepository) {
 
         this.statusRepository = statusRepository;
-        this.statusHistoryRepository = statusHistoryRepository;
         this.eventRepository = eventRepository;
         this.roomStyleRepository = roomStyleRepository;
         this.eventHistoryRepository = eventHistoryRepository;
         this.blacklistRepository = blacklistRepository;
         this.blacklistNotificationRepository = blacklistNotificationRepository;
+        this.departmentRepository = departmentRepository;
+        this.roomRepository = roomRepository;
 
-        // TODO: Better updates? (check if modified?)
+        // Only updates if the roomStyle MongoDB collection is dropped
         if (roomStyleRepository.count() == 0) {
             Gson gson = new Gson();
             FileReader f = null;
@@ -99,24 +105,29 @@ public class ApiController {
         return eventHistoryRepository.findAll();
     }
 
-    @GetMapping("/status_history")
-    public List<StatusHistory> statusHistory() {
-        return statusHistoryRepository.findAll();
+    @GetMapping("/status")
+    public List<Status> status() {
+        return statusRepository.findAll();
     }
 
-    @GetMapping("/status")
-    public Map<String, List<StatusNow>> status(@RequestParam(required = false) String dep) {
+    @GetMapping("/room")
+    public Map<String, List<Room>> room(@RequestParam(required = false) Integer dep) {
         // Used by student_app and analyst_app
         if (dep != null)
-            return Map.of(dep, statusRepository.findAllRooms(dep));
+            return Map.of(dep.toString(), roomRepository.findByDepId(dep));
 
         return null;
     }
 
     @CrossOrigin
     @GetMapping("/department")
-    public List<Dep> department() {
-        return statusRepository.findAllDep();
+    public List<Department> department(@RequestParam(required = false) Integer dep) {
+        if (dep != null) {
+            Department department = departmentRepository.findById(dep)
+                    .orElse(null);
+            return department != null ? List.of(department) : new ArrayList<>();
+        }
+        return departmentRepository.findAll();
     }
 
     /* FOR THE SECURITY GUARD APP */
@@ -126,8 +137,6 @@ public class ApiController {
         @RequestParam(required = true, defaultValue = "") String dep,
         @RequestParam(required = true, defaultValue = "") String floor) {
 
-        // if (dep.isEmpty() || floor.isEmpty())
-        //     return roomStyleRepository.findAll();
         return roomStyleRepository.findAllRooms(dep, floor);
     }
 
@@ -138,8 +147,8 @@ public class ApiController {
         System.out.println(res);
         ArrayList<String> results = new ArrayList<>();
 
-        List<StatusNow> x = statusRepository.findAllRooms(res);
-        x.forEach(elem -> results.add(elem.getRoom()));
+        List<Room> x = roomRepository.findByDepId(Integer.parseInt(res));
+        x.forEach(elem -> results.add(elem.getId()));
 
         System.out.println(res);
         System.out.println("Success");
@@ -183,18 +192,8 @@ public class ApiController {
     @PostMapping("/alerts/mark_read")
     public void markRead(@RequestBody List<BlacklistNotification> notifications) {
         List<BlacklistNotification> toRemove = new ArrayList<>();
-        // for (BlacklistNotification notification : notifications) {
-        //     BlacklistNotification repoNotification = blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())
-        //         .orElse(null);
-        //     if (repoNotification != null)
-        //         toRemove.add(repoNotification);
-        // }
-        // blacklistNotificationRepository.deleteAll( toRemove );
-        for (BlacklistNotification notification : notifications) {
-            System.out.println("Notification to be deleted: " + notification);
+        for (BlacklistNotification notification : notifications)
             toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
-            System.out.println("To be deleted so far: " + toRemove);
-        }
         blacklistNotificationRepository.deleteAll( toRemove );
     }
 }

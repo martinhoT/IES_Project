@@ -76,16 +76,16 @@ $(document).ready(function() {
     
         $.getJSON("http://" + location.hostname + ":84/api/department", {"dep": dep_number},
             function (data, textStatus, jqXHR) {
-                n_floors = 0;
+                n_floors = data[0].floors;
                 heatmapsScriptVars.viewModel.floors([]);
                 backgroundPopulator = [];
                 backgroundPopulatorInserted = 0;
     
-                for (let department of data)
-                    if (department.dep === dep_number) {
-                        n_floors = department.floors;
-                        break;
-                    }
+                // for (let department of data)
+                //     if (department.dep === dep_number) {
+                //         n_floors = department.floors;
+                //         break;
+                //     }
                 // viewModel.floors( Array.from(Array(n_floors), (_,i) => 1 + i) );
                 for (let i = 0; i < n_floors; i++) {
                     $.getJSON("http://" + location.hostname + ":84/api/room_styles", {"dep": dep_number, "floor": i+1},
@@ -138,19 +138,19 @@ $(document).ready(function() {
         var stts = JSON.parse(msg);
     
         roomid = stts["room"];
-        occupacy = stts["occupacy"]
-        occupacyPercentage = parseInt(Number(occupacy)*100);
+        occupancy = stts["occupancy"]
+        occupancyPercentage = parseInt(Number(occupancy)*100);
     
         hexRange = "0123456789abcdef";
     
-        hexIndex = parseInt(occupacy*16)
+        hexIndex = parseInt(occupancy*16)
         hexIndex = hexIndex > 15 ? 15 : hexIndex;
     
         colorStyle = "#" + hexRange[hexIndex] + hexRange[hexIndex] + hexRange[15-hexIndex] + hexRange[15-hexIndex] + "00";
         
         heatmapsScriptVars.viewModel.savedStyles.push({
             roomid: roomid,
-            pct: occupacyPercentage + "%",
+            pct: occupancyPercentage + "%",
             clr: colorStyle
         });
     
