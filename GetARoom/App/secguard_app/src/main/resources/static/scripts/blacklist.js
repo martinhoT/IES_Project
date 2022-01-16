@@ -21,6 +21,8 @@ function setRoomValues() {
     const dep = document.getElementById("dep");
     const getDep = dep.value;
 
+    document.getElementById("roomTable").style.visibility = "hidden"
+
     console.log(getDep)
 
     $.ajax({
@@ -92,6 +94,8 @@ function setRoomValuesForRoomModal() {
     const dep = document.getElementById("dep2");
     const getDep = dep.value;
 
+    document.getElementById("roomTable").style.visibility = "hidden"
+
     console.log(getDep)
 
     $.ajax({
@@ -131,6 +135,8 @@ function blacklistByRoom() {
         },
         dataType: 'json',
         success: function(data) {
+            document.getElementById("roomTable").style.visibility = "visible"
+
             //clean tbody
             removeTBody();
 
