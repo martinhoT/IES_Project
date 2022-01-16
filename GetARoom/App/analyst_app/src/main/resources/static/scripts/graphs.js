@@ -16,6 +16,31 @@ function ViewModel(){
     self.floors = ko.observableArray([]);
     self.departments = ko.observableArray([]);
     self.selectedFloor = ko.observable();
+
+    self.flagFloorsBound = function(parent) {
+        console.log("Floors loaded, data can be updated.");
+        self.floorsBound = true;
+        self.selectedFloor(self.floors()[0])
+        var chart = new google.charts.Line(document.getElementById('curve_chart_'+ self.floors()[0]));
+        chart.draw(floorData[self.floors()[0]], google.charts.Line.convertOptions(options));    
+    }
+
+    self.sortedFloors = ko.pureComputed(function () {
+        return self.floors.sorted(function (left, right) {
+            leftfloor = left.split("-")[1]
+            rightfloor = right.split("-")[1]
+            left = left.split("-")[0]
+            right = right.split("-")[0]
+            return left === right ? (
+                    leftfloor === rightfloor ? 0
+                    : leftfloor < rightfloor ? -1
+                    : 1
+                )
+                : left > right ? -1
+                : 1;
+        });
+    });
+
 }
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
@@ -76,6 +101,5 @@ function drawChart() {
             
                 floorData[floor].addRow(row);
             }
-            
-    });
+        });
 }

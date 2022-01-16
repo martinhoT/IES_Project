@@ -9,15 +9,12 @@
 <body>
 
     <label for="test">Choose a floor:</label>
-    <select name="test" id="selected_floor" data-bind="foreach: floors">
+    <select name="test" id="selected_floor" data-bind="foreach: sortedFloors, childrenComplete: flagFloorsBound">
         <!-- <optgroup data-bind="foreach: $root.floors, attr: { label: id }">
         </optgroup> -->
         <option data-bind="value: $data, text: $data + 'º Andar'"></option>
     </select> 
     <div data-bind="attr:{id: 'curve_chart_' + selectedFloor()}"  style="width: 95%; height: 650px"></div>
-
-    <!-- <div data-bind="foreach: floors"> -->
-    <!-- </div> -->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
