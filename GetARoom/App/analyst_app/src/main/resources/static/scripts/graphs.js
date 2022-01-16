@@ -4,7 +4,7 @@ google.charts.setOnLoadCallback(drawChart);
 var Events;
 var floorData = {};
 var options = {
-    title: 'Room occupacy by time',
+    title: 'Room occupancy by time',
     curveType: 'function',
     legend: {positon : 'bottom'},
     vAxis: { format:'#,###%'}
@@ -83,7 +83,7 @@ function drawChart() {
                 }
             
                 if(!(event['room'] in roomsByFloor[floor])){
-                    roomsByFloor[floor][event['room']] = event['occupacy'];
+                    roomsByFloor[floor][event['room']] = event['occupancy'];
                     floorData[floor].addColumn('number', event['room']);
                 }
             
@@ -91,8 +91,8 @@ function drawChart() {
             
                 for(var key in roomsByFloor[floor]){
                     if(event['room'] === key){
-                        row.push(event['occupacy']);
-                        roomsByFloor[floor][event['room']] = event['occupacy'];
+                        row.push(event['occupancy']);
+                        roomsByFloor[floor][event['room']] = event['occupancy'];
                     }
                     else{
                         row.push(roomsByFloor[floor][key]);
