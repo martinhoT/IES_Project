@@ -151,8 +151,6 @@ public class ApiController {
         List<Room> x = roomRepository.findByDepId(Integer.parseInt(res));
         x.forEach(elem -> results.add(elem.getId()));
 
-        System.out.println("Success");
-
         return results;
     }
 
@@ -182,10 +180,10 @@ public class ApiController {
     @CrossOrigin
     @PostMapping(value = "/blacklistByRoom")
     @ResponseBody
-    public ModelAndView blacklistByRoom(@RequestParam("Room") String room) {
+    public List<Blacklist> blacklistByRoom(@RequestParam("Room") String room) {
         System.out.println("controller blacklistByRoom()");
         System.out.println("room: " + room);
-        ModelAndView modelAndView = new ModelAndView();
+
         List<Blacklist> blacklistByRoom = new ArrayList<>();
         try{
             blacklistByRoom = blacklistRepository.findByRoomId(room);
@@ -196,10 +194,8 @@ public class ApiController {
 
         blacklistByRoom.forEach(elem -> System.out.println(elem.getEmail()));
 
-        modelAndView.addObject("lst", blacklistByRoom);
-        modelAndView.setViewName("blacklist");
 
-        return modelAndView;
+        return blacklistByRoom;
     }
 
     @CrossOrigin

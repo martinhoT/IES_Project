@@ -104,19 +104,14 @@
         <div class="container-table100">
             <div class="wrap-table100">
                 <div class="table100">
-                    <table>
+                    <table id="blacklistRoomTable">
                         <thead>
                         <tr class="table100-head">
                             <th class="column1">Room number</th>
                             <th class="column2">Email</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="user : ${lst}">
-                            <td class="column1" th:text="${user.getRoomId()}"></td>
-                            <td class="column2" th:text="${user.getEmail()}"></td>
-                        </tr>
-                        </tbody>
+
                     </table>
                 </div>
             </div>

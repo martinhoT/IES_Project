@@ -5,7 +5,15 @@ function removeOptions(selectElement) {
     }
 }
 
-// ADD REMOVE from blacklist
+function removeTBody() {
+    const table = document.getElementById('blacklistRoomTable');
+
+    table.querySelectorAll('tbody').forEach((tbody, i) => {
+        table.removeChild(tbody);
+    });
+}
+
+// ADD/REMOVE from blacklist
 
 function setRoomValues() {
     const frag = document.createDocumentFragment();
@@ -123,8 +131,39 @@ function blacklistByRoom() {
         },
         dataType: 'json',
         success: function(data) {
-            console.log('success',data);
-        },
+            //clean tbody
+            removeTBody();
+
+            const tableBody = document.createElement("tbody");
+            tableBody.className = "bodyRooms"
+
+            data.forEach(function (rowData) {
+                console.log(rowData);
+                const row = document.createElement("tr");
+
+                //roomId
+                let cellData = rowData.roomId;
+
+                let cell = document.createElement('td');
+                cell.className = "column1";
+                cell.innerHTML = cellData
+
+                row.appendChild(cell);
+
+                //email
+                cellData = rowData.email;
+
+                cell = document.createElement('td');
+                cell.className = "column1";
+                cell.innerHTML = cellData
+
+                row.appendChild(cell);
+
+                tableBody.appendChild(row);
+            })
+
+            document.getElementById("blacklistRoomTable").appendChild(tableBody);
+        }
     });
 }
 
