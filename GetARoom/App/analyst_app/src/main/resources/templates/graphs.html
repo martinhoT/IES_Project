@@ -9,27 +9,15 @@
 <body>
 
     <label for="test">Choose a floor:</label>
-    <select name="test" id="test">
-      <optgroup label="4">
-        <option value="4-1">1º Andar</option>
-        <option value="4-2">2º Andar</option>
-      </optgroup>
-      <optgroup label="17">
-        <option value="17-1">1º Andar</option>
-        <option value="17-2">2º Andar</option>
-        <option value="17-3">3º Andar</option>
-        <option value="17-3_2">3_2º Andar</option>
-      </optgroup>
+    <select name="test" id="selected_floor" data-bind="foreach: floors">
+        <!-- <optgroup data-bind="foreach: $root.floors, attr: { label: id }">
+        </optgroup> -->
+        <option data-bind="value: $data, text: $data + 'º Andar'"></option>
     </select> 
+    <div data-bind="attr:{id: 'curve_chart_' + selectedFloor()}"  style="width: 95%; height: 650px"></div>
 
-    <label for="cars">Choose a floor:</label>
-    <select data-bind="foreach: floors" name="cars" id="cars">
-
-    </select> 
-
-    <div data-bind="foreach: floors">
-        <div data-bind="attr:{id: 'curve_chart_' + $data}"  style="width: 95%; height: 650px"></div>
-    </div>
+    <!-- <div data-bind="foreach: floors"> -->
+    <!-- </div> -->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
