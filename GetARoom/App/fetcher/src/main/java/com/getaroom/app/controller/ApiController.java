@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/api")
@@ -152,9 +153,6 @@ public class ApiController {
         List<Room> x = roomRepository.findByDepId(Integer.parseInt(res));
         x.forEach(elem -> results.add(elem.getId()));
 
-        System.out.println(res);
-        System.out.println("Success");
-
         return results;
     }
 
@@ -163,8 +161,6 @@ public class ApiController {
     @ResponseBody
     public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
         blacklistRepository.save(new Blacklist(studentEmail, room));
-
-        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
 
         return "success";
     }
@@ -180,22 +176,57 @@ public class ApiController {
             System.out.println(e.getMessage());
         }
 
-        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
-
         return "success";
     }
 
     @CrossOrigin
-    @GetMapping("/alerts/unseen")
-    public List<BlacklistNotification> unseenNotifications() {
+    @PostMapping(value = "/blacklistByRoom")
+    @ResponseBody
+    public List<Blacklist> blacklistByRoom(@RequestParam("Room") String room) {
+        System.out.println("controller blacklistByRoom()");
+        System.out.println("room: " + room);
+
+        List<Blacklist> blacklistByRoom = new ArrayList<>();
+        try{
+            blacklistByRoom = blacklistRepository.findByRoomId(room);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        blacklistByRoom.forEach(elem -> System.out.println(elem.getEmail()));
+
+
+        return blacklistByRoom;
+    }
+
+
+    @GetMapping("/alerts")
+    public List<BlacklistNotification> alerts() {
         return blacklistNotificationRepository.findAll();
     }
     @CrossOrigin
-    @PostMapping("/alerts/mark_read")
-    public void markRead(@RequestBody List<BlacklistNotification> notifications) {
+    @GetMapping("/alerts/unseen")
+    public List<BlacklistNotification> alertsUnseen() {
+        return blacklistNotificationRepository.findBySeen(false);
+    }
+    @CrossOrigin
+    @GetMapping("/alerts/seen")
+    public List<BlacklistNotification> alertsSeen() {
+        return blacklistNotificationRepository.findBySeen(true);
+    }
+    @CrossOrigin
+    @PostMapping("/alerts/mark_seen")
+    public void alertsMarkRead(@RequestBody List<BlacklistNotification> notifications) {
         List<BlacklistNotification> toRemove = new ArrayList<>();
         for (BlacklistNotification notification : notifications)
-            toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
+            for (BlacklistNotification notificationDocument : blacklistNotificationRepository
+                .findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())) {
+                    notificationDocument.setSeen(true);
+                    blacklistNotificationRepository.save(notificationDocument);
+                }
+
+        
         blacklistNotificationRepository.deleteAll( toRemove );
     }
 }
