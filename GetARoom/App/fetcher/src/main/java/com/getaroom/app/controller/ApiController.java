@@ -198,17 +198,33 @@ public class ApiController {
         return blacklistByRoom;
     }
 
-    @CrossOrigin
-    @GetMapping("/alerts/unseen")
-    public List<BlacklistNotification> unseenNotifications() {
+
+    @GetMapping("/alerts")
+    public List<BlacklistNotification> alerts() {
         return blacklistNotificationRepository.findAll();
     }
     @CrossOrigin
-    @PostMapping("/alerts/mark_read")
-    public void markRead(@RequestBody List<BlacklistNotification> notifications) {
+    @GetMapping("/alerts/unseen")
+    public List<BlacklistNotification> alertsUnseen() {
+        return blacklistNotificationRepository.findBySeen(false);
+    }
+    @CrossOrigin
+    @GetMapping("/alerts/seen")
+    public List<BlacklistNotification> alertsSeen() {
+        return blacklistNotificationRepository.findBySeen(true);
+    }
+    @CrossOrigin
+    @PostMapping("/alerts/mark_seen")
+    public void alertsMarkRead(@RequestBody List<BlacklistNotification> notifications) {
         List<BlacklistNotification> toRemove = new ArrayList<>();
         for (BlacklistNotification notification : notifications)
-            toRemove.addAll( blacklistNotificationRepository.findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime()) );
+            for (BlacklistNotification notificationDocument : blacklistNotificationRepository
+                .findByEmailAndRoomAndTime(notification.getEmail(), notification.getRoom(), notification.getTime())) {
+                    notificationDocument.setSeen(true);
+                    blacklistNotificationRepository.save(notificationDocument);
+                }
+
+        
         blacklistNotificationRepository.deleteAll( toRemove );
     }
 }
