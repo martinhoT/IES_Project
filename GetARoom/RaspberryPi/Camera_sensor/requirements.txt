@@ -1,4 +1,7 @@
-imutils
+schedule
+numpy
 argparse
-datetime
+imutils
+dlib
 opencv-python
+scipy
