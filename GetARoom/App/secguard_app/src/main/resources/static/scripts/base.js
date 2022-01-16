@@ -1,4 +1,3 @@
-// For debugging
 var baseScriptVars = {
     viewModel: undefined
 }
@@ -11,55 +10,56 @@ $(document).ready(function() {
         self.notifications = ko.observableArray([]),
         self.notifications_popups = ko.observableArray([]),
 
-        self.notifications_length = ko.pureComputed(function() {
-            return self.notifications().length;
-        })
+        self.unseen_count = ko.observable(0);
 
-        self.commitSeenList = function(e) {
-            // Obtain first the array of notifications to be deleted, so that only one POST request is done.
-            to_be_deleted = []
-            $("#unseen-notification-list > tr > td > input:checked").each(function(idx) {
-                to_be_deleted.push( self.notifications.splice( this.value, 1 )[0] );
-            });
-    
-            if (to_be_deleted.length > 0) {
-                $.ajax({
-                    type: "POST",
-                    url: "http://" + location.hostname + ":84/api/alerts/mark_read",
-                    data: JSON.stringify(to_be_deleted),
-                    function (data, textStatus, jqXHR) {},
-                    contentType: "application/json",
-                    dataType: "json"
-                });
-            }
-        }
         self.commitSeen = function(notification_popup) {
             let prev_length = self.notifications().length;
             
-            // ew
-            self.notifications.remove(function(item) {
-                return item.user === notification_popup.user &&
-                    item.email === notification_popup.email &&
-                    item.room === notification_popup.room &&
-                    new Date(item.time).getTime() === new Date(notification_popup.time).getTime();
-            });
+            // thanks MongoDB
             self.notifications_popups.remove(function(item) {
                 return item.user === notification_popup.user &&
                     item.email === notification_popup.email &&
                     item.room === notification_popup.room &&
                     new Date(item.time).getTime() === new Date(notification_popup.time).getTime();
-            })
+            });
+        }
 
-            if (prev_length > self.notifications().length) {
+        /**
+         * NOTIFICATIONS
+         */
+        self.seeUnseen = ko.observable(true);
+
+        self.commitSeenList = function(e) {
+            // Obtain first the array of notifications to be deleted, so that only one POST request is done.
+            to_be_seen = []
+            $("#notification-table > tr > td > input:checked").each(function(idx) {
+                // Pop the notification
+                notification = baseScriptVars.viewModel.notifications.splice(this.value,1)[0];
+                
+                to_be_seen.push( notification );
+                baseScriptVars.viewModel.unseen_count( baseScriptVars.viewModel.unseen_count() - 1);
+                
+                // Put the notification back on, with 'seen' set to 'true'. This forces KnockoutJS to update the list itself.
+                notification.seen = true;
+                baseScriptVars.viewModel.notifications.push( notification );
+            });
+    
+            if (to_be_seen.length > 0) {
                 $.ajax({
                     type: "POST",
-                    url: "http://" + location.hostname + ":84/api/alerts/mark_read",
-                    data: JSON.stringify([notification_popup]),
+                    url: "http://" + location.hostname + ":84/api/alerts/mark_seen",
+                    data: JSON.stringify(to_be_seen),
                     function (data, textStatus, jqXHR) {},
                     contentType: "application/json",
                     dataType: "json"
                 });
             }
+        };
+
+        self.toggleCheckmarks = function(e) {
+            $("#notification-table > tr > td > input").each(function(idx) {
+                this.checked = !this.checked;
+            });
         }
     }
 
@@ -108,8 +108,10 @@ $(document).ready(function() {
                         present = true;
                         break;
                     }
-                if (!present) 
+                if (!present) {
                     baseScriptVars.viewModel.notifications.push( notification );
+                    baseScriptVars.viewModel.unseen_count( baseScriptVars.viewModel.unseen_count() + 1 );
+                }
             }
         });
     }
@@ -124,11 +126,21 @@ $(document).ready(function() {
         console.log("Received notification:" + msg);
         var evnt = JSON.parse(msg);
     
-        baseScriptVars.viewModel.notifications.push(evnt);
+        baseScriptVars.viewModel.notifications.push( evnt );
+        baseScriptVars.viewModel.unseen_count( baseScriptVars.viewModel.unseen_count() + 1 );
         
         baseScriptVars.viewModel.notifications_popups.push(evnt);
         if (baseScriptVars.viewModel.notifications_popups().length > NOTIFICATIONS_POPUPS_MAX_SIZE)
             baseScriptVars.viewModel.notifications_popups.shift();
+    }
+
+    // TODO: use pagination
+    if (document.getElementById("receive-all-notifications") !== null) {
+        $.getJSON("http://" + location.hostname + ":84/api/alerts/seen",
+        function (data, textStatus, jqXHR) {
+            for (let notification of data)
+                baseScriptVars.viewModel.notifications.push(notification);
+        });
     }
 
 });

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <th:block th:include="base :: head" />
@@ -10,30 +11,42 @@
     
         <th:block th:replace="base :: alerts" />
 
+        <!-- This element tells 'base.js' to do calls to the API to obtain seen notifications. This should be temporary, as there are better ways of handling this. -->
+        <input id="receive-all-notifications" hidden />
+
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Unseen notifications</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Person</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Time</th>
-                                <th scope="col">Room</th>
-                            </tr>
-                        </thead>
-                        <tbody id="unseen-notification-list" data-bind="foreach: notifications">
-                            <tr>
-                                <td data-bind="text: user"></td>
-                                <td data-bind="text: email"></td>
-                                <td data-bind="text: time"></td>
-                                <td data-bind="text: room"></td>
-                                <td><input type="checkbox" data-bind="value: $index" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button class="btn btn-primary" data-bind="click: commitSeenList">Mark as seen</button>
+                    <div class="form-check">
+                        <input class="form-check-input" id="see-unseen" type="checkbox" data-bind="checked: seeUnseen">
+                        <label class="form-check-label" for="see-unseen">Show unseen notifications</label>
+                    </div>
+                    <div>
+                        <h2 data-bind="if: seeUnseen">Unseen notifications</h2>
+                        <h2 data-bind="ifnot: seeUnseen">All notifications</h2>
+                        <button class="btn btn-primary" data-bind="click: commitSeenList">Mark as seen</button>
+                        <button class="btn btn-primary" data-bind="click: toggleCheckmarks">Check/uncheck all</button>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Person</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Room</th>
+                                    <th scope="col">Mark as seen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="notification-table" data-bind="foreach: notifications">
+                                <tr data-bind="ifnot: seen && $root.seeUnseen">
+                                    <td data-bind="text: user"></td>
+                                    <td data-bind="text: email"></td>
+                                    <td data-bind="text: time"></td>
+                                    <td data-bind="text: room"></td>
+                                    <td data-bind="ifnot: seen"><input type="checkbox" data-bind="value: $index" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

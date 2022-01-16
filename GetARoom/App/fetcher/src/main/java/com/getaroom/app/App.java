@@ -208,6 +208,7 @@ public class App implements CommandLineRunner {
 			EventNow event = new EventNow( (String) doc.get("user"), email, room, entered, time );
 
 			// Create a notification if this event matches a blacklist
+			System.out.println("Is room " + room + " and email " + email + " blacklisted? " + isBlacklisted(room, email));
 			if ( entered && isBlacklisted(room, email) ) {
 				BlacklistNotification notification = BlacklistNotification.fromEvent(event);
 
