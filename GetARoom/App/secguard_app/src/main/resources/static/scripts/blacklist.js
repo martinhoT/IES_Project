@@ -5,11 +5,23 @@ function removeOptions(selectElement) {
     }
 }
 
+function removeTBody() {
+    const table = document.getElementById('blacklistRoomTable');
+
+    table.querySelectorAll('tbody').forEach((tbody, i) => {
+        table.removeChild(tbody);
+    });
+}
+
+// ADD/REMOVE from blacklist
+
 function setRoomValues() {
     const frag = document.createDocumentFragment();
     const room = document.getElementById("room");
     const dep = document.getElementById("dep");
     const getDep = dep.value;
+
+    document.getElementById("roomTable").style.visibility = "hidden"
 
     console.log(getDep)
 
@@ -70,6 +82,94 @@ function removeBlacklist() {
         success: function(data) {
             console.log('success',data);
         },
+    });
+}
+
+// Blacklist by ROOM
+
+
+function setRoomValuesForRoomModal() {
+    const frag = document.createDocumentFragment();
+    const room = document.getElementById("room2");
+    const dep = document.getElementById("dep2");
+    const getDep = dep.value;
+
+    document.getElementById("roomTable").style.visibility = "hidden"
+
+    console.log(getDep)
+
+    $.ajax({
+        type: 'GET',
+        url: "http://" + location.hostname + ":84/api/getRooms",
+        data: {
+            Result : getDep
+        },
+        dataType: 'json',
+        success: function (res) {
+
+            removeOptions(room);
+
+            for (let i = 0; i < res.length; i++) {
+                const option = document.createElement("option");
+                option.value = "" + res[i];
+                option.text = " " + res[i];
+                frag.appendChild(option);
+            }
+
+            room.appendChild(frag);
+
+        }
+    });
+
+}
+
+function blacklistByRoom() {
+    const room = document.getElementById("room2").value;
+    console.log("blacklistByRoom()");
+    console.log(room);
+    $.ajax({
+        type:'POST',
+        url :"http://" + location.hostname + ":84/api/blacklistByRoom",
+        data: {
+            Room: room,
+        },
+        dataType: 'json',
+        success: function(data) {
+            document.getElementById("roomTable").style.visibility = "visible"
+
+            //clean tbody
+            removeTBody();
+
+            const tableBody = document.createElement("tbody");
+            tableBody.className = "bodyRooms"
+
+            data.forEach(function (rowData) {
+                console.log(rowData);
+                const row = document.createElement("tr");
+
+                //roomId
+                let cellData = rowData.roomId;
+
+                let cell = document.createElement('td');
+                cell.className = "column1";
+                cell.innerHTML = cellData
+
+                row.appendChild(cell);
+
+                //email
+                cellData = rowData.email;
+
+                cell = document.createElement('td');
+                cell.className = "column1";
+                cell.innerHTML = cellData
+
+                row.appendChild(cell);
+
+                tableBody.appendChild(row);
+            })
+
+            document.getElementById("blacklistRoomTable").appendChild(tableBody);
+        }
     });
 }
 
