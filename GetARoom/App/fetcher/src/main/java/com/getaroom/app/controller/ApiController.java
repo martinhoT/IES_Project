@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/api")
@@ -150,7 +151,6 @@ public class ApiController {
         List<Room> x = roomRepository.findByDepId(Integer.parseInt(res));
         x.forEach(elem -> results.add(elem.getId()));
 
-        System.out.println(res);
         System.out.println("Success");
 
         return results;
@@ -161,8 +161,6 @@ public class ApiController {
     @ResponseBody
     public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
         blacklistRepository.save(new Blacklist(studentEmail, room));
-
-        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
 
         return "success";
     }
@@ -178,9 +176,30 @@ public class ApiController {
             System.out.println(e.getMessage());
         }
 
-        //blacklist.forEach((k, v) -> System.out.println(k + ", " + v));
-
         return "success";
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "/blacklistByRoom")
+    @ResponseBody
+    public ModelAndView blacklistByRoom(@RequestParam("Room") String room) {
+        System.out.println("controller blacklistByRoom()");
+        System.out.println("room: " + room);
+        ModelAndView modelAndView = new ModelAndView();
+        List<Blacklist> blacklistByRoom = new ArrayList<>();
+        try{
+            blacklistByRoom = blacklistRepository.findByRoomId(room);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        blacklistByRoom.forEach(elem -> System.out.println(elem.getEmail()));
+
+        modelAndView.addObject("lst", blacklistByRoom);
+        modelAndView.setViewName("blacklist");
+
+        return modelAndView;
     }
 
     @CrossOrigin

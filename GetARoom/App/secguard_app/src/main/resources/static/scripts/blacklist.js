@@ -5,6 +5,8 @@ function removeOptions(selectElement) {
     }
 }
 
+// ADD REMOVE from blacklist
+
 function setRoomValues() {
     const frag = document.createDocumentFragment();
     const room = document.getElementById("room");
@@ -64,6 +66,59 @@ function removeBlacklist() {
         url :"http://" + location.hostname + ":84/api/removeUserBlacklist",
         data: {
             Email : email,
+            Room: room,
+        },
+        dataType: 'json',
+        success: function(data) {
+            console.log('success',data);
+        },
+    });
+}
+
+// Blacklist by ROOM
+
+
+function setRoomValuesForRoomModal() {
+    const frag = document.createDocumentFragment();
+    const room = document.getElementById("room2");
+    const dep = document.getElementById("dep2");
+    const getDep = dep.value;
+
+    console.log(getDep)
+
+    $.ajax({
+        type: 'GET',
+        url: "http://" + location.hostname + ":84/api/getRooms",
+        data: {
+            Result : getDep
+        },
+        dataType: 'json',
+        success: function (res) {
+
+            removeOptions(room);
+
+            for (let i = 0; i < res.length; i++) {
+                const option = document.createElement("option");
+                option.value = "" + res[i];
+                option.text = " " + res[i];
+                frag.appendChild(option);
+            }
+
+            room.appendChild(frag);
+
+        }
+    });
+
+}
+
+function blacklistByRoom() {
+    const room = document.getElementById("room2").value;
+    console.log("blacklistByRoom()");
+    console.log(room);
+    $.ajax({
+        type:'POST',
+        url :"http://" + location.hostname + ":84/api/blacklistByRoom",
+        data: {
             Room: room,
         },
         dataType: 'json',
