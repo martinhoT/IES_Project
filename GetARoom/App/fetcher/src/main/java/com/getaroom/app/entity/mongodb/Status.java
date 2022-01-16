@@ -29,10 +29,10 @@ public class Status {
     }
 
     public String getRoom() { return room; }
-    public double getOccupacy() { return occupancy; }
+    public double getOccupancy() { return occupancy; }
     public Date getTime() { return time; }
 
     public void setRoom(String room) { this.room = room; }
-    public void setOccupacy(double occupancy) { this.occupancy = occupancy; }
+    public void setOccupancy(double occupancy) { this.occupancy = occupancy; }
     public void setTime(Date time) { this.time = time; }
 }
