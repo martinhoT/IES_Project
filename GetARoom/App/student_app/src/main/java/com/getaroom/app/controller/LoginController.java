@@ -2,6 +2,8 @@ package com.getaroom.app.controller;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.getaroom.app.entity.User;
@@ -17,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import reactor.core.publisher.Mono;
 
 @RestController 
@@ -24,6 +27,20 @@ import reactor.core.publisher.Mono;
 public class LoginController {
 
     private final WebClient apiClient;
+
+    // setCookie to user
+    public void setCookie(String name, HttpServletResponse response) {
+        // Create cookie
+        Cookie jwtTokenCookie = new Cookie("user-id", "secret");
+
+        jwtTokenCookie.setMaxAge(86400);
+        jwtTokenCookie.setSecure(true);
+        jwtTokenCookie.setHttpOnly(true);
+        jwtTokenCookie.setPath("/studyRooms");
+
+        // Set cookie onto user
+        response.addCookie(jwtTokenCookie);
+    }
 
     public LoginController() {
         apiClient = WebClient.create("http://fetcher:8080");
@@ -44,7 +61,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@Valid User user, BindingResult result, Model model) {
+    public ModelAndView login(@Valid User user, BindingResult result, Model model, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors() && result.getAllErrors().size() > 1)  {
             modelAndView.setViewName("login");
@@ -52,6 +69,7 @@ public class LoginController {
         }
 
         if (apiAuthPost("login", new LoginData(user.getName(), user.getPassword()), LoginData.class)){
+            setCookie(user.getName(), response);
             modelAndView.setViewName("redirect:/studyRooms");
         }
         else{
