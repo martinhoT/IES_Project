@@ -66,7 +66,7 @@
     Blacklist by Room
 </button>
 
-<!-- Modal -->
+<!-- Modal by ROOM-->
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -99,13 +99,45 @@
     </div>
 </div>
 
+<!--Blacklist by DEPARTMENT-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
+    Blacklist by Department
+</button>
+
+<!-- Modal by DEPARTMENT-->
+<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel3">Blacklist Manager</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    <label>Department:</label>
+                    <select id="dep3" th:onchange="'setValuesForDepModal()'" name="dep2" class="form-control">
+                        <option th:each="dep :${depList}" th:value="${dep.id}" th:text="${dep.id} + ' - ' + ${dep.fullName}">
+                        </option>
+                    </select> </br>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnBlacklistDep" th:onclick="'blacklistByDep()'">Go</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="roomTable" style="visibility: hidden">
     <div id="booking" class = "section">
         <div class="limiter">
             <div class="container-table100">
                 <div class="wrap-table100">
                     <div class="table100">
-                        <table id="blacklistRoomTable">
+                        <table id="blacklistTable">
                             <thead>
                             <tr class="table100-head">
                                 <th class="column1">Room number</th>

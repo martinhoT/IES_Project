@@ -1,3 +1,5 @@
+// Aux functions
+
 function removeOptions(selectElement) {
     let i, L = selectElement.options.length - 1;
     for(i = L; i >= 0; i--) {
@@ -5,12 +7,61 @@ function removeOptions(selectElement) {
     }
 }
 
+function setOptions(res, frag, room){
+    removeOptions(room);
+
+    for (let i = 0; i < res.length; i++) {
+        const option = document.createElement("option");
+        option.value = "" + res[i];
+        option.text = " " + res[i];
+        frag.appendChild(option);
+    }
+
+    room.appendChild(frag);
+}
+
 function removeTBody() {
-    const table = document.getElementById('blacklistRoomTable');
+    const table = document.getElementById("blacklistTable");
 
     table.querySelectorAll('tbody').forEach((tbody, i) => {
         table.removeChild(tbody);
     });
+}
+
+function setBlacklistTable(data){
+    document.getElementById("roomTable").style.visibility = "visible"
+
+    //clean tbody
+    removeTBody();
+
+    const tableBody = document.createElement("tbody");
+
+    data.forEach(function (rowData) {
+        console.log(rowData);
+        const row = document.createElement("tr");
+
+        //roomId
+        let cellData = rowData.roomId;
+
+        let cell = document.createElement('td');
+        cell.className = "column1";
+        cell.innerHTML = cellData
+
+        row.appendChild(cell);
+
+        //email
+        cellData = rowData.email;
+
+        cell = document.createElement('td');
+        cell.className = "column2";
+        cell.innerHTML = cellData
+
+        row.appendChild(cell);
+
+        tableBody.appendChild(row);
+    })
+
+    document.getElementById("blacklistTable").appendChild(tableBody);
 }
 
 // ADD/REMOVE from blacklist
@@ -33,18 +84,7 @@ function setRoomValues() {
         },
         dataType: 'json',
         success: function (res) {
-
-            removeOptions(room);
-
-            for (let i = 0; i < res.length; i++) {
-                const option = document.createElement("option");
-                option.value = "" + res[i];
-                option.text = " " + res[i];
-                frag.appendChild(option);
-            }
-
-            room.appendChild(frag);
-
+            setOptions(res, frag, room)
         }
     });
 
@@ -106,18 +146,7 @@ function setRoomValuesForRoomModal() {
         },
         dataType: 'json',
         success: function (res) {
-
-            removeOptions(room);
-
-            for (let i = 0; i < res.length; i++) {
-                const option = document.createElement("option");
-                option.value = "" + res[i];
-                option.text = " " + res[i];
-                frag.appendChild(option);
-            }
-
-            room.appendChild(frag);
-
+            setOptions(res, frag, room)
         }
     });
 
@@ -135,40 +164,48 @@ function blacklistByRoom() {
         },
         dataType: 'json',
         success: function(data) {
-            document.getElementById("roomTable").style.visibility = "visible"
+            setBlacklistTable(data)
+        }
+    });
+}
 
-            //clean tbody
-            removeTBody();
+// Blacklist by DEPARTMENT
 
-            const tableBody = document.createElement("tbody");
-            tableBody.className = "bodyRooms"
 
-            data.forEach(function (rowData) {
-                console.log(rowData);
-                const row = document.createElement("tr");
+function setValuesForDepModal() {
+    const frag = document.createDocumentFragment();
+    const room = document.getElementById("room3");
+    const dep = document.getElementById("dep3");
+    const getDep = dep.value;
 
-                //roomId
-                let cellData = rowData.roomId;
+    document.getElementById("roomTable").style.visibility = "hidden"
 
-                let cell = document.createElement('td');
-                cell.className = "column1";
-                cell.innerHTML = cellData
 
-                row.appendChild(cell);
+    $.ajax({
+        type: 'GET',
+        url: "http://" + location.hostname + ":84/api/department",
+        data: {
+        },
+        dataType: 'json',
+        success: function (res) {
+            setOptions(res, frag, room)
+        }
+    });
 
-                //email
-                cellData = rowData.email;
+}
 
-                cell = document.createElement('td');
-                cell.className = "column1";
-                cell.innerHTML = cellData
+function blacklistByDep() {
+    const dep = document.getElementById("dep3").value;
 
-                row.appendChild(cell);
-
-                tableBody.appendChild(row);
-            })
-
-            document.getElementById("blacklistRoomTable").appendChild(tableBody);
+    $.ajax({
+        type:'POST',
+        url :"http://" + location.hostname + ":84/api/blacklistByDepartment",
+        data: {
+            Dep: dep,
+        },
+        dataType: 'json',
+        success: function(data) {
+            setBlacklistTable(data)
         }
     });
 }
