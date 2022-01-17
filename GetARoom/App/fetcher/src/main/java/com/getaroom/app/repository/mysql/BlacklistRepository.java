@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.getaroom.app.entity.mysql.Blacklist;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.getaroom.app.entity.mysql.Room;
 import java.util.List;
@@ -17,5 +18,8 @@ public interface BlacklistRepository extends JpaRepository<Blacklist, String> {
     boolean existsByRoomIdAndEmail(String roomId, String email);
 
     List<Blacklist> findByRoomId(String roomId);
+
+    @Query(value = "select b from Blacklist b where b.roomId in (select r.id from Room r where r.depId = :id) order by b.roomId")
+    List<Blacklist> blacklistForDepartment(int id);
 
 }

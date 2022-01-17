@@ -181,8 +181,6 @@ public class ApiController {
     @PostMapping(value = "/blacklistByRoom")
     @ResponseBody
     public List<Blacklist> blacklistByRoom(@RequestParam("Room") String room) {
-        System.out.println("controller blacklistByRoom()");
-        System.out.println("room: " + room);
 
         List<Blacklist> blacklistByRoom = new ArrayList<>();
         try{
@@ -192,12 +190,27 @@ public class ApiController {
             System.out.println(e.getMessage());
         }
 
-        blacklistByRoom.forEach(elem -> System.out.println(elem.getEmail()));
-
 
         return blacklistByRoom;
     }
 
+
+    @CrossOrigin
+    @PostMapping(value = "/blacklistByDepartment")
+    @ResponseBody
+    public List<Blacklist> blacklistByDepartment(@RequestParam("Dep") String dep) {
+
+        List<Blacklist> blacklistByDepartment = new ArrayList<>();
+        try{
+            blacklistByDepartment = blacklistRepository.blacklistForDepartment(Integer.parseInt(dep));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
+        return blacklistByDepartment;
+    }
 
     @GetMapping("/alerts")
     public List<BlacklistNotification> alerts() {
