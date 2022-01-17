@@ -7,6 +7,19 @@ function removeOptions(selectElement) {
     }
 }
 
+function setOptions(res, frag, room){
+    removeOptions(room);
+
+    for (let i = 0; i < res.length; i++) {
+        const option = document.createElement("option");
+        option.value = "" + res[i];
+        option.text = " " + res[i];
+        frag.appendChild(option);
+    }
+
+    room.appendChild(frag);
+}
+
 function removeTBody() {
     const table = document.getElementById("blacklistTable");
 
@@ -71,18 +84,7 @@ function setRoomValues() {
         },
         dataType: 'json',
         success: function (res) {
-
-            removeOptions(room);
-
-            for (let i = 0; i < res.length; i++) {
-                const option = document.createElement("option");
-                option.value = "" + res[i];
-                option.text = " " + res[i];
-                frag.appendChild(option);
-            }
-
-            room.appendChild(frag);
-
+            setOptions(res, frag, room)
         }
     });
 
@@ -144,18 +146,7 @@ function setRoomValuesForRoomModal() {
         },
         dataType: 'json',
         success: function (res) {
-
-            removeOptions(room);
-
-            for (let i = 0; i < res.length; i++) {
-                const option = document.createElement("option");
-                option.value = "" + res[i];
-                option.text = " " + res[i];
-                frag.appendChild(option);
-            }
-
-            room.appendChild(frag);
-
+            setOptions(res, frag, room)
         }
     });
 
@@ -189,7 +180,6 @@ function setValuesForDepModal() {
 
     document.getElementById("roomTable").style.visibility = "hidden"
 
-    console.log(getDep)
 
     $.ajax({
         type: 'GET',
@@ -198,18 +188,7 @@ function setValuesForDepModal() {
         },
         dataType: 'json',
         success: function (res) {
-
-            removeOptions(room);
-
-            for (let i = 0; i < res.length; i++) {
-                const option = document.createElement("option");
-                option.value = "" + res[i];
-                option.text = " " + res[i];
-                frag.appendChild(option);
-            }
-
-            room.appendChild(frag);
-
+            setOptions(res, frag, room)
         }
     });
 
