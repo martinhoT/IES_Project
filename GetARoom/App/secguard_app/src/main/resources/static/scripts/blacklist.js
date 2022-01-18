@@ -164,7 +164,8 @@ function blacklistByRoom() {
         },
         dataType: 'json',
         success: function(data) {
-            setBlacklistTable(data)
+            if (data.length > 0)
+                setBlacklistTable(data)
         }
     });
 }
@@ -205,7 +206,8 @@ function blacklistByDep() {
         },
         dataType: 'json',
         success: function(data) {
-            setBlacklistTable(data)
+            if (data.length > 0 )
+                setBlacklistTable(data)
         }
     });
 }
