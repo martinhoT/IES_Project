@@ -110,7 +110,7 @@ public class App implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// Schelude the batch processing of 'today' MongoDB collection into 'history' collection
+		// Schelude the daily batch processing
 		// ZonedDateTime already handles daylight saving cases
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Lisbon"));
 		
@@ -121,7 +121,7 @@ public class App implements CommandLineRunner {
 		long initialDelay = Duration.between(now, nextRun).getSeconds();
 
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(new NowMigrateToHistoryBatch(),
+		scheduler.scheduleAtFixedRate(new DailyBatchProcessing(),
 			initialDelay,
 			TimeUnit.DAYS.toSeconds(1),
 			TimeUnit.SECONDS);
@@ -267,13 +267,22 @@ public class App implements CommandLineRunner {
 		return blacklistRepository.existsByRoomIdAndEmail(room, email);
 	}
 
-	private class NowMigrateToHistoryBatch implements Runnable {
+	/**
+	 * Daily batch processing of:
+	 * - 'event' MongoDB collection into 'event_history' collection;
+	 * - delete old seen notifications.
+	 */
+	private class DailyBatchProcessing implements Runnable {
 
 		@Override
 		public void run() {
+			// 'event' into 'event_history'
 			List<EventNow> todays = eventRepository.findAll();
 			eventHistoryRepository.saveAll( todays.stream().map(EventNow::cloneHistory).toList() );
 			eventRepository.deleteAll( todays );
+
+			// delete seen notifications
+			blacklistNotificationRepository.deleteBySeen(true);
 		}
 
 	}
