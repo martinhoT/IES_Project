@@ -27,3 +27,11 @@
         -1px  1px #000,
          1px  1px #000;
 }
+
+.center {
+    position: absolute;
+    left: 1.5%;
+    right: 1.5%;
+    text-align: center;
+    border: 5px;
+}

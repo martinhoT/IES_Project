@@ -3,12 +3,7 @@ google.charts.setOnLoadCallback(drawChart);
 
 var Events;
 var floorData = {};
-var options = {
-    title: 'Room occupancy by time',
-    curveType: 'function',
-    legend: {positon : 'bottom'},
-    vAxis: { format:'#,###%'}
-};
+var options = {};
 
 function ViewModel(){
     var self = this;
@@ -21,6 +16,23 @@ function ViewModel(){
         console.log("Floors loaded, data can be updated.");
         self.floorsBound = true;
         self.selectedFloor(self.floors()[0])
+
+        options = {
+            title: 'Floor '+  self.floors()[0] +' room occupancy over time',
+            legend: {
+                position: 'left',
+                textStyle:{
+                    fontSize: 16
+                }
+            },
+            vAxis: {
+                format:'#,###%',
+                viewWindow:{
+                    max: 1,
+                    min: 0
+                }}
+        };
+
         var chart = new google.charts.Line(document.getElementById('curve_chart_'+ self.floors()[0]));
         chart.draw(floorData[self.floors()[0]], google.charts.Line.convertOptions(options));    
     }
@@ -54,6 +66,22 @@ $("#selected_floor").change(function() {
     console.log( $("#selected_floor").val() );
     viewModel.selectedFloor( $("#selected_floor").val() )
     // TODO
+    options = {
+        title: 'Floor '+  $("#selected_floor").val() +' room occupancy over time',
+        legend: {
+            position: 'left',
+            textStyle:{
+                fontSize: 16
+            }
+        },
+        vAxis: {
+            format:'#,###%',
+            viewWindow:{
+                max: 1,
+                min: 0
+            }}
+    };
+
     var chart = new google.charts.Line(document.getElementById('curve_chart_'+$("#selected_floor").val()));
     chart.draw(floorData[$("#selected_floor").val()], google.charts.Line.convertOptions(options));
 });
