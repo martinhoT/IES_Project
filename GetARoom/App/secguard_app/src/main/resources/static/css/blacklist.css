@@ -1,0 +1,17 @@
+.card-header, card-text{
+    margin-bottom: 20px;
+}
+
+.card-deck{
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.card-text{
+    margin-left: 20px;
+}
+
+.btn{
+    margin-top: 20px;
+}
