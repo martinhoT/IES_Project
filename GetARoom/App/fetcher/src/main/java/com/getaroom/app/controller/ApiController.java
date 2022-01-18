@@ -92,6 +92,7 @@ public class ApiController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/event")
     public List<EventNow> today(@RequestParam(defaultValue = "") String room) {
         if (room.isEmpty()){
@@ -106,6 +107,7 @@ public class ApiController {
         return eventHistoryRepository.findAll();
     }
 
+    @CrossOrigin
     @GetMapping("/status")
     public List<Status> status() {
         return statusRepository.findAll();
