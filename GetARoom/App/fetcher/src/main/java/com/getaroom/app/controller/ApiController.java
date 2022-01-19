@@ -3,6 +3,7 @@ package com.getaroom.app.controller;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/api")
@@ -91,26 +92,55 @@ public class ApiController {
             }
         }
     }
-
+    
     @CrossOrigin
     @GetMapping("/event")
-    public List<EventNow> today(@RequestParam(defaultValue = "") String room) {
+    public List<EventNow> event(
+        @RequestParam(required = false, defaultValue = "") String room,
+        @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+        @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
+            
+            PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
+            if (room.isEmpty()){
+                return eventRepository.findAll(pageRequest).toList();
+            }else{
+                return eventRepository.findByRoom(room, pageRequest).toList();
+            }
+            
+        }
+    
+    @CrossOrigin
+    @GetMapping("/event/pages")
+    public Integer eventPages(
+        @RequestParam(required = false, defaultValue = "") String room,
+        @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+        @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
+        
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
         if (room.isEmpty()){
-            return eventRepository.findAll();
+            return eventRepository.findAll(pageRequest).getTotalPages();
         }else{
-            return eventRepository.findByRoom(room);
+            return eventRepository.findByRoom(room, pageRequest).getTotalPages();
         }
     }
 
+    @CrossOrigin
     @GetMapping("/event_history")
-    public List<EventHistory> todayHistory() {
-        return eventHistoryRepository.findAll();
+    public List<EventHistory> todayHistory(
+        @RequestParam(required = false, defaultValue = "") String room,
+        @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+        @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
+        return eventHistoryRepository.findAll(pageRequest).toList();
     }
 
     @CrossOrigin
     @GetMapping("/status")
     public List<Status> status() {
-        return statusRepository.findAll();
+        List<Status> res = statusRepository.findAll();
+        res.sort(Comparator.comparingLong((s1) -> s1.getTime().getTime()));
+        return res;
     }
 
     @GetMapping("/room")

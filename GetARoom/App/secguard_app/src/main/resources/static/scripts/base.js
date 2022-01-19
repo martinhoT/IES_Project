@@ -61,6 +61,7 @@ $(document).ready(function() {
                 this.checked = !this.checked;
             });
         }
+
     }
 
     baseScriptVars.viewModel = new ViewModel();
