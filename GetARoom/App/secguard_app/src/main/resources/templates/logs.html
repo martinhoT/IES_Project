@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <th:block th:include="base :: head" />
         <title>Logs</title>
+        <link rel="stylesheet" th:href="@{css/logs.css}" href="../static/css/logs.css" type="text/css">
     </head>
     <body>
 
@@ -11,46 +13,45 @@
             <th:block th:replace="base :: alerts" />
         </div>
 
-        <div class="container">
+        <div class="container" id="ko-body">
             <h2>Logs</h2>
-            <form method="get" th:action="@{/logs}">
+            <div>
                 <label for="room">Room:</label>
-                <input type="text" id="room" name="room"/>
-                <input type="submit" value="Submit" />
-            </form>
-            <!-- <table class="table" th:unless="${events.isEmpty()}"> -->
-                <!-- <thead> -->
-                    <!-- <tr> -->
-                        <!-- <th scope="col">Id</th> -->
-                        <!-- <th scope="col">Person</th> -->
-                        <!-- <th scope="col">Email</th> -->
-                        <!-- <th scope="col">Room</th> -->
-                        <!-- <th scope="col">Action</th> -->
-                        <!-- <th scope="col">Time</th> -->
-                    <!-- </tr> -->
-                <!-- </thead> -->
-                <!-- <tbody th:each="event : ${events}"> -->
-                    <!-- <tr> -->
-                        <!-- <th th:text="${event.id}" scope="row">Id</th> -->
-                        <!-- <td th:text="${event.user}">User</td> -->
-                        <!-- <td th:text="${event.email}">Email</td> -->
-                        <!-- <td th:text="${event.room}">Room</td> -->
-                        <!-- <td th:switch="${event.entered}"> -->
-                            <!-- <p th:case="true"> -->
-                                <!-- Entry -->
-                            <!-- </p> -->
-                            <!-- <p th:case="false"> -->
-                                <!-- Exit -->
-                            <!-- </p> -->
-                        <!-- </td> -->
-                        <!-- <td th:text="${event.time}">Time</td> -->
-                    <!-- </tr> -->
-                <!-- </tbody> -->
-            <!-- </table> -->
-            <table class="table">
+                <input type="text" id="room" name="room" data-bind="value: room"/>
+                <label for="page-capacity">Events per page:</label>
+                <input type="number" id="page-capacity" name="page-capacity" data-bind="value: pageCapacity"/>
+                <button class="btn btn-primary" data-bind="click: $root.choosePage(0)">Apply</button>
+                <button class="btn btn-info" data-bind="click: resetDefault">Reset to default</button>
+            </div>
+            <br>
+            <h3>Stored events</h3>
+            <div id="page_selection">
+                <div class="page-select" data-bind="if: pages().length < 21">
+                    <div>
+                        Selected page: <span data-bind="text: pageSelected() + 1"></span>
+                    </div>
+                    <br>
+                    <div>
+                        <a class="page-prev-next-control" data-bind="click: prevPage">Prev</a>
+                    </div>
+                    <div class="page-select-array" data-bind="foreach: pages">
+                        <a class="page-select-button" data-bind="if: $root.pageSelected() == $index()">●</a>
+                        <a class="page-select-button" data-bind="ifnot: $root.pageSelected() == $index(), click: $root.choosePage">○</a>
+                    </div>
+                    <div>
+                        <a class="page-prev-next-control" data-bind="click: nextPage">Next</a>
+                    </div>
+                </div>
+                <div class="page-select" data-bind="ifnot: pages().length < 21">
+                    <label for="page-number">Page:</label>
+                    <input type="number" min="1" id="page-number-input" name="page-number" data-bind="attr: { max: pages().length }"/>
+                    <span data-bind="text: '/' + pages().length"></span>
+                    <button class="btn btn-primary" data-bind="click: choosePageInput">Go to page</button>
+                </div>
+            </div>
+            <table class="table" data-bind="if: events().length > 0">
                 <thead>
                     <tr>
-                        <!-- <th scope="col">Id</th> -->
                         <th scope="col">Person</th>
                         <th scope="col">Email</th>
                         <th scope="col">Room</th>
@@ -58,18 +59,48 @@
                         <th scope="col">Time</th>
                     </tr>
                 </thead>
-                <tbody data-bind="foreach: Events">
+                <tbody data-bind="foreach: events">
                     <tr>
-                        <!-- <th th:text="${event.id}" scope="row">Id</th> -->
                         <td data-bind="text: user">User</td>
                         <td data-bind="text: email">Email</td>
                         <td data-bind="text: room">Room</td>
-                        <!-- ko if: entered -->
-                        <td>Entry</td>
-                        <!-- /ko -->
-                        <!-- ko ifnot: entered -->
-                        <td>Exit</td>
-                        <!-- /ko -->
+                        <td>
+                            <span data-bind="if: entered">
+                                Entry
+                            </span>
+                            <span data-bind="ifnot: entered">
+                                Exit
+                            </span>
+                        </td>
+                        <td data-bind="text: time">Time</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <h3>New events</h3>
+            <table class="table" data-bind="if: newEvents().length > 0">
+                <thead>
+                    <tr>
+                        <th scope="col">Person</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Room</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: newEvents">
+                    <tr>
+                        <td data-bind="text: user">User</td>
+                        <td data-bind="text: email">Email</td>
+                        <td data-bind="text: room">Room</td>
+                        <td>
+                            <span data-bind="if: entered">
+                                Entry
+                            </span>
+                            <span data-bind="ifnot: entered">
+                                Exit
+                            </span>
+                        </td>
                         <td data-bind="text: time">Time</td>
                     </tr>
                 </tbody>
