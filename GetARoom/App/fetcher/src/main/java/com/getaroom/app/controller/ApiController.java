@@ -100,7 +100,6 @@ public class ApiController {
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
         @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
             
-            
             PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
             if (room.isEmpty()){
                 return eventRepository.findAll(pageRequest).toList();
@@ -113,10 +112,16 @@ public class ApiController {
     @CrossOrigin
     @GetMapping("/event/pages")
     public Integer eventPages(
+        @RequestParam(required = false, defaultValue = "") String room,
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
         @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
         
-        return eventRepository.findAll(PageRequest.of(pageNumber, pageCapacity)).getTotalPages();
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
+        if (room.isEmpty()){
+            return eventRepository.findAll(pageRequest).getTotalPages();
+        }else{
+            return eventRepository.findByRoom(room, pageRequest).getTotalPages();
+        }
     }
 
     @CrossOrigin
@@ -130,6 +135,7 @@ public class ApiController {
         return eventHistoryRepository.findAll(pageRequest).toList();
     }
 
+    @CrossOrigin
     @GetMapping("/status")
     public List<Status> status() {
         List<Status> res = statusRepository.findAll();

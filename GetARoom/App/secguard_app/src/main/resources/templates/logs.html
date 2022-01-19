@@ -15,24 +15,38 @@
 
         <div class="container" id="ko-body">
             <h2>Logs</h2>
-            <form action="#">
+            <div>
                 <label for="room">Room:</label>
                 <input type="text" id="room" name="room" data-bind="value: room"/>
                 <label for="page-capacity">Events per page:</label>
                 <input type="number" id="page-capacity" name="page-capacity" data-bind="value: pageCapacity"/>
-                <button class="btn btn-primary" data-bind="click: updateAll">Apply</button>
+                <button class="btn btn-primary" data-bind="click: $root.choosePage(0)">Apply</button>
                 <button class="btn btn-info" data-bind="click: resetDefault">Reset to default</button>
-            </form>
-            <div id="page_selection" class="page-select">
-                <div>
-                    <a class="page-prev-next-control" data-bind="click: prevPage">Prev</a>
+            </div>
+            <br>
+            <h3>Stored events</h3>
+            <div id="page_selection">
+                <div class="page-select" data-bind="if: pages().length < 21">
+                    <div>
+                        Selected page: <span data-bind="text: pageSelected() + 1"></span>
+                    </div>
+                    <br>
+                    <div>
+                        <a class="page-prev-next-control" data-bind="click: prevPage">Prev</a>
+                    </div>
+                    <div class="page-select-array" data-bind="foreach: pages">
+                        <a class="page-select-button" data-bind="if: $root.pageSelected() == $index()">●</a>
+                        <a class="page-select-button" data-bind="ifnot: $root.pageSelected() == $index(), click: $root.choosePage">○</a>
+                    </div>
+                    <div>
+                        <a class="page-prev-next-control" data-bind="click: nextPage">Next</a>
+                    </div>
                 </div>
-                <div class="page-select-array" data-bind="foreach: pages">
-                    <a class="page-select-button" data-bind="if: $root.pageSelected() == $index()">●</a>
-                    <a class="page-select-button" data-bind="ifnot: $root.pageSelected() == $index(), click: $root.choosePage">○</a>
-                </div>
-                <div>
-                    <a class="page-prev-next-control" data-bind="click: nextPage">Next</a>
+                <div class="page-select" data-bind="ifnot: pages().length < 21">
+                    <label for="page-number">Page:</label>
+                    <input type="number" min="1" id="page-number-input" name="page-number" data-bind="attr: { max: pages().length }"/>
+                    <span data-bind="text: '/' + pages().length"></span>
+                    <button class="btn btn-primary" data-bind="click: choosePageInput">Go to page</button>
                 </div>
             </div>
             <table class="table" data-bind="if: events().length > 0">
@@ -51,12 +65,41 @@
                         <td data-bind="text: email">Email</td>
                         <td data-bind="text: room">Room</td>
                         <td>
-                            <p data-bind="if: entered">
+                            <span data-bind="if: entered">
                                 Entry
-                            </p>
-                            <p data-bind="ifnot: entered">
+                            </span>
+                            <span data-bind="ifnot: entered">
                                 Exit
-                            </p>
+                            </span>
+                        </td>
+                        <td data-bind="text: time">Time</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <h3>New events</h3>
+            <table class="table" data-bind="if: newEvents().length > 0">
+                <thead>
+                    <tr>
+                        <th scope="col">Person</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Room</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: newEvents">
+                    <tr>
+                        <td data-bind="text: user">User</td>
+                        <td data-bind="text: email">Email</td>
+                        <td data-bind="text: room">Room</td>
+                        <td>
+                            <span data-bind="if: entered">
+                                Entry
+                            </span>
+                            <span data-bind="ifnot: entered">
+                                Exit
+                            </span>
                         </td>
                         <td data-bind="text: time">Time</td>
                     </tr>
@@ -65,7 +108,7 @@
         </div>
         
         <th:block th:include="base :: scripts" />
-
+        
         <script th:src="@{/scripts/logs.js}" src="../static/scripts/logs.js"></script>
     </body>
 </html>

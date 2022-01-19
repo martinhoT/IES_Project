@@ -10,6 +10,7 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" th:href="@{/css/base.css}" type="text/css">
         <link rel="stylesheet" th:href="@{/css/table.css}" type="text/css">
+        <link rel="stylesheet" th:href="@{/css/blacklist.css}" type="text/css">
     </th:block>
 </head>
 <body>
@@ -20,12 +21,77 @@
     <th:block th:replace="base :: alerts" />
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Blacklist Manager
-</button>
+<div class="card-deck">
+    <div class="card">
+        <div class="card-block d-flex flex-column">
+            <div class="card-header">
+                Blacklist Manager
+            </div>
+            <p class="card-text">
+                Manage the room's blacklist in a certain department by adding or removing a user, using is identifier (e-mail)
+            </p>
 
-<!-- Modal -->
+            <button type="button" class="align-self-end btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Blacklist Manager
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block d-flex flex-column">
+            <div class="card-header">
+                By Room
+            </div>
+            <p class="card-text">
+                Check out the table with all the blacklisted users in a certain room's department
+            </p>
+
+            <button type="button" class="align-self-end btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
+                Blacklist by Room
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-block d-flex flex-column">
+            <div class="card-header">
+                By Department
+            </div>
+            <p class="card-text">
+                Check out the table with all the blacklisted users in a certain department
+            </p>
+
+            <button type="button" class="align-self-end btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
+                Blacklist by Department
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="roomTable" style="visibility: hidden">
+    <div id="booking" class = "section">
+        <div class="limiter">
+            <div class="container-table100">
+                <div class="wrap-table100">
+                    <div class="table100">
+                        <table id="blacklistTable">
+                            <thead>
+                            <tr class="table100-head">
+                                <th class="column1">Room number</th>
+                                <th class="column2">Email</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal MANAGER -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -61,10 +127,7 @@
     </div>
 </div>
 
-<!--Blacklist by ROOM-->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
-    Blacklist by Room
-</button>
+
 
 <!-- Modal by ROOM-->
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -99,10 +162,7 @@
     </div>
 </div>
 
-<!--Blacklist by DEPARTMENT-->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
-    Blacklist by Department
-</button>
+
 
 <!-- Modal by DEPARTMENT-->
 <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -131,27 +191,6 @@
     </div>
 </div>
 
-<div id="roomTable" style="visibility: hidden">
-    <div id="booking" class = "section">
-        <div class="limiter">
-            <div class="container-table100">
-                <div class="wrap-table100">
-                    <div class="table100">
-                        <table id="blacklistTable">
-                            <thead>
-                            <tr class="table100-head">
-                                <th class="column1">Room number</th>
-                                <th class="column2">Email</th>
-                            </tr>
-                            </thead>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <th:block th:fragment="scripts">
