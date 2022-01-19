@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <th:block th:include="base :: head" />
         <title>Logs</title>
+        <link rel="stylesheet" th:href="@{css/logs.css}" href="../static/css/logs.css" type="text/css">
     </head>
     <body>
 
@@ -18,21 +20,19 @@
                 <input type="text" id="room" name="room" data-bind="value: room"/>
                 <label for="page-capacity">Events per page:</label>
                 <input type="number" id="page-capacity" name="page-capacity" data-bind="value: pageCapacity"/>
-                <button class="btn btn-primary" data-bind="click: updateEvents">Apply</button>
+                <button class="btn btn-primary" data-bind="click: updateAll">Apply</button>
                 <button class="btn btn-info" data-bind="click: resetDefault">Reset to default</button>
             </form>
-            <div id="page_selection" class="container">
-                <div class="row">
-                    <div class="col-2">
-                        <a>Prev</a>
-                    </div>
-                    <div class="col-8" data-bind="foreach: pages">
-                        <a data-bind="if: $root.pageSelected == $index()">●</a>
-                        <a data-bind="ifnot: $root.pageSelected == $index(), click: $root.showPage($index())">○</a>
-                    </div>
-                    <div class="col-2">
-                        <a>Next</a>
-                    </div>
+            <div id="page_selection" class="page-select">
+                <div>
+                    <a class="page-prev-next-control" data-bind="click: prevPage">Prev</a>
+                </div>
+                <div class="page-select-array" data-bind="foreach: pages">
+                    <a class="page-select-button" data-bind="if: $root.pageSelected() == $index()">●</a>
+                    <a class="page-select-button" data-bind="ifnot: $root.pageSelected() == $index(), click: $root.choosePage">○</a>
+                </div>
+                <div>
+                    <a class="page-prev-next-control" data-bind="click: nextPage">Next</a>
                 </div>
             </div>
             <table class="table" data-bind="if: events().length > 0">

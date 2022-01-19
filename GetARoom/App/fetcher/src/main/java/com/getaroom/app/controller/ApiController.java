@@ -29,7 +29,6 @@ import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -94,6 +93,7 @@ public class ApiController {
         }
     }
     
+    @CrossOrigin
     @GetMapping("/event")
     public List<EventNow> event(
         @RequestParam(required = false, defaultValue = "") String room,
@@ -112,8 +112,11 @@ public class ApiController {
     
     @CrossOrigin
     @GetMapping("/event/pages")
-    public Integer eventPages() {
-        return eventRepository.findAll(Pageable.unpaged()).getTotalPages();
+    public Integer eventPages(
+        @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+        @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
+        
+        return eventRepository.findAll(PageRequest.of(pageNumber, pageCapacity)).getTotalPages();
     }
 
     @CrossOrigin

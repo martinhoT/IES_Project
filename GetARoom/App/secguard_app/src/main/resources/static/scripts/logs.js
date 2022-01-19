@@ -21,26 +21,44 @@ $(document).ready(function() {
 
         self.updateEvents = function() {
             
-            $.getJSON("http://localhost:84/api/event", {pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
+            $.getJSON("http://localhost:84/api/event", {room: self.room(), pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
             function(data, testStatus, jqXHR) {
                 self.events(data);
             });
         }
 
+        // Used in case a new page count has to be used (the filters)
+        self.updateAll = function() {
+            $.getJSON("http://localhost:84/api/event/pages", {pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
+            function(data, testStatus, jqXHR) {
+                self.pages( [...Array(data).keys()] );
+
+                self.choosePage(0);
+            });
+        }
+
         self.resetDefault = function() {
             $("#room").val("");
+            self.room("");
             $("#page-capacity").val(20);
+            self.pageCapacity(20);
+        }
+
+        self.nextPage = function() {
+            if (self.pageSelected() < self.pages().length-1) {
+                self.choosePage(self.pageSelected() + 1);
+            }
+        }
+
+        self.prevPage = function() {
+            if (self.pageSelected() > 0) {
+                self.choosePage(self.pageSelected() - 1);
+            }
         }
 
     }
     logsScriptVars.viewModel = new ViewModel();
     ko.applyBindings(logsScriptVars.viewModel, document.getElementById("ko-body"));
 
-    $.getJSON("http://localhost:84/api/event/pages",
-    function(data, testStatus, jqXHR) {
-        logsScriptVars.viewModel.pages( Array(data).keys() );
-
-        logsScriptVars.viewModel.updateEvents();
-    });
-
+    logsScriptVars.viewModel.updateAll();
 })
