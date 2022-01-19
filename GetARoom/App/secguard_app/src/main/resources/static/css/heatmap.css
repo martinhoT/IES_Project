@@ -6,8 +6,15 @@ body {
 }
 
 #ko-body{
-    background: whitesmoke;
     margin-top: 20px;
+}
+
+h2, h3, label{
+    color: white;
+    text-shadow: -1px 1px 0 #000,
+                1px 1px 0 #000,
+                1px -1px 0 #000,
+                -1px -1px 0 #000;
 }
 
 .map-container {

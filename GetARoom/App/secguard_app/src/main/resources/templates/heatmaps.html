@@ -13,7 +13,7 @@
     </div>
 
     <div id="ko-body" class="container">
-        <label for="department_selected">Department</label>
+        <label for="department_selected"></label>
         <select id="department_selected" name="department_selected">
             <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.id + ' - ' + department.shortName}"></option>
         </select>
@@ -23,8 +23,8 @@
             </ol>
             <div id="carousel-inner" class="carousel-inner" data-bind="foreach: floors, childrenComplete: flagFloorsBound">
             <div class="carousel-item" data-bind="css: { active: $index() == 0 }" >
-                <h2 style="text-align:center">Departamento <span data-bind="text: $root.department"></span></h2>
-                <h3 style="text-align: center"><span data-bind="text: $data.floor"></span>º andar</h3>
+                <h2 style="text-align:center; color: white;">Departamento <span data-bind="text: $root.department"></span></h2>
+                <h3 style="text-align: center; color: white;"><span data-bind="text: $data.floor"></span>º andar</h3>
                 <div class="map-container">
                     <div data-bind="foreach: $data.styles">
                         <a data-bind="attr: { href: '/room/' + $data.room }">
