@@ -19,7 +19,7 @@
                 <label for="room">Room:</label>
                 <input type="text" id="room" name="room" data-bind="value: room"/>
                 <label for="page-capacity">Events per page:</label>
-                <input type="number" id="page-capacity" name="page-capacity" data-bind="value: pageCapacity"/>
+                <input type="number" min="1" id="page-capacity" name="page-capacity" data-bind="value: pageCapacity"/>
                 <button class="btn btn-primary" data-bind="click: $root.choosePage(0)">Apply</button>
                 <button class="btn btn-info" data-bind="click: resetDefault">Reset to default</button>
             </div>

@@ -153,14 +153,7 @@ public class App implements CommandLineRunner {
 				String roomStr = (String) doc.get("room");
 				int departmentNum = Integer.parseInt(roomStr.split("\\.")[0]);
 				Room room = roomRepository.findById(roomStr)
-						.orElse(null);
-	
-				// Put the old room stats on the status repository
-				if (room != null)
-					statusRepository.save( room.createStatus() );
-				// If it was never in the repository, create a new one
-				else
-					room = new Room(roomStr, departmentNum);
+						.orElse(new Room(roomStr, departmentNum));
 				
 				// Update the current status
 				String timeStr = (String) doc.get("time");
@@ -182,6 +175,7 @@ public class App implements CommandLineRunner {
 	
 				// Finally save/update the room's statistics
 				roomRepository.save(room);
+				statusRepository.save( room.createStatus() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -263,8 +257,7 @@ public class App implements CommandLineRunner {
 
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		// return blacklistRepository.findByRoomIdAndEmail(room, email).orElse(null) != null;
-		return blacklistRepository.existsByRoomIdAndEmail(room, email);
+		return blacklistRepository.existsByRoomAndEmail(room, email);
 	}
 
 	/**

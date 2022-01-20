@@ -12,8 +12,8 @@ function setOptions(res, frag, room){
 
     for (let i = 0; i < res.length; i++) {
         const option = document.createElement("option");
-        option.value = "" + res[i];
-        option.text = " " + res[i];
+        option.value = "" + res[i].id;
+        option.text = " " + res[i].id;
         frag.appendChild(option);
     }
 
@@ -41,7 +41,7 @@ function setBlacklistTable(data){
         const row = document.createElement("tr");
 
         //roomId
-        let cellData = rowData.roomId;
+        let cellData = rowData.room;
 
         let cell = document.createElement('td');
         cell.className = "column1";
@@ -78,13 +78,13 @@ function setRoomValues() {
 
     $.ajax({
         type: 'GET',
-        url: "http://" + location.hostname + ":84/api/getRooms",
+        url: "http://" + location.hostname + ":84/api/room",
         data: {
-            Result : getDep
+            dep: getDep
         },
         dataType: 'json',
-        success: function (res) {
-            setOptions(res, frag, room)
+        success: function (data, textStatus, jqXHR) {
+            setOptions(data[getDep], frag, room)
         }
     });
 
@@ -94,12 +94,13 @@ function addToBlacklist() {
     const room = document.getElementById("room").value;
 
     $.ajax({
-        type:'POST',
-        url : "http://" + location.hostname + ":84/api/addUserBlacklist",
-        data: {
-            Email : email,
-            Room: room,
-        },
+        type: 'POST',
+        url: "http://" + location.hostname + ":84/api/blacklist/user",
+        contentType: "application/json",
+        data: JSON.stringify({
+            email: email,
+            room: room,
+        }),
         dataType: 'json',
         success: function(data) {
             console.log('success',data);
@@ -112,12 +113,13 @@ function removeBlacklist() {
     const room = document.getElementById("room").value;
 
     $.ajax({
-        type:'POST',
-        url :"http://" + location.hostname + ":84/api/removeUserBlacklist",
-        data: {
-            Email : email,
-            Room: room,
-        },
+        type: 'DELETE',
+        url: "http://" + location.hostname + ":84/api/blacklist/user",
+        contentType: "application/json",
+        data: JSON.stringify({
+            email: email,
+            room: room,
+        }),
         dataType: 'json',
         success: function(data) {
             console.log('success',data);
@@ -140,13 +142,13 @@ function setRoomValuesForRoomModal() {
 
     $.ajax({
         type: 'GET',
-        url: "http://" + location.hostname + ":84/api/getRooms",
+        url: "http://" + location.hostname + ":84/api/room",
         data: {
-            Result : getDep
+            dep: getDep
         },
         dataType: 'json',
-        success: function (res) {
-            setOptions(res, frag, room)
+        success: function (data, textStatus, jqXHR) {
+            setOptions(data[getDep], frag, room)
         }
     });
 
@@ -157,10 +159,10 @@ function blacklistByRoom() {
     console.log("blacklistByRoom()");
     console.log(room);
     $.ajax({
-        type:'POST',
-        url :"http://" + location.hostname + ":84/api/blacklistByRoom",
+        type: 'GET',
+        url: "http://" + location.hostname + ":84/api/blacklist",
         data: {
-            Room: room,
+            room: room,
         },
         dataType: 'json',
         success: function(data) {
@@ -199,10 +201,10 @@ function blacklistByDep() {
     const dep = document.getElementById("dep3").value;
 
     $.ajax({
-        type:'POST',
-        url :"http://" + location.hostname + ":84/api/blacklistByDepartment",
+        type: 'GET',
+        url: "http://" + location.hostname + ":84/api/blacklist",
         data: {
-            Dep: dep,
+            dep: dep,
         },
         dataType: 'json',
         success: function(data) {
