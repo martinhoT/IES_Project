@@ -6,6 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -46,6 +52,7 @@ import com.getaroom.app.repository.mongodb.EventRepository;
 import com.getaroom.app.repository.mysql.RoomRepository;
 
 @SpringBootApplication
+@EnableSwagger2
 public class App implements CommandLineRunner {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -64,6 +71,11 @@ public class App implements CommandLineRunner {
 	private final Gson gson;
 
 	private Map<Integer, DepartmentInfo> departmentInfoMap;
+
+	@Bean
+	public Docket productApi() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.getaroom.app")).build();
+	}
 
 	@Autowired
 	public App(
