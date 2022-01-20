@@ -3,12 +3,7 @@ package com.getaroom.app.controller;
 import java.nio.charset.StandardCharsets;
 
 import com.getaroom.app.entity.User;
-import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Status_event;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +39,7 @@ public class MainController {
 
 	@GetMapping("/graphs")
 	public String graphs(Model model) {
-		List<Status_event> Status_Events = apiGetRequestList("status_history", Status_event.class);
+		List<Status_event> Status_Events = apiGetRequestList("status", Status_event.class);
 		model.addAllAttributes(Map.of(
 			"status_events", Status_Events
 		));

@@ -71,11 +71,6 @@ public class MainController {
 
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
-		// List<Event> RoomEvents = apiGetRequestList("event", Event.class);
-		// System.err.println(RoomEvents);
-		// model.addAllAttributes(Map.of(
-		// 	"events", RoomEvents
-		// ));
 		return "logs";
 	}
 
@@ -89,10 +84,10 @@ public class MainController {
 		}
 		Map<String, Student> blacklisted = new HashMap<String, Student>();
 		model.addAllAttributes(Map.of(
-			 "dep", dep,
-			 "floor", floor,
-			 "room", room,
-			 "blacklisted", blacklisted,
+			"dep", dep,
+			"floor", floor,
+			"room", room,
+			"blacklisted", blacklisted,
 			"events", currentRoomEvents
 		));
 		return "room";
@@ -134,23 +129,5 @@ public class MainController {
 			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
 			.collectList().block();
 	}
-
-	// private List<Status> apiStatusDep(String dep) {
-	// 	String json = apiClient.get()
-	// 		.uri(uriBuilder -> uriBuilder
-	// 			.path("/api/status")
-	// 			.queryParam("dep", dep)
-	// 			.build())
-	// 		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-	// 		.acceptCharset(StandardCharsets.UTF_8)
-	// 		.exchangeToMono(response -> response.bodyToMono(String.class))
-	// 		.block();
-
-	// 	Gson gson = new Gson();
-	// 	List<Status> res = new ArrayList<>();
-	// 	for (JsonElement elem : gson.fromJson(json, JsonObject.class).getAsJsonArray(dep))
-	// 		res.add(gson.fromJson(elem.toString(), Status.class));
-	// 	return res;
-	// }
 
 }
