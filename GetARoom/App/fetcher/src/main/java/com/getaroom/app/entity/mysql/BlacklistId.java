@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 public class BlacklistId implements Serializable {
 	private String email;
-	private String roomId;
+	private String room;
 
 	public BlacklistId() {
 	}
 
-	public BlacklistId(String email, String roomId) {
+	public BlacklistId(String email, String room) {
 		this.email = email;
-		this.roomId = roomId;
+		this.room = room;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public String getRoomId() {
-		return roomId;
+	public String getRoom() {
+		return room;
 	}
 }

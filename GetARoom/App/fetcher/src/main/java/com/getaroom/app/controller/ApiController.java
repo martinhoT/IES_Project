@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -125,7 +125,7 @@ public class ApiController {
     }
 
     @CrossOrigin
-    @GetMapping("/event_history")
+    @GetMapping("/event/history")
     public List<EventHistory> todayHistory(
         @RequestParam(required = false, defaultValue = "") String room,
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
@@ -143,13 +143,17 @@ public class ApiController {
         return res;
     }
 
+    @CrossOrigin
     @GetMapping("/room")
     public Map<String, List<Room>> room(@RequestParam(required = false) Integer dep) {
         // Used by student_app and analyst_app
         if (dep != null)
             return Map.of(dep.toString(), roomRepository.findByDepId(dep));
 
-        return null;
+        Map<String, List<Room>> res = new HashMap<>();
+        for (Room room : roomRepository.findAll())
+            res.putIfAbsent(String.valueOf(room.getDepId()), new ArrayList<>()).add(room);
+        return res;
     }
 
     @CrossOrigin
@@ -172,78 +176,58 @@ public class ApiController {
 
         return roomStyleRepository.findAllRooms(dep, floor);
     }
-
+    
     @CrossOrigin
-    @GetMapping(value="/getRooms")
-    @ResponseBody
-    public ArrayList<String> setRoomValuesByDepartment(@RequestParam("Result") String res, Model model) {
-        System.out.println(res);
-        ArrayList<String> results = new ArrayList<>();
+    @GetMapping("/blacklist")
+    public List<Blacklist> blacklist(
+        @RequestParam(required = false, defaultValue = "") String dep,
+        @RequestParam(required = false, defaultValue = "") String room) {
 
-        List<Room> x = roomRepository.findByDepId(Integer.parseInt(res));
-        x.forEach(elem -> results.add(elem.getId()));
+        if (!room.isEmpty())
+            return blacklistRepository.findByRoom(room);
 
-        return results;
+        if (!dep.isEmpty()) {
+            try {
+                return blacklistRepository.blacklistForDepartment(Integer.parseInt(dep));
+            }
+            catch (NumberFormatException e){
+                System.err.println("/blacklist endpoint invalid value " + dep + " for argument 'dep', could not parse an Integer.");
+                return null;
+            }
+        }        
+
+        return blacklistRepository.findAll();
     }
 
     @CrossOrigin
-    @PostMapping(value = "/addUserBlacklist")
-    @ResponseBody
-    public String addRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
-        blacklistRepository.save(new Blacklist(studentEmail, room));
+    @PostMapping("/blacklist/user")
+    public String blacklistUserPost(@RequestBody Blacklist blacklist) {
+        if (blacklistRepository.existsByRoomAndEmail(blacklist.getRoom(), blacklist.getEmail()))
+            return "failure";
+        
+        blacklistRepository.save(blacklist);
 
         return "success";
     }
 
     @CrossOrigin
-    @PostMapping(value = "/removeUserBlacklist")
-    @ResponseBody
-    public String remRoomBlacklist(@RequestParam("Room") String room, @RequestParam("Email") String studentEmail) {
-        try{
-            blacklistRepository.delete(new Blacklist(studentEmail, room));
+    @DeleteMapping("/blacklist/user")
+    public String blacklistUserDelete(@RequestBody Blacklist blacklist) {
+        try {
+            blacklist = blacklistRepository.findByRoomAndEmail(blacklist.getRoom(), blacklist.getEmail())
+                .orElseThrow();
         }
-        catch(Exception e){
-            System.out.println(e.getMessage());
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+            return "failure";
         }
+
+        blacklistRepository.delete(blacklist);
 
         return "success";
     }
 
     @CrossOrigin
-    @PostMapping(value = "/blacklistByRoom")
-    @ResponseBody
-    public List<Blacklist> blacklistByRoom(@RequestParam("Room") String room) {
-
-        List<Blacklist> blacklistByRoom = new ArrayList<>();
-        try{
-            blacklistByRoom = blacklistRepository.findByRoomId(room);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-
-
-        return blacklistByRoom;
-    }
-
-
-    @CrossOrigin
-    @PostMapping(value = "/blacklistByDepartment")
-    @ResponseBody
-    public List<Blacklist> blacklistByDepartment(@RequestParam("Dep") String dep) {
-
-        List<Blacklist> blacklistByDepartment = new ArrayList<>();
-        try{
-            blacklistByDepartment = blacklistRepository.blacklistForDepartment(Integer.parseInt(dep));
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-
-
-        return blacklistByDepartment;
-    }
-
     @GetMapping("/alerts")
     public List<BlacklistNotification> alerts() {
         return blacklistNotificationRepository.findAll();
@@ -259,7 +243,7 @@ public class ApiController {
         return blacklistNotificationRepository.findBySeen(true);
     }
     @CrossOrigin
-    @PostMapping("/alerts/mark_seen")
+    @PostMapping("/alerts/seen")
     public void alertsMarkRead(@RequestBody List<BlacklistNotification> notifications) {
         List<BlacklistNotification> toRemove = new ArrayList<>();
         for (BlacklistNotification notification : notifications)

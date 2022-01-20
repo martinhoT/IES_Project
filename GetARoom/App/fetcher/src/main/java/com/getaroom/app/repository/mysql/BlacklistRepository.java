@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface BlacklistRepository extends JpaRepository<Blacklist, String> {
 
-    Optional<Blacklist> findByRoomIdAndEmail(String roomId, String email);
+    Optional<Blacklist> findByRoomAndEmail(String room, String email);
 
-    boolean existsByRoomIdAndEmail(String roomId, String email);
+    boolean existsByRoomAndEmail(String room, String email);
 
-    List<Blacklist> findByRoomId(String roomId);
+    List<Blacklist> findByRoom(String room);
 
-    @Query(value = "select b from Blacklist b where b.roomId in (select r.id from Room r where r.depId = :id) order by b.roomId")
+    @Query(value = "select b from Blacklist b where b.room in (select r.id from Room r where r.depId = :id) order by b.room")
     List<Blacklist> blacklistForDepartment(int id);
 
 }

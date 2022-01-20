@@ -6,6 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -46,6 +52,7 @@ import com.getaroom.app.repository.mongodb.EventRepository;
 import com.getaroom.app.repository.mysql.RoomRepository;
 
 @SpringBootApplication
+@EnableSwagger2
 public class App implements CommandLineRunner {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -64,6 +71,11 @@ public class App implements CommandLineRunner {
 	private final Gson gson;
 
 	private Map<Integer, DepartmentInfo> departmentInfoMap;
+
+	@Bean
+	public Docket productApi() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.getaroom.app")).build();
+	}
 
 	@Autowired
 	public App(
@@ -153,14 +165,7 @@ public class App implements CommandLineRunner {
 				String roomStr = (String) doc.get("room");
 				int departmentNum = Integer.parseInt(roomStr.split("\\.")[0]);
 				Room room = roomRepository.findById(roomStr)
-						.orElse(null);
-	
-				// Put the old room stats on the status repository
-				if (room != null)
-					statusRepository.save( room.createStatus() );
-				// If it was never in the repository, create a new one
-				else
-					room = new Room(roomStr, departmentNum);
+						.orElse(new Room(roomStr, departmentNum));
 				
 				// Update the current status
 				String timeStr = (String) doc.get("time");
@@ -182,6 +187,7 @@ public class App implements CommandLineRunner {
 	
 				// Finally save/update the room's statistics
 				roomRepository.save(room);
+				statusRepository.save( room.createStatus() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -263,8 +269,7 @@ public class App implements CommandLineRunner {
 
 	// Simply returns if events of that room and email are blacklisted on the database
 	private boolean isBlacklisted(String room, String email) {
-		// return blacklistRepository.findByRoomIdAndEmail(room, email).orElse(null) != null;
-		return blacklistRepository.existsByRoomIdAndEmail(room, email);
+		return blacklistRepository.existsByRoomAndEmail(room, email);
 	}
 
 	/**
