@@ -27,11 +27,7 @@ if [ ! -e "./Data/Output/logs.txt" ]
 then
     if [ ! -d "./Data/Output" ]
     then
-        if [ ! -d "./Data" ]
-        then
-            mkdir ./Data
-        fi
-        mkdir ./Data/Output
+        mkdir -p ./Data/Output
     fi
     touch ./Data/Output/logs.txt
 fi

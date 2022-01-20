@@ -56,6 +56,7 @@ def main():
     peopleLimit = None
     depsDict = {}
     depRooms = []
+    roomIgnore = "4.2.08"
 
     # Get people data
     with open(peoplePath,"r") as jsonF:
@@ -66,7 +67,7 @@ def main():
     # Get Department rooms
     with open(depsPath,"r") as jsonF:
         depsJson = json.load(jsonF)
-        for room in depsJson:
+        for room in (room for room in depsJson if room["name"] != roomIgnore):
             depsDict[room["name"]] = [room["limit"], 0]
             depRooms.append(room["name"])
 
