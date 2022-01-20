@@ -1,40 +1,25 @@
 google.charts.load('current', {'packages':['line']});
 google.charts.setOnLoadCallback(drawChart);
 
-var Events;
 var floorData = {};
-var options = {};
+var data_per_day = {};
 
 function ViewModel(){
     var self = this;
     
     self.floors = ko.observableArray([]);
+    self.days = ko.observableArray([]);
     self.departments = ko.observableArray([]);
     self.selectedFloor = ko.observable();
+    self.selectedDay = ko.observable();
+
+    floorData = data_per_day[self.days()[0]];
 
     self.flagFloorsBound = function(parent) {
         console.log("Floors loaded, data can be updated.");
         self.floorsBound = true;
-        self.selectedFloor(self.floors()[0])
-
-        options = {
-            title: 'Floor '+  self.floors()[0] +' room occupancy over time',
-            legend: {
-                position: 'left',
-                textStyle:{
-                    fontSize: 16
-                }
-            },
-            vAxis: {
-                format:'#,###%',
-                viewWindow:{
-                    max: 1,
-                    min: 0
-                }}
-        };
-
-        var chart = new google.charts.Line(document.getElementById('curve_chart_'+ self.floors()[0]));
-        chart.draw(floorData[self.floors()[0]], google.charts.Line.convertOptions(options));    
+        self.selectedDay(self.days()[0]);
+        self.selectedFloor(self.sortedFloors()[0]);
     }
 
     self.sortedFloors = ko.pureComputed(function () {
@@ -52,21 +37,23 @@ function ViewModel(){
                 : 1;
         });
     });
-
 }
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
 
-$.getJSON("http://localhost:84/api/status   ",
-function (data, textStatus, jqXHR) {
-    Events = data;
+$("#selected_day").change(function() {
+    console.log( $("#selected_day").val() );
+    viewModel.selectedDay( $("#selected_day").val() )
+    floorData = data_per_day[$("#selected_day").val()]
+
+    viewModel.floors(Object.keys(floorData));
 });
 
 $("#selected_floor").change(function() {
     console.log( $("#selected_floor").val() );
     viewModel.selectedFloor( $("#selected_floor").val() )
     // TODO
-    options = {
+    var options = {
         title: 'Floor '+  $("#selected_floor").val() +' room occupancy over time',
         legend: {
             position: 'left',
@@ -83,17 +70,36 @@ $("#selected_floor").change(function() {
     };
 
     var chart = new google.charts.Line(document.getElementById('curve_chart_'+$("#selected_floor").val()));
+    google.visualization.events.addListener(chart, 'error', function (err) {
+        console.log(err.id, err.message);
+        google.visualization.errors.removeError(err.id);
+        google.visualization.errors.removeAll(document.getElementById('curve_chart_'+$("#selected_floor").val()));
+    });
     chart.draw(floorData[$("#selected_floor").val()], google.charts.Line.convertOptions(options));
 });
 
 function drawChart() {
     viewModel.floors([]);
+    viewModel.days([]);
     var roomsByFloor = {};
     $.getJSON("http://localhost:84/api/status",
         function (data, textStatus, jqXHR) {
             for(let event of data){
                 var floor = event['room'].split(".").splice(0,2).join("-");
-            
+
+                var date = new Date(event['time'])
+                var day = date.getDate().toString() +"/"+(date.getMonth()+1).toString() +"/"+date.getFullYear().toString();
+
+                if (!(Object.keys(data_per_day).includes(day))){
+                    data_per_day[day] = {};
+                    if (Object.keys(data_per_day).length >= 2){
+                        var prev_day = Object.keys(data_per_day)[Object.keys(data_per_day).indexOf(day)-1]
+                        data_per_day[prev_day] = floorData;
+                    }
+                    floorData = {};
+                    roomsByFloor = {};
+                }
+
                 if(!(floor in roomsByFloor)){
                     roomsByFloor[floor] = {};
                 }
@@ -105,7 +111,6 @@ function drawChart() {
                 }
             
                 if(!(floor in floorData)){
-                    viewModel.floors.push(floor);
                     floorData[floor] = new google.visualization.DataTable();
                     floorData[floor].addColumn('date', 'Time');
                 }
@@ -129,5 +134,32 @@ function drawChart() {
             
                 floorData[floor].addRow(row);
             }
+            data_per_day[Object.keys(data_per_day)[Object.keys(data_per_day).length - 1]] = floorData;
+            viewModel.days(Object.keys(data_per_day));
+            viewModel.floors(Object.keys(data_per_day[viewModel.days()[0]]));
+            floorData = data_per_day[viewModel.days()[0]];
+
+            var options = {
+                title: 'Floor '+  viewModel.sortedFloors()[0] +' room occupancy over time',
+                legend: {
+                    position: 'left',
+                    textStyle:{
+                        fontSize: 16
+                    }
+                },
+                vAxis: {
+                    format:'#,###%',
+                    viewWindow:{
+                        max: 1,
+                        min: 0
+                    }}
+            };
+            
+            var chart = new google.charts.Line(document.getElementById('curve_chart_'+ viewModel.sortedFloors()[0]));
+            google.visualization.events.addListener(chart, 'error', function (err) {
+                console.log(err.id, err.message);
+                google.visualization.errors.removeError(err.id);
+            });
+            chart.draw(floorData[viewModel.sortedFloors()[0]], google.charts.Line.convertOptions(options));
         });
 }

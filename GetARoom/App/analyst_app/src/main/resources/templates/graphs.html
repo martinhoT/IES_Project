@@ -15,13 +15,13 @@
                 <a class="nav-link" th:href="@{/api}">
                     <i class="fa fa-home"></i>
                     Home
+                    <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" th:href="@{/graphs}">
                     <i class="fa fa-line-chart"></i>
                     Graphs
-                    <span class="sr-only">(current)</span>
                 </a>
             </li>
           </ul>
@@ -35,10 +35,13 @@
         </div>
       </nav>
 
+    <label for="test">Choose a date:</label>
+      <select name="test" id="selected_day" data-bind="foreach: days, childrenComplete: flagFloorsBound">
+        <option data-bind="value: $data, text: $data"></option>
+    </select> 
+    <p></p>
     <label for="test">Choose a floor:</label>
     <select name="test" id="selected_floor" data-bind="foreach: sortedFloors, childrenComplete: flagFloorsBound">
-        <!-- <optgroup data-bind="foreach: $root.floors, attr: { label: id }">
-        </optgroup> -->
         <option data-bind="value: $data, text: $data + 'º Andar'"></option>
     </select> 
     <div class="center" data-bind="attr:{id: 'curve_chart_' + selectedFloor()}"  style="width: 97%; height: 650px"></div>
