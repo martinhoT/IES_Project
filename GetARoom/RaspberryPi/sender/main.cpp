@@ -159,6 +159,7 @@ Options:\n\
 
                             default:
                                 std::cerr << "Unknown message type '" << type << "' from data stream" << std::endl;
+                                continue;
                         }
 
                         delete[] msg;

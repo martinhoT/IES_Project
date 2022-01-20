@@ -40,10 +40,6 @@ public class MainController {
 		return blacklist;
 	}
 
-	// public Map<String, List<Event>> getRoomEventMap(int dep, int floor, int room) {
-	// 	return ApiController.getHistory("2020");
-	// }
-
 	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
 		blacklist.remove(studentEmail);
 	}
@@ -58,11 +54,6 @@ public class MainController {
 		return "redirect:/login";
 	}
 	
-	// @GetMapping("/sec")
-	// public String sec() {
-	// 	return "sec";
-	// }
-
 	@GetMapping("/blacklist")
 	public ModelAndView getBlacklist(Model model){
 		ModelAndView mav = new ModelAndView();
@@ -80,42 +71,23 @@ public class MainController {
 
 	@GetMapping("/logs")
 	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
-		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
-		System.err.println(RoomEvents);
-	// 	List<Event> events;
-	// 	if (room.equals("None"))
-	// 		events = new ArrayList<>();
-	// 	else
-	// 		events = ApiController.getToday(room);
-		model.addAllAttributes(Map.of(
-			"events", RoomEvents
-		));
+		// List<Event> RoomEvents = apiGetRequestList("event", Event.class);
+		// System.err.println(RoomEvents);
+		// model.addAllAttributes(Map.of(
+		// 	"events", RoomEvents
+		// ));
 		return "logs";
 	}
 
 	@GetMapping("/room/{dep}.{floor}.{room}")
 	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
-	// 	/*
-	// 	* ... obtain the room dynamically ...
-	// 	*/
 		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
 		List<Event> currentRoomEvents = new ArrayList<Event>();
 		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
 		for (Event e : RoomEvents){
 			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
 		}
-	// List<Event> RoomEvents = apiRoomLogs(currentRoom);
 		Map<String, Student> blacklisted = new HashMap<String, Student>();
-	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-	// 	model.addAllAttributes(Map.of(
-	// 		"dep", dep,
-	// 		"floor", floor,
-	// 		"room", room,
-	// 		"blacklisted", blacklisted,
-	// 		"eventMap", eventMap
-	// 	));
-	// 	return "room";
 		model.addAllAttributes(Map.of(
 			 "dep", dep,
 			 "floor", floor,
@@ -125,50 +97,6 @@ public class MainController {
 		));
 		return "room";
 	}
-
-	// @GetMapping("/room/{dep}.{floor}.{room}/remove")
-	// public String roomRemove(
-	// 		@PathVariable int dep,
-	// 		@PathVariable int floor,
-	// 		@PathVariable int room,
-	// 		@RequestParam(name="email") String studentEmail,
-	// 		Model model) {
-
-	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-	// 	model.addAllAttributes(Map.of(
-	// 			"dep", dep,
-	// 			"floor", floor,
-	// 			"room", room,
-	// 			"blacklisted", blacklisted,
-	// 			"eventMap", eventMap
-	// 	));
-	// 	remRoomBlacklist(dep, floor, room, studentEmail);
-	// 	return "room";
-	// }
-
-	// @GetMapping("/room/{dep}.{floor}.{room}/add")
-	// public String roomAdd(
-	// 		@PathVariable int dep,
-	// 		@PathVariable int floor,
-	// 		@PathVariable int room,
-	// 		@RequestParam(name="name") String studentName,
-	// 		@RequestParam(name="email") String studentEmail,
-	// 		Model model) {
-
-	// 	Map<String, Student> blacklisted = getRoomBlacklist(dep, floor, room);
-	// 	Map<String, List<Event>> eventMap = getRoomEventMap(dep, floor, room);
-	// 	model.addAllAttributes(Map.of(
-	// 			"dep", dep,
-	// 			"floor", floor,
-	// 			"room", room,
-	// 			"blacklisted", blacklisted,
-	// 			"eventMap", eventMap
-	// 	));
-	// 	addRoomBlacklist(dep, floor, room, studentName, studentEmail);
-	// 	return "room";
-	// }
-
 
 	@GetMapping("/heatmaps")
 	public String heatmaps(Model model) {
@@ -224,4 +152,5 @@ public class MainController {
 	// 		res.add(gson.fromJson(elem.toString(), Status.class));
 	// 	return res;
 	// }
+
 }

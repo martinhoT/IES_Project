@@ -20,12 +20,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("")
 @Controller
 public class MainController {
 
 	private final WebClient apiClient;
-
+	
+	// Get cookies
+	public Boolean VerifyCookie(HttpServletRequest request, String name){
+		Cookie[] cookies = request.getCookies();
+		if(cookies == null) return false;
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals(name) && cookie.getValue().equals("secret")) return true;
+		};
+		return false;
+	}
+	  
 	@Autowired
 	public MainController(){
 		apiClient = WebClient.create("http://fetcher:8080");
@@ -37,7 +50,12 @@ public class MainController {
 	}
 
 	@GetMapping(value="/studyRooms")
-	public String getAllDepartments(Model model) {
+	public String getAllDepartments(Model model, HttpServletRequest request) {
+
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 

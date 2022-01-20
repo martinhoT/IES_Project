@@ -12,4 +12,6 @@ public interface BlacklistNotificationRepository extends MongoRepository<Blackli
     List<BlacklistNotification> findByEmailAndRoomAndTime(String email, String room, Date time);
 
     List<BlacklistNotification> findBySeen(boolean seen);
+
+    List<BlacklistNotification> deleteBySeen(boolean seen);
 }
