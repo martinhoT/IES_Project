@@ -47,7 +47,7 @@ $(document).ready(function() {
             if (to_be_seen.length > 0) {
                 $.ajax({
                     type: "POST",
-                    url: "http://" + location.hostname + ":84/api/alerts/mark_seen",
+                    url: "http://" + location.hostname + ":84/api/alerts/seen",
                     data: JSON.stringify(to_be_seen),
                     function (data, textStatus, jqXHR) {},
                     contentType: "application/json",

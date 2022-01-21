@@ -203,7 +203,7 @@ public class ApiController {
 	private List<Event> apiHistoryYear() {
 		return apiClient.get()
 			.uri(uriBuilder -> uriBuilder
-			.path("/api/event_history")
+			.path("/api/event/history")
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)

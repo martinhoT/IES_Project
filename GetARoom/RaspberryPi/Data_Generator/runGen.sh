@@ -27,11 +27,7 @@ if [ ! -e "./Data/Output/logs.txt" ]
 then
     if [ ! -d "./Data/Output" ]
     then
-        if [ ! -d "./Data" ]
-        then
-            mkdir ./Data
-        fi
-        mkdir ./Data/Output
+        mkdir -p ./Data/Output
     fi
     touch ./Data/Output/logs.txt
 fi
@@ -40,7 +36,7 @@ fi
 > ${log_file}
 
 # Data Generator
-python3 ./Data_Generator/PSMG.py >> ${log_file} &
+python3 -u ./PSMG.py >> ${log_file} &
 pid=($!)
 
 # Sender

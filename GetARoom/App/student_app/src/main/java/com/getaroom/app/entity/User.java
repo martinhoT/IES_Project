@@ -1,5 +1,6 @@
 package com.getaroom.app.entity;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 
 public class User {
@@ -12,6 +13,8 @@ public class User {
 
     @NotBlank(message = "Password is mandatory")
     private String password;
+
+    private String repassword;
 
     private String role;
 
@@ -31,17 +34,26 @@ public class User {
         this.role = "";
     }
 
-    public User(String name, String email, String password, String role) {
+    public User(String name, String email, String password, String repassword) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.repassword = repassword;
+        this.role = "";
+    }
+
+    public User(String name, String email, String password, String repassword, String role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.repassword = repassword;
         this.role = role;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public void setpassword(String password) {
         this.password = password;
     }
@@ -68,6 +80,19 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRepassword() {
+        return repassword;
+    }
+
+    public void setRepassword(String repassword) {
+        this.repassword = repassword;
+    }
+
+    @AssertTrue(message = "The password and the repeat password should match")
+    public boolean isPasswordsEqual() {
+        return password != null && password.equals(repassword);
     }
 
     @Override

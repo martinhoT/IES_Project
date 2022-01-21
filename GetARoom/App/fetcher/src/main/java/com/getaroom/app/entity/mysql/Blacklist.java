@@ -11,24 +11,24 @@ public class Blacklist {
 	private String email;
 
 	@Id
-	@Column(name = "room_id")
-	private String roomId;
+	@Column(name = "room")
+	private String room;
 
 
 	protected Blacklist() {
 
 	}
 
-	public Blacklist(String email, String roomId) {
+	public Blacklist(String email, String room) {
 		this.email = email;
-		this.roomId = roomId;
+		this.room = room;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public String getRoomId() {
-		return roomId;
+	public String getRoom() {
+		return room;
 	}
 }

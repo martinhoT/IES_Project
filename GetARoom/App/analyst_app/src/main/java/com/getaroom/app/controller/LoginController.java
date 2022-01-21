@@ -32,29 +32,29 @@ public class LoginController {
     @GetMapping("/login")
     public ModelAndView showLoginForm(User user) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("login_form");
         return modelAndView;
     }
 
     @GetMapping("/register")
     public ModelAndView showRegisterForm(User user) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register");
+        modelAndView.setViewName("register_form");
         return modelAndView;
     }
 
     @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        if (result.hasErrors() && result.getAllErrors().size() > 1)  {
-            modelAndView.setViewName("login");
+        if (result.hasErrors() && result.getAllErrors().size() > 2)  {
+            modelAndView.setViewName("login_form");
             return modelAndView;
         }
         if ( apiAuthPost("login", new LoginData(user.getName(), user.getPassword()), LoginData.class) ){
             modelAndView.setViewName("redirect:/api");
         }
         else{
-            modelAndView.setViewName("login");
+            modelAndView.setViewName("login_form");
             model.addAttribute("wrong", true);
         }
         return modelAndView;
@@ -64,14 +64,14 @@ public class LoginController {
     public ModelAndView register(@Valid User user, BindingResult result, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors()) {
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("register_form");
             return modelAndView;
         }
         if ( apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class) ){
             modelAndView.setViewName("redirect:/api");
         }
         else{
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("register_form");
             model.addAttribute("wrong", true);
         }
         return modelAndView;
