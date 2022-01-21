@@ -31,20 +31,16 @@ then
     touch ./Data/Output/logs.txt
 fi
 
-# Requirements
-pip install -r Camera_sensor/requirements.txt
-pip install -r Nfc_sensor/requirements.txt
-
 > "./Data/Output/logs.txt"
 
 # Camera sensor
 cd Camera_sensor
-python -u run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel >> "../Data/Output/logs.txt" &
+python3 -u run.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel >> "../Data/Output/logs.txt" &
 pids+=($!)
 
 # NFC sensor
 cd ..
-python Nfc_sensor/server.py &
+python3 Nfc_sensor/server.py &
 pids+=($!)
 
 # Sender
