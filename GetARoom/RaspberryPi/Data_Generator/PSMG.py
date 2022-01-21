@@ -51,8 +51,8 @@ class Person():
         return f"Name: {self.name}, email: {self.email}"
 
 def main():
-    peoplePath = "Data/Input/people.json"
-    depsPath = "Data/Input/rooms.json"
+    peoplePath = "./Data/Input/people.json"
+    depsPath = "./Data/Input/rooms.json"
     peopleLimit = None
     depsDict = {}
     depRooms = []

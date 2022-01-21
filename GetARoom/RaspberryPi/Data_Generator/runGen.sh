@@ -36,7 +36,7 @@ fi
 > ${log_file}
 
 # Data Generator
-python3 ./Data_Generator/PSMG.py >> ${log_file} &
+python3 -u ./PSMG.py >> ${log_file} &
 pid=($!)
 
 # Sender
