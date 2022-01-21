@@ -85,7 +85,7 @@ function drawChart() {
     viewModel.floors([]);
     viewModel.days([]);
     var roomsByFloor = {};
-    $.getJSON("http://localhost:84/api/status",
+    $.getJSON("http://" + location.hostname + ":84/api/status",
         function (data, textStatus, jqXHR) {
             for(let event of data){
                 var floor = event['room'].split(".").splice(0,2).join("-");

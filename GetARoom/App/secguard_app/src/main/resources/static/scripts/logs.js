@@ -22,7 +22,7 @@ $(document).ready(function() {
             self.pageSelected(page);
 
             // Update the number of pages in case new messages created new pages
-            $.getJSON("http://localhost:84/api/event/pages", {room: self.room(), pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
+            $.getJSON("http://" + location.hostname + ":84/api/event/pages", {room: self.room(), pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
             function(data, testStatus, jqXHR) {
                 self.pages( [...Array(data).keys()] );
             });
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
         self.updateEvents = function() {
             
-            $.getJSON("http://localhost:84/api/event", {room: self.room(), pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
+            $.getJSON("http://" + location.hostname + ":84/api/event", {room: self.room(), pageNumber: self.pageSelected(), pageCapacity: self.pageCapacity()},
             function(data, testStatus, jqXHR) {
                 self.events(data);
             });

@@ -81,16 +81,9 @@ $(document).ready(function() {
                 backgroundPopulator = [];
                 backgroundPopulatorInserted = 0;
     
-                // for (let department of data)
-                //     if (department.dep === dep_number) {
-                //         n_floors = department.floors;
-                //         break;
-                //     }
-                // viewModel.floors( Array.from(Array(n_floors), (_,i) => 1 + i) );
                 for (let i = 0; i < n_floors; i++) {
                     $.getJSON("http://" + location.hostname + ":84/api/room_styles", {"dep": dep_number, "floor": i+1},
                         function (data, textStatus, jqXHR) {
-                            // viewModel.rooms( Array.from(rooms, (v,_) => v.room.split(".")[2]) );
                             backgroundPopulator[i] = {
                                 "floor": i+1,
                                 "img": 'images/dep' + heatmapsScriptVars.viewModel.department() + '_' + (i+1) + '.jpg',
