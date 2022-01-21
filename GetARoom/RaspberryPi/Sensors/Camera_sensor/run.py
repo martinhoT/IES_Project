@@ -9,12 +9,14 @@ import numpy as np
 import argparse, imutils
 import time, dlib, cv2, datetime
 from itertools import zip_longest
+from os import environ
 
 t0 = time.time()
 
 def run():
-	RoomName = "1.1.1"
-	maxNumberOfPeople = 5
+	RoomName = environ.get("ROOM_ID", "4.2.08")
+	# hardcoded
+	maxNumberOfPeople = 21
 
 	# construct the argument parse and parse the arguments
 	ap = argparse.ArgumentParser()
@@ -228,7 +230,7 @@ def run():
 					if direction < 0 and centroid[1] < H // 2:
 						totalUp += 1
 						empty.append(totalUp)
-						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
+						print("1{\"room\":" + f"\"{RoomName}\",\"occupancy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
 						to.counted = True
 
 					# if the direction is positive (indicating the object
@@ -237,7 +239,7 @@ def run():
 					elif direction > 0 and centroid[1] > H // 2:
 						totalDown += 1
 						empty1.append(totalDown)
-						print("{\"type\": \"status\",\"room\":" + f"\"{RoomName}\",\"occupacy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
+						print("1{\"room\":" + f"\"{RoomName}\",\"occupancy\": {round((len(empty1)-len(empty))/maxNumberOfPeople, 2)}, \"maxNumberOfPeople\": {maxNumberOfPeople}, \"time\": \"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"" + "}")
 						#print(empty1[-1])
 						# if the people limit exceeds over threshold, send an email alert
 						if sum(x) >= config.Threshold:
