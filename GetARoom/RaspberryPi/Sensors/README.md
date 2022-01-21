@@ -2,7 +2,7 @@
 
 ### Build docker
 ```bash
-docker build -t datagen . 
+docker build -t sensors . 
 ```
 
 ### Run docker background
