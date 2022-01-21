@@ -17,14 +17,15 @@
         <select id="department_selected" name="department_selected">
             <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.id + ' - ' + department.shortName}"></option>
         </select>
+
         <div id="myCarousel" class="carousel carousel-dark slide" data-ride="false" data-interval="false">
             <ol class="carousel-indicators" data-bind="foreach: floors">
             <li data-target="#myCarousel" data-bind="attr: { 'data-slide-to': $index }, css: { active: $index() == 0 }"></li>
             </ol>
             <div id="carousel-inner" class="carousel-inner" data-bind="foreach: floors, childrenComplete: flagFloorsBound">
             <div class="carousel-item" data-bind="css: { active: $index() == 0 }" >
-                <h2 style="text-align:center; color: white;">Departamento <span data-bind="text: $root.department"></span></h2>
-                <h3 style="text-align: center; color: white;"><span data-bind="text: $data.floor"></span>º andar</h3>
+                <h2 style="text-align:center; color: grey;">Departamento <span data-bind="text: $root.department"></span></h2>
+                <h3 style="text-align: center; color: grey;"><span data-bind="text: $data.floor"></span>º andar</h3>
                 <div class="map-container">
                     <div data-bind="foreach: $data.styles">
                         <a data-bind="attr: { href: '/room/' + $data.room }">
