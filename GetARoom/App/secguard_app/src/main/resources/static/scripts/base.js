@@ -13,8 +13,6 @@ $(document).ready(function() {
         self.unseen_count = ko.observable(0);
 
         self.commitSeen = function(notification_popup) {
-            let prev_length = self.notifications().length;
-            
             // thanks MongoDB
             self.notifications_popups.remove(function(item) {
                 return item.user === notification_popup.user &&

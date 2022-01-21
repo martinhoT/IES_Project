@@ -3,6 +3,7 @@ package com.getaroom.app.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+import com.getaroom.app.entity.Blacklist;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
 import com.getaroom.app.entity.Student;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
@@ -82,7 +84,9 @@ public class MainController {
 		for (Event e : RoomEvents){
 			if (e.getRoom().equals(currentRoom)) currentRoomEvents.add(e);
 		}
-		Map<String, Student> blacklisted = new HashMap<String, Student>();
+		List<Blacklist> blacklisted = apiGetRequestList("blacklist", Blacklist.class, Map.of(
+			"room", List.of(currentRoom)
+		));
 		model.addAllAttributes(Map.of(
 			"dep", dep,
 			"floor", floor,
@@ -124,6 +128,19 @@ public class MainController {
 	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass) {
 		return apiClient.get()
 			.uri("/api/" + uriAppend)
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.acceptCharset(StandardCharsets.UTF_8)
+			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )
+			.collectList().block();
+	}
+
+	private <E> List<E> apiGetRequestList(String uriAppend, Class<E> elementClass, Map<String, List<String>> parameters) {
+		
+		return apiClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/api/{append}")
+				.queryParams(new MultiValueMapAdapter<>(parameters))
+				.build(uriAppend))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)
 			.exchangeToFlux( response -> response.bodyToFlux(elementClass) )

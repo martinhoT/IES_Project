@@ -30,6 +30,7 @@ import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,14 +101,12 @@ public class ApiController {
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
         @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
             
-            PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
-            if (room.isEmpty()){
-                return eventRepository.findAll(pageRequest).toList();
-            }else{
-                return eventRepository.findByRoom(room, pageRequest).toList();
-            }
-            
-        }
+        Pageable pageInfo = pageCapacity > 0 ? PageRequest.of(pageNumber, pageCapacity) : Pageable.unpaged();
+        if (!room.isEmpty())
+            return eventRepository.findByRoom(room, pageInfo).toList();
+
+        return eventRepository.findAll(pageInfo).toList();
+    }
     
     @CrossOrigin
     @GetMapping("/event/pages")
@@ -115,13 +114,12 @@ public class ApiController {
         @RequestParam(required = false, defaultValue = "") String room,
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
         @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
+            
+        Pageable pageInfo = pageCapacity > 0 ? PageRequest.of(pageNumber, pageCapacity) : Pageable.unpaged();
+        if (!room.isEmpty())
+            return eventRepository.findByRoom(room, pageInfo).getTotalPages();
         
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
-        if (room.isEmpty()){
-            return eventRepository.findAll(pageRequest).getTotalPages();
-        }else{
-            return eventRepository.findByRoom(room, pageRequest).getTotalPages();
-        }
+        return eventRepository.findAll(pageInfo).getTotalPages();
     }
 
     @CrossOrigin
@@ -131,8 +129,8 @@ public class ApiController {
         @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
         @RequestParam(required = false, defaultValue = "20") Integer pageCapacity) {
 
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageCapacity);
-        return eventHistoryRepository.findAll(pageRequest).toList();
+        Pageable pageInfo = pageCapacity > 0 ? PageRequest.of(pageNumber, pageCapacity) : Pageable.unpaged();
+        return eventHistoryRepository.findAll(pageInfo).toList();
     }
 
     @CrossOrigin
