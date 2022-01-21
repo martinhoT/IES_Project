@@ -3,6 +3,7 @@
 <head>
     <th:block th:include="base :: head" />
     <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</title>
+    <link rel="stylesheet" th:href="@{css/table_logs.css}" href="../static/css/table_logs.css" type="text/css">
 </head>
 <body>
     <div id="notification-consumers">
@@ -16,55 +17,59 @@
         </ul>
     </div>
 
-    <div id="ko-body">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-7">
-                    <h1 th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</h1>
-                </div>
-    
-                <div class="col-5">
-                    <h2>Blacklist</h2>
-                    <ul>
-                        <li th:each="entry : ${blacklisted}">
-                            <span th:text="${entry.email}">Student</span>
-                        </li>
-                    </ul>
-                </div>
-    
-            </div>
-            <div id="room"  th:text="${dep} + '.' + ${floor} + '.' + ${room}"  hidden></div>
-            <div class="row">
-                <div class="col-12">
-                    <h2>Events</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Person</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Room</th>
-                                <th scope="col">Action</th>
-                                <th scope="col">Time</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: Events">
-                            <tr>
-                                <td data-bind="text: user">User</td>
-                                <td data-bind="text: email">Email</td>
-                                <td data-bind="text: room">Room</td>
-                                <!-- ko if: entered -->
-                                <td>Entry</td>
-                                <!-- /ko -->
-                                <!-- ko ifnot: entered -->
-                                <td>Exit</td>
-                                <!-- /ko -->
-                                <td data-bind="text: time">Time</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="container" id="ko-body">
+        <h2 th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey;">Room</h2>
+
+        <h3>Blacklist</h3>
+        <ul>
+            <li th:each="entry : ${blacklisted}">
+                <span th:text="${entry.email}">Student</span>
+            </li>
+        </ul>
+
+
+        <div id="room"  th:text="${dep} + '.' + ${floor} + '.' + ${room}"  hidden></div>
+
+        <h3>Events</h3>
+
+        <!--Events table-->
+
+        <div class="section">
+            <div class="limiter">
+                <div class="container-table100">
+                    <div class="wrap-table100">
+                        <div class="table100">
+                            <table >
+                                <thead>
+                                <tr class="table100-head">
+                                    <th class="column1" scope="col">Person</th>
+                                    <th class="column2" scope="col">Email</th>
+                                    <th class="column3" scope="col">Room</th>
+                                    <th class="column4" scope="col">Action</th>
+                                    <th class="column5" scope="col">Time</th>
+                                </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Events">
+                                <tr>
+                                    <td class="column1" data-bind="text: user">User</td>
+                                    <td class="column2" data-bind="text: email">Email</td>
+                                    <td class="column3" data-bind="text: room">Room</td>
+                                    <!-- ko if: entered -->
+                                    <td class="column4">Entry</td>
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: entered -->
+                                    <td class="column4">Exit</td>
+                                    <!-- /ko -->
+                                    <td class="column5" data-bind="text: time">Time</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <th:block th:include="base :: scripts" />
