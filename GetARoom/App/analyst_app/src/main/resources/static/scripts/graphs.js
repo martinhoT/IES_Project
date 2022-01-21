@@ -66,7 +66,10 @@ $("#selected_floor").change(function() {
             viewWindow:{
                 max: 1,
                 min: 0
-            }}
+            }},
+        hAxis: {
+            format: 'HH:mm'
+        }
     };
 
     var chart = new google.charts.Line(document.getElementById('curve_chart_'+$("#selected_floor").val()));
@@ -152,7 +155,10 @@ function drawChart() {
                     viewWindow:{
                         max: 1,
                         min: 0
-                    }}
+                    }},
+                hAxis: {
+                    format: 'HH:mm'
+                }
             };
             
             var chart = new google.charts.Line(document.getElementById('curve_chart_'+ viewModel.sortedFloors()[0]));
