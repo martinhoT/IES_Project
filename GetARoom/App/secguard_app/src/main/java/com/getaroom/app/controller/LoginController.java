@@ -2,6 +2,8 @@ package com.getaroom.app.controller;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.getaroom.app.entity.User;
@@ -25,6 +27,19 @@ public class LoginController {
 
     private final WebClient apiClient;
 
+    // setCookie to user
+    public void setCookie(String name, HttpServletResponse response) {
+        // Create cookie
+        Cookie jwtTokenCookie = new Cookie("user-id", "secret2");
+
+        jwtTokenCookie.setMaxAge(86400);
+        jwtTokenCookie.setSecure(true);
+        jwtTokenCookie.setHttpOnly(true);
+
+        // Set cookie onto user
+        response.addCookie(jwtTokenCookie);
+    }
+
     public LoginController() {
         apiClient = WebClient.create("http://fetcher:8080");
     }
@@ -44,13 +59,14 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@Valid User user, BindingResult result, Model model) {
+    public ModelAndView login(@Valid User user, BindingResult result, Model model, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors() && result.getAllErrors().size() > 2)  {
             modelAndView.setViewName("login_form");
             return modelAndView;
         }
         if (apiAuthPost("login", new LoginData(user.getName(), user.getPassword()), LoginData.class)){
+            setCookie(user.getName(), response);
             modelAndView.setViewName("redirect:/heatmaps");
         }
         else{
@@ -61,13 +77,14 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid User user, BindingResult result, Model model) {
+    public ModelAndView register(@Valid User user, BindingResult result, Model model, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors()) {
             modelAndView.setViewName("register_form");
             return modelAndView;
         }
         if (apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class)){
+            setCookie(user.getName(), response);
             modelAndView.setViewName("redirect:/studyRooms");
         }
         else{

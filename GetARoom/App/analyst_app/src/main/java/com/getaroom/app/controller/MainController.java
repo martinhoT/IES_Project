@@ -15,12 +15,25 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 
 @RequestMapping("")
 @Controller
 public class MainController {
 
 	private final WebClient apiClient;
+	
+	// Get cookies
+	public Boolean VerifyCookie(HttpServletRequest request, String name){
+		Cookie[] cookies = request.getCookies();
+		if(cookies == null) return false;
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals(name) && cookie.getValue().equals("secret3")) return true;
+		};
+		return false;
+	}
 
 	@Autowired
 	public MainController() {
@@ -33,12 +46,24 @@ public class MainController {
 	}
 	
 	@GetMapping("/api")
-	public String api() {
+	public String api(HttpServletRequest request) {
+
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+
 		return "api";
 	}
 
 	@GetMapping("/graphs")
-	public String graphs(Model model) {
+	public String graphs(Model model, HttpServletRequest request) {
+
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+		
 		List<Status_event> Status_Events = apiGetRequestList("status", Status_event.class);
 		model.addAllAttributes(Map.of(
 			"status_events", Status_Events
