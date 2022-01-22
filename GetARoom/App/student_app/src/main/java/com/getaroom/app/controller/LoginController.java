@@ -3,6 +3,7 @@ package com.getaroom.app.controller;
 import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -59,6 +60,24 @@ public class LoginController {
         modelAndView.setViewName("register_form");
         return modelAndView;
     }
+
+    @GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// See if we are logged in or not
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("user-id") && cookie.getValue().equals("secret1")){
+                    // Remove cookie
+                    cookie.setMaxAge(0); // Don't set to -1 or it will become a session cookie!
+                    response.addCookie(cookie);
+                    return "redirect:/login";
+                }
+            }
+        }
+        return "redirect:/error";
+	}
 
     @PostMapping("/login")
     public ModelAndView login(@Valid User user, BindingResult result, Model model, HttpServletResponse response) {
