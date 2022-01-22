@@ -28,7 +28,6 @@ import java.util.*;
 @Controller
 public class MainController {
 
-	private final Map<String, Student> blacklist;
 	private final WebClient apiClient;
 
 	// Get cookies
@@ -44,24 +43,6 @@ public class MainController {
 	@Autowired
 	public MainController() {
 		apiClient = WebClient.create("http://fetcher:8080");
-		blacklist = new HashMap<>(Map.of(
-				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
-				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
-				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
-		));
-	}
-
-	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
-		return blacklist;
-	}
-
-	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
-		blacklist.remove(studentEmail);
-	}
-
-	public void addRoomBlacklist(int dep, int floor, int room, String studentName, String studentEmail) {
-		if (!blacklist.containsKey(studentEmail))
-			blacklist.put(studentEmail, new Student(studentName, studentEmail));
 	}
 
 	@GetMapping("/")
