@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.getaroom.app.entity.Blacklist;
 import com.getaroom.app.entity.Dep;
@@ -20,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
@@ -28,7 +28,6 @@ import java.util.*;
 @Controller
 public class MainController {
 
-	private final Map<String, Student> blacklist;
 	private final WebClient apiClient;
 
 	// Get cookies
@@ -44,24 +43,6 @@ public class MainController {
 	@Autowired
 	public MainController() {
 		apiClient = WebClient.create("http://fetcher:8080");
-		blacklist = new HashMap<>(Map.of(
-				"petersonkidd@cytrex.com", new Student("Peterson Kidd", "petersonkidd@cytrex.com"),
-				"alfordnicholson@cytrex.com", new Student("Alford Nicholson", "alfordnicholson@cytrex.com"),
-				"doramcneil@cytrex.com", new Student("Dora Mcneil", "doramcneil@cytrex.com")
-		));
-	}
-
-	public Map<String, Student> getRoomBlacklist(int dep, int floor, int room) {
-		return blacklist;
-	}
-
-	public void remRoomBlacklist(int dep, int floor, int room, String studentEmail) {
-		blacklist.remove(studentEmail);
-	}
-
-	public void addRoomBlacklist(int dep, int floor, int room, String studentName, String studentEmail) {
-		if (!blacklist.containsKey(studentEmail))
-			blacklist.put(studentEmail, new Student(studentName, studentEmail));
 	}
 
 	@GetMapping("/")
@@ -84,6 +65,24 @@ public class MainController {
 		model.addAttribute("depList", allDepartments);
 
 		return "blacklist";
+	}
+
+	@GetMapping(value="/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// See if we are logged in or not
+        if(VerifyCookie(request, "user-id")){
+			Cookie jwtTokenCookie = new Cookie("user-id", "null");
+
+			jwtTokenCookie.setMaxAge(0);
+			jwtTokenCookie.setSecure(true);
+			jwtTokenCookie.setHttpOnly(true);
+	
+			// Set cookie onto user
+			response.addCookie(jwtTokenCookie);
+			return "redirect:/login";
+        }else{
+			return "error";
+		}
 	}
 
 	@GetMapping("/logs")

@@ -27,6 +27,7 @@
     <div class="card">
         <div class="card-block d-flex flex-column">
             <div class="card-header">
+                <i class="fa fa-book" aria-hidden="true"></i>
                 Blacklist Manager
             </div>
             <p class="card-text">
@@ -42,6 +43,7 @@
     <div class="card">
         <div class="card-block d-flex flex-column">
             <div class="card-header">
+                <i class="fa fa-users" aria-hidden="true"></i>
                 By Room
             </div>
             <p class="card-text">
@@ -57,6 +59,7 @@
     <div class="card">
         <div class="card-block d-flex flex-column">
             <div class="card-header">
+                <i class="fa fa-building" aria-hidden="true"></i>
                 By Department
             </div>
             <p class="card-text">
@@ -107,7 +110,7 @@
             <div class="modal-body">
                 <form action="">
                     <label>Department:</label>
-                    <select id="dep" th:onchange="'setRoomValues()'" name="dep" class="form-control">
+                    <select id="dep" th:onclick="'setRoomValues()'" name="dep" class="form-control">
                         <option th:each="dep :${depList}" th:value="${dep.id}" th:text="${dep.id} + ' - ' + ${dep.fullName}">
                         </option>
                     </select> </br>

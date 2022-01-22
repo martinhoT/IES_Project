@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("")
 @Controller
@@ -47,6 +48,24 @@ public class MainController {
 	@GetMapping("/")
 	public String entryPoint(User user) {
 		return "redirect:/login";
+	}
+
+	@GetMapping(value="/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// See if we are logged in or not
+        if(VerifyCookie(request, "user-id")){
+			Cookie jwtTokenCookie = new Cookie("user-id", "null");
+
+			jwtTokenCookie.setMaxAge(0);
+			jwtTokenCookie.setSecure(true);
+			jwtTokenCookie.setHttpOnly(true);
+	
+			// Set cookie onto user
+			response.addCookie(jwtTokenCookie);
+			return "redirect:/login";
+        }else{
+			return "error";
+		}
 	}
 
 	@GetMapping(value="/studyRooms")

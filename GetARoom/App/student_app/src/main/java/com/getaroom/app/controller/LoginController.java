@@ -36,7 +36,6 @@ public class LoginController {
         jwtTokenCookie.setMaxAge(86400);
         jwtTokenCookie.setSecure(true);
         jwtTokenCookie.setHttpOnly(true);
-        jwtTokenCookie.setPath("/studyRooms");
 
         // Set cookie onto user
         response.addCookie(jwtTokenCookie);
