@@ -18,7 +18,7 @@
     </div>
 
     <div class="container" id="ko-body">
-        <h2 th:text="'Events for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey;">Room</h2>
+        <h2 th:text="'Events for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey; margin-top: 15px;">Room</h2>
 
 
         <!-- Button trigger modal -->
@@ -31,7 +31,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="'Blacklist for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
