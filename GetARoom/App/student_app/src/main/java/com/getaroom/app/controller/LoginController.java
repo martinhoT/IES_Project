@@ -31,7 +31,7 @@ public class LoginController {
     // setCookie to user
     public void setCookie(String name, HttpServletResponse response) {
         // Create cookie
-        Cookie jwtTokenCookie = new Cookie("user-id", "secret");
+        Cookie jwtTokenCookie = new Cookie("user-id", "secret1");
 
         jwtTokenCookie.setMaxAge(86400);
         jwtTokenCookie.setSecure(true);
@@ -80,7 +80,7 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid User user, BindingResult result, Model model) {
+    public ModelAndView register(@Valid User user, BindingResult result, Model model, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         if (result.hasErrors()) {
             modelAndView.setViewName("register_form");
@@ -88,6 +88,7 @@ public class LoginController {
         }
 
         if (apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class)){
+            setCookie(user.getName(), response);
             modelAndView.setViewName("redirect:/studyRooms");
         }
         else{
