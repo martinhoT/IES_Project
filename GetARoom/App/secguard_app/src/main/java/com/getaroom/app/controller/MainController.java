@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.getaroom.app.entity.Blacklist;
 import com.getaroom.app.entity.Dep;
@@ -83,6 +84,24 @@ public class MainController {
 		model.addAttribute("depList", allDepartments);
 
 		return "blacklist";
+	}
+
+	@GetMapping(value="/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// See if we are logged in or not
+        if(VerifyCookie(request, "user-id")){
+			Cookie jwtTokenCookie = new Cookie("user-id", "null");
+
+			jwtTokenCookie.setMaxAge(0);
+			jwtTokenCookie.setSecure(true);
+			jwtTokenCookie.setHttpOnly(true);
+	
+			// Set cookie onto user
+			response.addCookie(jwtTokenCookie);
+			return "redirect:/login";
+        }else{
+			return "error";
+		}
 	}
 
 	@GetMapping("/logs")
