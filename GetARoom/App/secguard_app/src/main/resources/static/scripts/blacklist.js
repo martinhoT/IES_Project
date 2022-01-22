@@ -74,8 +74,6 @@ function setRoomValues() {
 
     document.getElementById("roomTable").style.visibility = "hidden"
 
-    console.log(getDep)
-
     $.ajax({
         type: 'GET',
         url: "http://" + location.hostname + ":84/api/room",
@@ -168,6 +166,10 @@ function blacklistByRoom() {
         success: function(data) {
             if (data.length > 0)
                 setBlacklistTable(data)
+            else{
+                document.getElementById("roomTable").style.visibility = "hidden"
+                alert("There's no blacklisted user for this room");
+            }
         }
     });
 }
@@ -210,6 +212,10 @@ function blacklistByDep() {
         success: function(data) {
             if (data.length > 0 )
                 setBlacklistTable(data)
+            else{
+                document.getElementById("roomTable").style.visibility = "hidden"
+                alert("There's no blacklisted user for this department");
+            }
         }
     });
 }
