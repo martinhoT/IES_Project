@@ -30,7 +30,7 @@ public class LoginController {
     // setCookie to user
     public void setCookie(String name, HttpServletResponse response) {
         // Create cookie
-        Cookie jwtTokenCookie = new Cookie("user-id", "secret2");
+        Cookie jwtTokenCookie = new Cookie("user-id", "secret3");
 
         jwtTokenCookie.setMaxAge(86400);
         jwtTokenCookie.setSecure(true);

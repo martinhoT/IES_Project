@@ -30,7 +30,7 @@ public class MainController {
 		Cookie[] cookies = request.getCookies();
 		if(cookies == null) return false;
 		for(Cookie cookie : cookies){
-			if(cookie.getName().equals(name) && cookie.getValue().equals("secret2")) return true;
+			if(cookie.getName().equals(name) && cookie.getValue().equals("secret3")) return true;
 		};
 		return false;
 	}

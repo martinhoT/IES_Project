@@ -3,6 +3,9 @@ package com.getaroom.app.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import com.getaroom.app.entity.Blacklist;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
@@ -27,6 +30,16 @@ public class MainController {
 
 	private final Map<String, Student> blacklist;
 	private final WebClient apiClient;
+
+	// Get cookies
+	public Boolean VerifyCookie(HttpServletRequest request, String name){
+		Cookie[] cookies = request.getCookies();
+		if(cookies == null) return false;
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals(name) && cookie.getValue().equals("secret2")) return true;
+		};
+		return false;
+	}
 
 	@Autowired
 	public MainController() {
@@ -57,8 +70,12 @@ public class MainController {
 	}
 	
 	@GetMapping("/blacklist")
-	public ModelAndView getBlacklist(Model model){
-		ModelAndView mav = new ModelAndView();
+	public String getBlacklist(Model model, HttpServletRequest request){
+
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
 
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
@@ -66,18 +83,28 @@ public class MainController {
 
 		model.addAttribute("depList", allDepartments);
 
-		mav.setViewName("blacklist");
-
-		return mav;
+		return "blacklist";
 	}
 
 	@GetMapping("/logs")
-	public String logs(@RequestParam(defaultValue = "None") String room, Model model) {
+	public String logs(@RequestParam(defaultValue = "None") String room, Model model, HttpServletRequest request) {
+						
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+
 		return "logs";
 	}
 
 	@GetMapping("/room/{dep}.{floor}.{room}")
-	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model) {
+	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model, HttpServletRequest request) {
+				
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+
 		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
 		List<Event> currentRoomEvents = new ArrayList<Event>();
 		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
@@ -98,7 +125,13 @@ public class MainController {
 	}
 
 	@GetMapping("/heatmaps")
-	public String heatmaps(Model model) {
+	public String heatmaps(Model model, HttpServletRequest request) {
+		
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+		
 		List<Dep> allDepartments = apiGetRequestList("department", Dep.class);
 
 		model.addAllAttributes(Map.of(
@@ -107,7 +140,13 @@ public class MainController {
 	}
 
 	@GetMapping("/notifications")
-	public String notifications() {
+	public String notifications(HttpServletRequest request) {
+				
+		// See if we are logged in or not
+		if(!VerifyCookie(request, "user-id")){
+			return "redirect:/login";
+		}
+
 		return "notifications";
 	}
 
