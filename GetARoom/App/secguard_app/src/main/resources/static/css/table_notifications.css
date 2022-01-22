@@ -161,13 +161,13 @@ tbody tr:hover {
         content: "Email";
     }
     table tbody tr td:nth-child(3):before {
-        content: "Room";
+        content: "Time";
     }
     table tbody tr td:nth-child(4):before {
-        content: "Action";
+        content: "Room";
     }
     table tbody tr td:nth-child(5):before {
-        content: "Time";
+        content: "Mark as seen";
     }
     table tbody tr td:nth-child(6):before {
         content: "Total";
