@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="base :: head" />
     <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</title>
-    <link rel="stylesheet" th:href="@{/css/table_logs.css}" href="../static/css/table_logs.css" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/table_room.css}" href="../static/css/table_room.css" type="text/css">
 </head>
 <body>
     <div id="notification-consumers">
@@ -18,19 +18,49 @@
     </div>
 
     <div class="container" id="ko-body">
-        <h2 th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey;">Room</h2>
+        <h2 th:text="'Events for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey;">Room</h2>
 
-        <h3>Blacklist</h3>
-        <ul>
-            <li th:each="entry : ${blacklisted}">
-                <span th:text="${entry.email}">Student</span>
-            </li>
-        </ul>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Blacklist
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Blacklist table-->
+
+                        <div th:if="${blacklisted!=null and !blacklisted.isEmpty()}">
+                            <ul>
+                                <li th:each="entry : ${blacklisted}">
+                                    <span th:text="${entry.email}">Student</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${blacklisted.isEmpty()}">
+                            <p>There's not any blacklisted user for this room</p>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <div id="room"  th:text="${dep} + '.' + ${floor} + '.' + ${room}"  hidden></div>
-
-        <h3>Events</h3>
 
         <!--Events table-->
 
