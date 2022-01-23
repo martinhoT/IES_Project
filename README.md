@@ -2,6 +2,14 @@
 
 Application for gathering entry/exit data of people in a building.
 
+## Authors
+| NMec | Name | Role |  
+|:-:|:--|:--|  
+| 98262 | Martinho Tavares | Team Leader |  
+| 98157 | Miguel Monteiro | Product Owner |  
+| 89123 | Tomás Candeias | Architect |  
+| 98475 | Rodrigo Lima | DevOps master |  
+
 ## Data interaction
 
 There are 3 different interfaces:
@@ -35,3 +43,7 @@ There are 3 different interfaces:
 - [Register](http://34.140.235.127:83/register)
 - [API](http://34.140.235.127:83/api)
 - [Graphs](http://34.140.235.127:83/graphs)
+
+## API Documentation
+- [API](http://34.140.235.127:83/swagger-ui.html)
+- [Internal API](http://34.140.235.127:84/swagger-ui.html)
