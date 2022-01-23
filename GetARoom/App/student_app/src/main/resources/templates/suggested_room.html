@@ -10,29 +10,35 @@
 
 <nav th:replace="base :: navbar"></nav>
 
-<div id="booking" class = "section">
-    <div class="limiter">
-        <div class="container-table100">
-            <div class="wrap-table100">
-                <div class="table100">
-                    <table>
-                        <thead>
-                        <tr class="table100-head">
-                            <th class="column1">Room number</th>
-                            <th class="column2">Occupacy</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="room : ${rooms}">
-                            <td class="column1" th:text="${room.getId()}"></td>
-                            <td class="column2" th:text="${room.getCurrentOccupancy()} + '%'"></td>
-                        </tr>
-                        </tbody>
-                    </table>
+<div th:if="${rooms!=null and !rooms.isEmpty()}">
+    <div id="booking" class = "section">
+        <div class="limiter">
+            <div class="container-table100">
+                <div class="wrap-table100">
+                    <div class="table100">
+                        <table>
+                            <thead>
+                            <tr class="table100-head">
+                                <th class="column1">Room number</th>
+                                <th class="column2">Occupacy</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="room : ${rooms}">
+                                <td class="column1" th:text="${room.getId()}"></td>
+                                <td class="column2" th:text="${room.getCurrentOccupancy()} + '%'"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div th:if="${rooms.isEmpty()}" id="booking2">
+    <script>alert("There's no room available in the selected department for the given group size");</script>
 </div>
 
 <th:block th:include="base :: scripts" />
