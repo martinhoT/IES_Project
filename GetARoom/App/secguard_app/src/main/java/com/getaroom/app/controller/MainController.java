@@ -1,8 +1,6 @@
 package com.getaroom.app.controller;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.getaroom.app.entity.Blacklist;
 import com.getaroom.app.entity.Dep;
 import com.getaroom.app.entity.Event;
-import com.getaroom.app.entity.Student;
 import com.getaroom.app.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,14 +94,14 @@ public class MainController {
 	}
 
 	@GetMapping("/room/{dep}.{floor}.{room}")
-	public String room(@PathVariable int dep, @PathVariable int floor, @PathVariable int room, Model model, HttpServletRequest request) {
+	public String room(@PathVariable String dep, @PathVariable String floor, @PathVariable String room, Model model, HttpServletRequest request) {
 				
 		// See if we are logged in or not
 		if(!VerifyCookie(request, "user-id")){
 			return "redirect:/login";
 		}
 
-		String currentRoom = String.valueOf(dep) + "." + String.valueOf(floor) + "." + String.valueOf(room);
+		String currentRoom = dep + "." + floor + "." + room;
 		List<Event> currentRoomEvents = new ArrayList<Event>();
 		List<Event> RoomEvents = apiGetRequestList("event", Event.class);
 		for (Event e : RoomEvents){

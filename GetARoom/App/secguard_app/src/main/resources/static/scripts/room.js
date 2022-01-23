@@ -38,7 +38,7 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     msg = message.payloadString;
     console.log("Received message:" + msg);
-    var evnt = evnt.parse(msg);
+    var evnt = JSON.parse(msg);
     roomid = stts["room"];
 
     let notPresent = true;
@@ -46,14 +46,14 @@ function onMessageArrived(message) {
         if (event.email === evnt.email &&
             event.user === evnt.user &&
             event.entered === evnt.entered &&
-            new Date(item.time).getTime() === new Date(notification_popup.time).getTime())
+            new Date(event.time).getTime() === new Date(evnt.time).getTime())
 
             notPresent = false;
             break;
     }
 
     if (notPresent) {
-        ViewModel.Events.push(stts);
+        ViewModel.Events.push(evnt);
     }
 
 }

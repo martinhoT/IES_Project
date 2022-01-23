@@ -44,4 +44,4 @@ python3 Nfc_sensor/server.py &
 pids+=($!)
 
 # Sender
-./sender/sender "$@" --file "Data/Output/logs.txt" --broker "34.140.235.127"
+./sender/sender "$@" --file "Data/Output/logs.txt"
