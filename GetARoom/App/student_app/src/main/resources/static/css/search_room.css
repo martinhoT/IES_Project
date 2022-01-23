@@ -19,6 +19,14 @@
     background-position: center;
 }
 
+#booking2 {
+    font-family: 'Montserrat', sans-serif;
+    background-image: url('../images/faveiro.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
 #booking::before {
     content: '';
     position: absolute;

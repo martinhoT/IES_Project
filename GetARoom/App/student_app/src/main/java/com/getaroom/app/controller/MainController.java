@@ -94,7 +94,14 @@ public class MainController {
 
 		Collections.sort(allRooms, Comparator.comparingDouble(Room::getOccupancy));
 
-		mav.addObject("rooms", allRooms.stream().limit(10).collect(Collectors.toList()));
+		List<Room> result = new ArrayList<>();
+		for (Room r : allRooms){
+			if (r.getOccupancy() * r.getMaxNumberOfPeople() + npeople <= r.getMaxNumberOfPeople())
+				result.add(r);
+		}
+
+		mav.addObject("rooms", result.stream().limit(10).collect(Collectors.toList()));
+
 		mav.setViewName("suggested_room");
 
 		return mav;
