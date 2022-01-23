@@ -16,8 +16,7 @@ docker run -i -t --network=host -p 1885:1883 datagen
 ```
 
 ### Change the broker host's address
-In order to change the broker's address, change the '--broker' argument to the desired address in the last line of the 'runSen.sh' script.
-```bash
-# Sender
-./sender/sender "$@" --file "$log_file" --broker "<broker address>"
+In order to change the broker's address, change the '--broker' argument to the desired address in the last line of the Dockerfile.
+```
+CMD ["./runGen.sh", "--broker", "<broker address>"]
 ```
