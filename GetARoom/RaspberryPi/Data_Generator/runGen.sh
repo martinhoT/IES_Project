@@ -40,4 +40,4 @@ python3 -u ./PSMG.py >> ${log_file} &
 pid=($!)
 
 # Sender
-./sender/sender "$@" --file "$log_file"
+./sender/sender "$@" --file "$log_file" --broker "34.140.235.127"
