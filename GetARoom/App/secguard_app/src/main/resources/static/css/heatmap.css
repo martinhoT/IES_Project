@@ -1,0 +1,42 @@
+#ko-body{
+    margin-top: 20px;
+}
+
+.map-container {
+    position: relative;
+}
+
+.box {
+    position: absolute;
+    outline: 3px dashed black;
+    opacity: 0.4;
+    transition: opacity 0.5s, outline 0.5s;
+}
+
+.box:hover {
+    opacity: 0.6;
+    outline: 3px solid black;
+    transition: opacity 0.5s, outline 0.5s;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon,
+.carousel-indicators {
+    filter: invert(1);
+}
+
+.percentage-outlined {
+    color: white;
+    font-weight: bolder;
+    text-shadow:
+        -1px -1px #000,
+         1px  1px #000,
+        -1px  1px #000,
+         1px  1px #000;
+}
+
+#myCarousel{
+    margin-top: 20px;
+}
+
+

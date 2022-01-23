@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+    <th:block th:include="base :: head" />
+    <title>Heatmaps</title>
+    <link rel="stylesheet" th:href="@{/css/heatmap.css}" href="../static/css/heatmap.css" type="text/css">        
+</head>
+<body>
+
+    <div id="notification-consumers">
+        <th:block th:replace="base :: navbar" />
+    
+        <th:block th:replace="base :: alerts" />
+    </div>
+
+    <div id="ko-body" class="container">
+        <label for="department_selected"></label>
+        <select id="department_selected" name="department_selected">
+            <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.id + ' - ' + department.shortName}"></option>
+        </select>
+
+        <div id="myCarousel" class="carousel carousel-dark slide" data-ride="false" data-interval="false">
+            <ol class="carousel-indicators" data-bind="foreach: floors">
+            <li data-target="#myCarousel" data-bind="attr: { 'data-slide-to': $index }, css: { active: $index() == 0 }"></li>
+            </ol>
+            <div id="carousel-inner" class="carousel-inner" data-bind="foreach: floors, childrenComplete: flagFloorsBound">
+            <div class="carousel-item" data-bind="css: { active: $index() == 0 }" >
+                <h2 style="text-align:center; color: grey;">Departamento <span data-bind="text: $root.department"></span></h2>
+                <h3 style="text-align: center; color: grey;"><span data-bind="text: $data.floor"></span>º andar</h3>
+                <div class="map-container">
+                    <div data-bind="foreach: $data.styles">
+                        <a data-bind="attr: { href: '/room/' + $data.room }">
+                            <div class="box" data-bind="style: { top: $data.top, left: $data.left, width: $data.width, height: $data.height }, attr: { id: 'clr:' + $data.room }">
+                                <p class="percentage-outlined" data-bind="attr: { id: 'pct:' + $data.room }"></p>
+                            </div>
+                        </a>
+                    </div>
+                    <img data-bind="attr: { src: $data.img }" style="width: 100%;">
+                </div>
+            </div>
+            </div>
+
+            <a class="carousel-control-prev" href="#myCarousel" data-slide="prev" style="width: 5%;">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" data-slide="next" style="width: 5%;">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+
+    <th:block th:include="base :: scripts" />
+
+    <script th:src="@{/scripts/heatmaps.js}" src="../static/scripts/heatmaps.js"></script>
+</body>
+</html>
