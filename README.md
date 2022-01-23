@@ -15,12 +15,14 @@ There are 3 different interfaces:
   - username: Analyst
   - password: Password
 
-## Student front-end pages
+## Front-end pages
+
+### Student
 - [Login](http://34.140.235.127:81/login)
 - [Register](http://34.140.235.127:81/register)
 - [Search for a study room](http://34.140.235.127:81/studyRooms)
 
-## Security guard front-end pages
+### Security guard
 - [Login](http://34.140.235.127:82/login)
 - [Register](http://34.140.235.127:82/register)
 - [Heatmaps](http://34.140.235.127:82/heatmaps)
@@ -28,7 +30,7 @@ There are 3 different interfaces:
 - [Blacklist](http://34.140.235.127:82/blacklist)
 - [Notifications](http://34.140.235.127:82/notifications)
 
-## Analyst front-end pages
+### Analyst
 - [Login](http://34.140.235.127:83/login)
 - [Register](http://34.140.235.127:83/register)
 - [API](http://34.140.235.127:83/api)
