@@ -74,7 +74,7 @@ public class MainController {
 			Cookie jwtTokenCookie = new Cookie("user-id", "null");
 
 			jwtTokenCookie.setMaxAge(0);
-			jwtTokenCookie.setSecure(true);
+			jwtTokenCookie.setSecure(false);
 			jwtTokenCookie.setHttpOnly(true);
 	
 			// Set cookie onto user

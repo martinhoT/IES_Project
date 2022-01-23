@@ -34,7 +34,7 @@ public class LoginController {
         Cookie jwtTokenCookie = new Cookie("user-id", "secret1");
 
         jwtTokenCookie.setMaxAge(86400);
-        jwtTokenCookie.setSecure(true);
+        jwtTokenCookie.setSecure(false);
         jwtTokenCookie.setHttpOnly(true);
 
         // Set cookie onto user
