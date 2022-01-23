@@ -23,4 +23,4 @@ RUN apt-get -y install libmosquitto-dev
 RUN pip3 install -r requirements.txt
 
 # run the command to start uWSGI
-CMD ["./runGen.sh", "--broker", "34.140.235.127"]
+CMD ["./runGen.sh", "--broker", "34.140.235.127", "--name", "melga-gen"]
