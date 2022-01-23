@@ -1,6 +1,6 @@
 # IES_Project
 
-Application for gathering entry/exit data of people in a building.
+Application for gathering entry/exit data of people in a building.  
 Detailed information about the project (such as the architecture) is present in the `reports` folder.
 
 ## Authors
