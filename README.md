@@ -1,6 +1,7 @@
 # IES_Project
 
 Application for gathering entry/exit data of people in a building.
+Detailed information about the project (such as the architecture) is present in the `reports` folder.
 
 ## Authors
 | NMec | Name | Role |  
@@ -9,6 +10,13 @@ Application for gathering entry/exit data of people in a building.
 | 98157 | Miguel Monteiro | Product Owner |  
 | 89123 | Tomás Candeias | Architect |  
 | 98475 | Rodrigo Lima | DevOps master |  
+
+## Links
+
+The website link is http://34.140.235.127, hosted on Google Cloud. The different applications are hosted on the following ports:
+- [**Student**](http://34.140.235.127:81): 81
+- [**Security guard**](http://34.140.235.127:82): 82
+- [**Analyst**](http://34.140.235.127:83): 83
 
 ## Data interaction
 
@@ -24,6 +32,8 @@ There are 3 different interfaces:
   - password: Password
 
 ## Front-end pages
+
+Below is the complete list of accessible front-end pages for each application.
 
 ### Student
 - [Login](http://34.140.235.127:81/login)
