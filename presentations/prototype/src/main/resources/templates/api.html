@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <th:block th:fragment="head">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" th:href="@{/css/api.css}" type="text/css">
+    </th:block>
+</head>
+<body>
+    <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/api">
+                    <i class="fa fa-home"></i>
+                    Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ">
+            <li class="nav-item">
+              <a class="nav-link" href="/login">
+                Log out
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="banner-wrap">
+        <div class="banner">
+            <div class="logo">
+                <h1>GetARoom API</h1>
+            </div>
+        </div>
+    </div>
+    <!---banner-wrap-End--->
+
+    <div class="page-wrap">
+        <div class="wrap">
+            <div class='row card-group'>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="column" style="margin-right: 15px">
+                                    <img src="images/icon1.png" alt="icon"/>
+                                </div>
+                                <div class="column">
+                                    <h1>Current Events</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Daily feed of events for a given department, room or company.</p>
+                            <div class="btn btn-dark" onclick="window.location.href='/api/today'">
+                                <a>Go to</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="column" style="margin-right: 15px">
+                                    <img src="images/icon2.png" alt="icon"/>
+                                </div>
+                                <div class="column">
+                                    <h1>Yearly History</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Logging system with full history of events grouped by year.</p>
+                            <div class="btn btn-dark" onclick="window.location.href='/api/history'">
+                                <a>Go to</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="column" style="margin-right: 15px">
+                                    <img src="images/icon3.png" alt="icon"/>
+                                </div>
+                                <div class="column">
+                                    <h1>System Status</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">All buildings rooms status, grouped by department or company.</p>
+                            <div class="btn btn-dark" onclick="window.location.href='/api/status'">
+                                <a>Go to</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="base :: scripts" />
+</body>
+
+</html>

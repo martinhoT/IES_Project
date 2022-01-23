@@ -1,0 +1,15 @@
+.page-select > div {
+    display: inline-block;
+}
+
+.page-prev-next-control {
+    cursor: pointer;
+}
+
+.page-select-button {
+    cursor: pointer;
+}
+
+.page-select-array {
+    margin: auto;
+}

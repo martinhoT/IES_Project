@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:include="base :: head" />
+    <title th:text="'Room ' + ${dep} + '.' + ${floor} + '.' + ${room}">Room</title>
+    <link rel="stylesheet" th:href="@{/css/table.css}" href="../static/css/table.css" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/table_room.css}" href="../static/css/table_room.css" type="text/css">
+</head>
+<body>
+    <div id="notification-consumers">
+        <th:block th:replace="base :: navbar" />
+    
+        <th:block th:replace="base :: alerts" />
+    </div>
+
+    <div style="position: absolute; z-index: 1; width: 100%;">
+        <ul id="alert-list" style="padding: 0">
+        </ul>
+    </div>
+
+    <div class="container" id="ko-body">
+        <h2 th:text="'Events for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}" style="text-align: center; color: grey; margin-top: 15px;">Room</h2>
+
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Blacklist
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="'Blacklist for Room ' + ${dep} + '.' + ${floor} + '.' + ${room}"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Blacklist table-->
+
+                        <div th:if="${blacklisted!=null and !blacklisted.isEmpty()}">
+                            <ul>
+                                <li th:each="entry : ${blacklisted}">
+                                    <span th:text="${entry.email}">Student</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${blacklisted.isEmpty()}">
+                            <p>There's not any blacklisted user for this room</p>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="room"  th:text="${dep} + '.' + ${floor} + '.' + ${room}"  hidden></div>
+
+        <!--Events table-->
+
+        <div class="section">
+            <div class="limiter">
+                <div class="container-table100">
+                    <div class="wrap-table100">
+                        <div class="table100">
+                            <table >
+                                <thead>
+                                <tr class="table100-head">
+                                    <th class="column1" scope="col">Person</th>
+                                    <th class="column2" scope="col">Email</th>
+                                    <th class="column3" scope="col">Room</th>
+                                    <th class="column4" scope="col">Action</th>
+                                    <th class="column5" scope="col">Time</th>
+                                </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Events">
+                                <tr>
+                                    <td class="column1" data-bind="text: user">User</td>
+                                    <td class="column2" data-bind="text: email">Email</td>
+                                    <td class="column3" data-bind="text: room">Room</td>
+                                    <!-- ko if: entered -->
+                                    <td class="column4">Entry</td>
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: entered -->
+                                    <td class="column4">Exit</td>
+                                    <!-- /ko -->
+                                    <td class="column5" data-bind="text: time">Time</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <th:block th:include="base :: scripts" />
+
+    <script th:src="@{/scripts/room.js}" src="../static/scripts/room.js"></script>
+</body>
+</html>
