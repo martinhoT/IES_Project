@@ -33,4 +33,4 @@ RUN pip3 install -r requirements.txt
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 # run the command to start uWSGI
-CMD ["./runSen.sh", "--broker", "34.140.235.127"]
+CMD ["./runSen.sh", "--broker", "34.140.235.127", "--name", "melga-sen"]
