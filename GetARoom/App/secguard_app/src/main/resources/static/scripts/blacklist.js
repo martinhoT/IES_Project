@@ -1,5 +1,11 @@
 // Aux functions
 
+window.addEventListener("load", function(){
+    document.getElementById("dep").selectedIndex = -1;
+    document.getElementById("dep2").selectedIndex = -1;
+    document.getElementById("dep3").selectedIndex = -1;
+});
+
 function removeOptions(selectElement) {
     let i, L = selectElement.options.length - 1;
     for(i = L; i >= 0; i--) {
