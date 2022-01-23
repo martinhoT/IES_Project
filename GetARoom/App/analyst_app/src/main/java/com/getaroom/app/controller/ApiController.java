@@ -97,9 +97,19 @@ public class ApiController {
 			HashMap<Integer, HashMap<Integer, List<Event>>> filteredHistory = new HashMap<>();
 			Integer yearInt = Integer.parseInt(yfilter);
 
+			// Check if contains key
+			if(!history.containsKey(yearInt)){
+				return filteredHistory;
+			}
+
 			// Check if there is a month filter
 			if(mfilter.matches("\\d+")){
 				Integer monthInt = Integer.parseInt(mfilter);
+
+				// Check if contains key
+				if(!history.get(yearInt).containsKey(monthInt)){
+					return filteredHistory;
+				}
 
 				// Check if there is a day filter
 				if(dfilter.matches("\\d+")){
