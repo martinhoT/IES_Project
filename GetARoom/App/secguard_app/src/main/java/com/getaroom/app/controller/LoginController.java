@@ -85,7 +85,7 @@ public class LoginController {
         }
         if (apiAuthPost("register", new RegisterData(user.getName(), user.getPassword(), user.getEmail()), RegisterData.class)){
             setCookie(user.getName(), response);
-            modelAndView.setViewName("redirect:/studyRooms");
+            modelAndView.setViewName("redirect:/heatmaps");
         }
         else{
             modelAndView.setViewName("register_form");
