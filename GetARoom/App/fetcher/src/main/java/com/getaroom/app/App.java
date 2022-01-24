@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Pageable;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -126,7 +127,7 @@ public class App implements CommandLineRunner {
 		// ZonedDateTime already handles daylight saving cases
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Lisbon"));
 		
-		ZonedDateTime nextRun = now.withHour(15).withMinute(30).withSecond(30);
+		ZonedDateTime nextRun = now.withHour(0).withMinute(0).withSecond(0);
 		if (now.compareTo(nextRun) > 0)
 			nextRun = nextRun.plusDays(1);
 		
@@ -282,7 +283,7 @@ public class App implements CommandLineRunner {
 		@Override
 		public void run() {
 			// 'event' into 'event_history'
-			List<EventNow> todays = eventRepository.findAll();
+			List<EventNow> todays = eventRepository.findAll(Pageable.unpaged()).toList();
 			eventHistoryRepository.saveAll( todays.stream().map(EventNow::cloneHistory).toList() );
 			eventRepository.deleteAll( todays );
 
