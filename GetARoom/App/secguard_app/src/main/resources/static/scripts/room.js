@@ -39,7 +39,6 @@ function onMessageArrived(message) {
     msg = message.payloadString;
     console.log("Received message:" + msg);
     var evnt = JSON.parse(msg);
-    roomid = stts["room"];
 
     let notPresent = true;
     for (let event of ViewModel.Events) {

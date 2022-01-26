@@ -214,6 +214,7 @@ public class ApiController {
 		return apiClient.get()
 			.uri(uriBuilder -> uriBuilder
 			.path("/api/event/history")
+			.queryParam("pageCapacity", 0)
 			.build())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.acceptCharset(StandardCharsets.UTF_8)

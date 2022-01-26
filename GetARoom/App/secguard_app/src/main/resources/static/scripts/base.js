@@ -133,7 +133,6 @@ $(document).ready(function() {
             baseScriptVars.viewModel.notifications_popups.shift();
     }
 
-    // TODO: use pagination
     if (document.getElementById("receive-all-notifications") !== null) {
         $.getJSON("http://" + location.hostname + ":84/api/alerts/seen",
         function (data, textStatus, jqXHR) {
